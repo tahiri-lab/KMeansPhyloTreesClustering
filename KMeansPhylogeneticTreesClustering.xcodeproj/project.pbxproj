@@ -35,7 +35,6 @@
 		403EB8F42875258100C6FDBF /* Covid-19_trees.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Covid-19_trees.txt"; sourceTree = "<group>"; };
 		403EB8F52875259C00C6FDBF /* output.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = output.txt; sourceTree = "<group>"; };
 		403EB8F6287525D000C6FDBF /* stat.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = stat.csv; sourceTree = "<group>"; };
-		403EB8F72875260800C6FDBF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = data/README.md; sourceTree = "<group>"; };
 		403EB8F82875265D00C6FDBF /* fonctions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fonctions.cpp; sourceTree = "<group>"; };
 		403EB8F92875265D00C6FDBF /* fonctions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fonctions.hpp; sourceTree = "<group>"; };
 		403EB8FB2875267100C6FDBF /* K-means.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "K-means.cpp"; sourceTree = "<group>"; };
@@ -64,7 +63,6 @@
 		403EB8DE2875241700C6FDBF = {
 			isa = PBXGroup;
 			children = (
-				403EB8F72875260800C6FDBF /* README.md */,
 				403EB8F22875252700C6FDBF /* data */,
 				403EB8F12875250700C6FDBF /* output */,
 				403EB8E92875241700C6FDBF /* src */,
