@@ -47,6 +47,7 @@
 		403EB905287526B300C6FDBF /* Super-trees.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "Super-trees.hpp"; sourceTree = "<group>"; };
 		403EB907287526C700C6FDBF /* structures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = structures.h; sourceTree = "<group>"; };
 		403EB9082875270900C6FDBF /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		403EB90A28752B7A00C6FDBF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +64,7 @@
 		403EB8DE2875241700C6FDBF = {
 			isa = PBXGroup;
 			children = (
+				403EB90A28752B7A00C6FDBF /* README.md */,
 				403EB8F22875252700C6FDBF /* data */,
 				403EB8F12875250700C6FDBF /* output */,
 				403EB8E92875241700C6FDBF /* src */,
