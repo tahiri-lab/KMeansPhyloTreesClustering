@@ -1,9 +1,9 @@
-# KMeansSuperTreeClustering
+# KMeansPhylogeneticTreesClustering
 A new fast method for clustering phylogenetic trees using K-means and inferring multiple supertrees
 
 # About
     => =============================================================================================================================
-    => Program   : KMeansSuperTreeClustering - 2021
+    => Program   : KMeansPhylogeneticTreesClustering - 2021
     => Authors   : Nadia Tahiri and Vladimir Makarenkov (Université du Québec à Montréal)
                    Bernard Fichet (Laboratoire d’Informatique Fondamentale de Marseille)
     => This program clusters phylogenetic trees using the k-means partitioning algorithm.
@@ -18,7 +18,7 @@ A new fast method for clustering phylogenetic trees using K-means and inferring 
     => =============================================================================================================================
 
 # Installation
-    $ git clone https://github.com/iambenjaminalbertelli/TestPhylogenetic.git
+    $ git clone https://github.com/tahiri-lab/KMeansPhylogeneticTreesClustering.git
     $ make
     or
     $ make install
