@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		403EB8EB2875241700C6FDBF /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403EB8EA2875241700C6FDBF /* main.cpp */; };
+		403EB8FA2875265D00C6FDBF /* fonctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403EB8F82875265D00C6FDBF /* fonctions.cpp */; };
+		403EB8FD2875267100C6FDBF /* K-means.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403EB8FB2875267100C6FDBF /* K-means.cpp */; };
+		403EB9002875268700C6FDBF /* utils_tree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403EB8FE2875268700C6FDBF /* utils_tree.cpp */; };
+		403EB9032875269E00C6FDBF /* hgt_int.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403EB9012875269E00C6FDBF /* hgt_int.cpp */; };
+		403EB906287526B300C6FDBF /* Super-trees.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403EB904287526B300C6FDBF /* Super-trees.cpp */; };
+		403EB9092875270900C6FDBF /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 403EB9082875270900C6FDBF /* Makefile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +31,23 @@
 /* Begin PBXFileReference section */
 		403EB8E72875241700C6FDBF /* KMeansPhylogeneticTreesClustering */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = KMeansPhylogeneticTreesClustering; sourceTree = BUILT_PRODUCTS_DIR; };
 		403EB8EA2875241700C6FDBF /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		403EB8F32875256200C6FDBF /* all_trees_woese.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = all_trees_woese.txt; sourceTree = "<group>"; };
+		403EB8F42875258100C6FDBF /* Covid-19_trees.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Covid-19_trees.txt"; sourceTree = "<group>"; };
+		403EB8F52875259C00C6FDBF /* output.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = output.txt; sourceTree = "<group>"; };
+		403EB8F6287525D000C6FDBF /* stat.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = stat.csv; sourceTree = "<group>"; };
+		403EB8F72875260800C6FDBF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = data/README.md; sourceTree = "<group>"; };
+		403EB8F82875265D00C6FDBF /* fonctions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fonctions.cpp; sourceTree = "<group>"; };
+		403EB8F92875265D00C6FDBF /* fonctions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fonctions.hpp; sourceTree = "<group>"; };
+		403EB8FB2875267100C6FDBF /* K-means.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "K-means.cpp"; sourceTree = "<group>"; };
+		403EB8FC2875267100C6FDBF /* K-means.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "K-means.hpp"; sourceTree = "<group>"; };
+		403EB8FE2875268700C6FDBF /* utils_tree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = utils_tree.cpp; sourceTree = "<group>"; };
+		403EB8FF2875268700C6FDBF /* utils_tree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = utils_tree.hpp; sourceTree = "<group>"; };
+		403EB9012875269E00C6FDBF /* hgt_int.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = hgt_int.cpp; sourceTree = "<group>"; };
+		403EB9022875269E00C6FDBF /* hgt_int.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = hgt_int.hpp; sourceTree = "<group>"; };
+		403EB904287526B300C6FDBF /* Super-trees.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "Super-trees.cpp"; sourceTree = "<group>"; };
+		403EB905287526B300C6FDBF /* Super-trees.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "Super-trees.hpp"; sourceTree = "<group>"; };
+		403EB907287526C700C6FDBF /* structures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = structures.h; sourceTree = "<group>"; };
+		403EB9082875270900C6FDBF /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,7 +64,10 @@
 		403EB8DE2875241700C6FDBF = {
 			isa = PBXGroup;
 			children = (
-				403EB8E92875241700C6FDBF /* KMeansPhylogeneticTreesClustering */,
+				403EB8F72875260800C6FDBF /* README.md */,
+				403EB8F22875252700C6FDBF /* data */,
+				403EB8F12875250700C6FDBF /* output */,
+				403EB8E92875241700C6FDBF /* src */,
 				403EB8E82875241700C6FDBF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,12 +80,42 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		403EB8E92875241700C6FDBF /* KMeansPhylogeneticTreesClustering */ = {
+		403EB8E92875241700C6FDBF /* src */ = {
 			isa = PBXGroup;
 			children = (
 				403EB8EA2875241700C6FDBF /* main.cpp */,
+				403EB8F82875265D00C6FDBF /* fonctions.cpp */,
+				403EB8F92875265D00C6FDBF /* fonctions.hpp */,
+				403EB8FB2875267100C6FDBF /* K-means.cpp */,
+				403EB8FC2875267100C6FDBF /* K-means.hpp */,
+				403EB8FE2875268700C6FDBF /* utils_tree.cpp */,
+				403EB8FF2875268700C6FDBF /* utils_tree.hpp */,
+				403EB9012875269E00C6FDBF /* hgt_int.cpp */,
+				403EB9022875269E00C6FDBF /* hgt_int.hpp */,
+				403EB904287526B300C6FDBF /* Super-trees.cpp */,
+				403EB905287526B300C6FDBF /* Super-trees.hpp */,
+				403EB907287526C700C6FDBF /* structures.h */,
+				403EB9082875270900C6FDBF /* Makefile */,
 			);
-			path = KMeansPhylogeneticTreesClustering;
+			path = src;
+			sourceTree = "<group>";
+		};
+		403EB8F12875250700C6FDBF /* output */ = {
+			isa = PBXGroup;
+			children = (
+				403EB8F52875259C00C6FDBF /* output.txt */,
+				403EB8F6287525D000C6FDBF /* stat.csv */,
+			);
+			path = output;
+			sourceTree = "<group>";
+		};
+		403EB8F22875252700C6FDBF /* data */ = {
+			isa = PBXGroup;
+			children = (
+				403EB8F32875256200C6FDBF /* all_trees_woese.txt */,
+				403EB8F42875258100C6FDBF /* Covid-19_trees.txt */,
+			);
+			path = data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -120,6 +176,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				403EB8EB2875241700C6FDBF /* main.cpp in Sources */,
+				403EB9032875269E00C6FDBF /* hgt_int.cpp in Sources */,
+				403EB8FD2875267100C6FDBF /* K-means.cpp in Sources */,
+				403EB8FA2875265D00C6FDBF /* fonctions.cpp in Sources */,
+				403EB9002875268700C6FDBF /* utils_tree.cpp in Sources */,
+				403EB9092875270900C6FDBF /* Makefile in Sources */,
+				403EB906287526B300C6FDBF /* Super-trees.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,6 +303,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2YCKVXG23Z;
 				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = /usr/local/Cellar/boost/1.78.0_1/include;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
