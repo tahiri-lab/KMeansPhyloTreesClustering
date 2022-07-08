@@ -19,23 +19,7 @@ using namespace std;
 //===================================================================================
 //===================================================================================
 
-const char *SpeciesBranch = "**Rooted species tree inferred with NJ (with branch lengths fitted to the gene distance)**\n";
-const char *SpeciesBranchNewick = "**Rooted species tree (with branch lengths fitted to the gene distance)**\n";
-const char *GeneBranch = "**Rooted gene tree inferred with NJ**\n";
-const char *description = "=======================================================================================================\n"
-                          "| Program : HGT Detection 3.3 --------------------- February, 2011\n"
-                          "| Authors   : Nadia Tahiri, Alix Boc, Alpha Boubacar Diallo and Vladimir Makarenkov (Universite du Quebec a Montreal)\n"
-                          "| This program computes a unique scenario of horizontal gene transfers (HGT) for\n"
-                          "| the given pair of species and gene phylogenetic trees.\n"
-                          "=======================================================================================================\n";
-
-const char *startMessage = "HGT-DETECTION V.3.2\n"
-                           "by Alix Boc and Vladimir Makarenkov\n";
                           
-const char *fichier_output = "output.txt";
-const char *fichier_hgt    = "result.txt";
-const char *fichier_stat   = "tmp_nbHgtParMots";
-
 int rand_bootstrap;
 
 
