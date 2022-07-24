@@ -21,6 +21,7 @@ using namespace std;
 
                           
 int rand_bootstrap;
+bool withConsensus = true;
 
 
 //===================================================================================
@@ -47,6 +48,8 @@ int main(int nargs, char ** argv) {
     
     Initialisation(nargs, argv);
     nargs = 7;
+    
+    
     
     /*if(nargs < 2){
         printf("\nbad input..\nusage:%s {-simulation|-matrice|-tree}\n",argv[0]);
@@ -216,9 +219,10 @@ int main(int nargs, char ** argv) {
                 tabIndices.push_back(n);
 
                 int *n_leaves = new int[mesTrees.size()+1];
+                double alpha = atof(argv[4]);
                 //appel de l'algorithme de K-means:
                 if(mesTrees.size()>3){
-                    main_kmeans(cl2,mesTrees,Matrice_RF,n_identique,Ww,tabIndices,intParam, n_leaves,kmin,kmax);
+                    main_kmeans(cl2,mesTrees,Matrice_RF,n_identique,Ww,tabIndices,intParam, n_leaves,kmin,kmax, alpha);
                 }
 
                 //vider les vectors
@@ -338,7 +342,7 @@ void Initialisation(int nargs, char ** argv){
             printf("\nα is the penalty parameter for species overlap in phylogenetic trees.\n");
             printf("It must be between 0 and 1 :\n");
             scanf("%s", argv[4]);
-            printf("\nLast step ! You have to choose the number of cluster minimum and maximum.\n");
+            printf("\nAlmost ready! You have to choose the number of cluster minimum and maximum.\n");
             if(strcmp(argv[3], "1") == 0){
                 printf("You chose Calisnki-Harabasz, so Kmin has to be >= 2\n");
             }
@@ -349,7 +353,11 @@ void Initialisation(int nargs, char ** argv){
             scanf("%s", argv[5]);
             printf("Kmax : ");
             scanf("%s", argv[6]);
+            printf("\nLast step ! Do you want to use clusters' consensus tree to measure distance between tree among the cluster:\n1) Yes\n2) No\n");
+            int withCons;
+            scanf("%d", &withCons);
             printf("\n\n");
+            (withCons == 2) ? withConsensus = false : withConsensus = true;
         }
     }
 }

@@ -19,6 +19,7 @@
 // =============================================================================================================
 
 #include "K-means.hpp"
+#include "hgt_int.hpp"
 
 FILE *Output4;
 
@@ -86,7 +87,7 @@ FILE *Output4;
 // =============================================================================================================
 // =============================================================================================================
 
-int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double ** n_identique,double ** Ww, vector<int> tabIndices, int intParam, int *n_leaves,int k_min, int k_max)
+int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double ** n_identique,double ** Ww, vector<int> tabIndices, int intParam, int *n_leaves,int k_min, int k_max, int alpha)
 {
     //*****************Define variables******************************************//
     // Variables
@@ -409,7 +410,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
 
                 // Compute distances to group centroids and assign objects to nearest one
                 if(intParam==1){
-                    FO_new = FO_super_tree(n,kmax,mat,Dvec,list,howmany,SSE,kk,monTableau);
+                    FO_new = FO_super_tree(n,kmax,mat,Dvec,list,howmany,SSE,kk,monTableau, alpha);
                 }else if(intParam==2){
                     FO_new = FO_W(n,kmax,mat,Dvec,list,howmany,SSE,kk,monTableau);
                 }
@@ -1100,7 +1101,7 @@ void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char 
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_super_tree(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk,vector <string> monTableau)
+double FO_super_tree(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk,vector <string> monTableau, int alpha)
 {
     double *clusterK_same = new double [kmax+1];
     int *nk_CH = new int [kmax+1];
@@ -1132,15 +1133,40 @@ double FO_super_tree(int &n,int &kmax,double** mat,double* Dvec,int* list,int* h
     for(int k=1;k<=kmax; k++){
         nk_CH[list[k]]++;
     }
-
-    //compute for each cluster initially, SSW value (intra groupe distance)
-    //compute SSW
-    for (int i=1;i<n;i++){
-        cluster_k=list[i];
-        for (int j=i+1;j<=n;j++){
-            if (list[j]==cluster_k){
-                RF = mat[i-1][j-1];
-                clusterK_same[cluster_k]+=RF;
+    
+    //Créer l'arbre consensus pour chaque cluster
+    if(withConsensus == true){
+        vector <string> listeConsensusCluster;
+        double *distances = new double[6];
+        for (int j=0; j<4; j++){
+            distances[j]=0.0;
+        }
+        distances[5] = alpha;
+        for(int k=1;k<=kmax; k++){  //pour chaque cluster
+            int indice_arbre= 0; //indice de l'arbre
+            //créer le consensus
+            string consensek = "init";
+            
+            //ajouter le consensus à listeConsensusCluster
+            listeConsensusCluster[k - 1] =  consensek;
+            for (int i = 0; i < nk_CH[list[k]]; i++){   //pour chaque arbre du cluster k
+                //Calcul des distances entre chaque abre du cluster et le consensus
+                main_hgt(consensek, monTableau[indice_arbre], distances);
+                clusterK_same[k] += distances[0];
+            }
+        }
+    }
+    else{
+        //compute for each cluster initially, SSW value (intra groupe distance)
+        //compute SSW
+        for (int i=1;i<n;i++){
+            cluster_k=list[i];
+            for (int j=i+1;j<=n;j++){
+                if (list[j]==cluster_k){
+                    
+                    RF = mat[i-1][j-1];
+                    clusterK_same[cluster_k]+=RF;
+                }
             }
         }
     }

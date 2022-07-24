@@ -19,7 +19,9 @@
 
 using namespace std;
 
-int main_kmeans(char **,vector <string>, double **, double **, double **, vector<int>, int, int *, int, int);
+extern bool withConsensus;
+
+int main_kmeans(char **,vector <string>, double **, double **, double **, vector<int>, int, int *, int, int, int);
 
 //--Read the data
 void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat/* ,double* coord */,int* ishort,double* weight,double* colsum,int &ntran,char* nameb,int N);
@@ -35,7 +37,7 @@ double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N);
 void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group,double score,int **listr,double *allScore,int k1, int k2 ,vector <string> monTableau);
 
 //SUPERTREES
-double FO_super_tree(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk,vector <string> monTableau);
+double FO_super_tree(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk,vector <string> monTableau, int alpha);
 
 //fonctions sans passer par le centroid pour supertree
 double DistanceCH(int &n,int &kmax,double** mat,int* list,double** Ww,double FO_new, double facteur);
