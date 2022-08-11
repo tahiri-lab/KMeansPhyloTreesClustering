@@ -40,6 +40,6 @@ extern double trweight, ntrees, mlfrac;
 void getoptions(void);
 void count_siblings(node);
 void treeout(node);
-string main_consense(char *);
+string main_consensus(char *);
 
 #endif /* consense_hpp */
