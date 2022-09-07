@@ -46,6 +46,8 @@ int main(int nargs, char ** argv) {
     char champs[100];
     char contenu[100];
     
+    printf("je suis là");
+    
     Initialisation(nargs, argv);
     nargs = 7;
     
