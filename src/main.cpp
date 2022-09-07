@@ -49,9 +49,6 @@ int main(int nargs, char ** argv) {
     printf("je suis là");
     
     Initialisation(nargs, argv);
-    nargs = 7;
-    
-    
     
     /*if(nargs < 2){
         printf("\nbad input..\nusage:%s {-simulation|-matrice|-tree}\n",argv[0]);
@@ -361,5 +358,7 @@ void Initialisation(int nargs, char ** argv){
             printf("\n\n");
             (withCons == 2) ? withConsensus = false : withConsensus = true;
         }
+    nargs = 7;
     }
+    else{}
 }
