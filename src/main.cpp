@@ -21,7 +21,7 @@ using namespace std;
 
                           
 int rand_bootstrap;
-bool withConsensus = true;
+bool withConsensus = false;
 
 
 //===================================================================================
@@ -49,6 +49,7 @@ int main(int nargs, char ** argv) {
     printf("je suis là");
     
     Initialisation(nargs, argv);
+    nargs = 7;
     
     /*if(nargs < 2){
         printf("\nbad input..\nusage:%s {-simulation|-matrice|-tree}\n",argv[0]);
@@ -352,12 +353,6 @@ void Initialisation(int nargs, char ** argv){
             scanf("%s", argv[5]);
             printf("Kmax : ");
             scanf("%s", argv[6]);
-            printf("\nLast step ! Do you want to use clusters' consensus tree to measure distance between tree among the cluster:\n1) Yes\n2) No\n");
-            int withCons;
-            scanf("%d", &withCons);
-            printf("\n\n");
-            (withCons == 2) ? withConsensus = false : withConsensus = true;
         }
     }
-    else{}
 }
