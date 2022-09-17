@@ -27,7 +27,7 @@ help:
 execute:
 	@echo 'We gonna execute this line as example :'
 	@echo '===> ./KMPTC -tree ../data/Covid-19_trees.txt 1 0.2 3 8'
-	$./KMPTC -tree ../data/Covid-19_trees.txt 1 0.2 3 8
+	$. ./KMPTC -tree ../data/Covid-19_trees.txt 1 0.2 3 8
 
 clean:
 	$(RM) *.o input_.txt
