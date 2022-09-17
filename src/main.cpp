@@ -28,7 +28,7 @@ bool withConsensus = false;
 //===================================================================================
 //===================================================================================
 
-//==Prototypes des fonctions
+//Prototypes of functions
 int ExtraireDonneesLC(const char * chaine, char *champs, char * contenu);
 void validation(int &intParam);
 void validationAlpha(double &alpha);
@@ -48,11 +48,8 @@ int main(int nargs, char ** argv) {
 
     Initialisation(nargs, argv);
     nargs = 7;
-    
-    /*if(nargs < 2){
-        printf("\nbad input..\nusage:%s {-simulation|-matrice|-tree}\n",argv[0]);
-        exit(1);
-    }*/
+
+    presenterProgramme();
     
     if(ExtraireDonneesLC(argv[1],champs,contenu)==1){
         if(strcmp("tree",champs) == 0){
@@ -290,6 +287,7 @@ void validation(int &intParam){
 }
 
 void validationAlpha(double &alpha){
+    //Validation of the alpha argument
     if(alpha<0){
         alpha=0;
     }else if(alpha>1){
@@ -298,6 +296,7 @@ void validationAlpha(double &alpha){
 }
 
 void validationKmin(int intParam, int &kmin){
+    //Validation of the K-min argument
     if(intParam==1 && kmin<1){
         kmin = 2;
     }
@@ -307,11 +306,13 @@ void validationKmin(int intParam, int &kmin){
 }
 
 void presenterProgramme(){
+    //Presentation of the Programm
    printf ("Generate Tree similar\n");
-   printf("Nadia Tahiri and Vladimir Makarenkov - Departement d'informatique - Universite du Quebec a Montreal\n");
+    printf("Program   : KMeansSuperTreeClustering - 2021\nAuthors : Benjamin Albertelli and Nadia Tahiri - Departement d'informatique - Universite de Sherbrooke\n This program clusters phylogenetic trees using the k-means partitioning algorithm.\nThese trees may have the same or different, but mutually overlapping, sets of leaves (the multiple supertree problem).\nPhylogenetic trees must be given in the Newick format (program input).\n A partitioning of the input trees in K clusters of trees is returned as output.\nThe optimal number of clusters can be determined either by the Calinski-Harabasz (CH) or by the Ball-Hall (BH) cluster validity index adapted for tree clustering.\nA supertree can then be inferred for each cluster of trees.\nThe Robinson and Foulds topological distance is used in the objective function of K-means.\n The list of the program parameters is specified below.");
 }
 
 void Initialisation(int nargs, char ** argv){
+    //Allow the user to use the program without executing the example line but choosing arguments step by step
     int choice = 0;
     if(nargs != 7){
         if(nargs < 1){
