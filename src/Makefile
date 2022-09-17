@@ -1,4 +1,10 @@
-all: install help
+all: install
+	@echo ' '
+	help
+	@echo ' '
+	execute
+	@echo ' '
+	clean
 	
 install: main.cpp
 	g++ main.cpp fonctions.cpp hgt_int.cpp K-means.cpp Super-trees.cpp utils_tree.cpp -openmp -g -o KMPTC
@@ -27,7 +33,9 @@ help:
 execute:
 	@echo 'We gonna execute this line as example :'
 	@echo '===> ./KMPTC -tree ../data/Covid-19_trees.txt 1 0.2 3 8'
+	@echo ' '
 	$. ./KMPTC -tree ../data/Covid-19_trees.txt 1 0.2 3 8
+	@echo ' '
 
 clean:
 	$(RM) *.o input_.txt

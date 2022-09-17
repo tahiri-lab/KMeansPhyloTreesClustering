@@ -242,7 +242,7 @@ int main(int nargs, char ** argv) {
         }
 
     }
-    printf("END OF PROGRAM!\n");
+    printf("END OF PROGRAM!\n\n");
     return 0;
 }
 
@@ -308,7 +308,7 @@ void validationKmin(int intParam, int &kmin){
 void presenterProgramme(){
     //Presentation of the Programm
    printf ("Generate Tree similar\n");
-    printf("Program   : KMeansSuperTreeClustering - 2021\nAuthors : Benjamin Albertelli and Nadia Tahiri - Departement d'informatique - Universite de Sherbrooke\n This program clusters phylogenetic trees using the k-means partitioning algorithm.\nThese trees may have the same or different, but mutually overlapping, sets of leaves (the multiple supertree problem).\nPhylogenetic trees must be given in the Newick format (program input).\n A partitioning of the input trees in K clusters of trees is returned as output.\nThe optimal number of clusters can be determined either by the Calinski-Harabasz (CH) or by the Ball-Hall (BH) cluster validity index adapted for tree clustering.\nA supertree can then be inferred for each cluster of trees.\nThe Robinson and Foulds topological distance is used in the objective function of K-means.\n The list of the program parameters is specified below.");
+    printf("Program   : KMeansSuperTreeClustering - 2021\nAuthors : Benjamin Albertelli and Nadia Tahiri - Departement d'informatique - Universite de Sherbrooke\nPresentation : This program clusters phylogenetic trees using the k-means partitioning algorithm.\nThese trees may have the same or different, but mutually overlapping, sets of leaves (the multiple supertree problem).\nPhylogenetic trees must be given in the Newick format (program input).\nA partitioning of the input trees in K clusters of trees is returned as output.\nThe optimal number of clusters can be determined either by the Calinski-Harabasz (CH) or by the Ball-Hall (BH) cluster validity index adapted for tree clustering.\nA supertree can then be inferred for each cluster of trees.\nThe Robinson and Foulds topological distance is used in the objective function of K-means.\nThe list of the program parameters is specified below.\n\n\n");
 }
 
 void Initialisation(int nargs, char ** argv){
