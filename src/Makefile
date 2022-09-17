@@ -1,14 +1,9 @@
-all: install
-	@echo ' '
-	help
-	@echo ' '
-	execute
-	@echo ' '
-	clean
+all: install help execute clean
 	
 install: main.cpp
 	g++ main.cpp fonctions.cpp hgt_int.cpp K-means.cpp Super-trees.cpp utils_tree.cpp -openmp -g -o KMPTC
 	chmod -R 777 * .
+	@echo ' '
 	
 help:
 	@echo 'Please execute the following command lines (on two steps):'
@@ -29,6 +24,7 @@ help:
 	@echo ' '
 	@echo 'You also can enter step by step your argyment, for that, please execute this line :'
 	@echo '===> ./KMPTC'
+	@echo ' '
 	
 execute:
 	@echo 'We gonna execute this line as example :'
@@ -40,4 +36,4 @@ execute:
 clean:
 	$(RM) *.o input_.txt
 	$(RM) KMPTC
-
+	@echo ' '
