@@ -2,9 +2,9 @@
 A new fast method for clustering phylogenetic trees using K-means and inferring multiple supertrees.
 
 # About
-=> Program   : KMeansPhylogeneticTreesClustering - 2022
-=> Authors   : Benjamin Albertelli and Nadia Tahiri (University of Sherbrooke)
-This program clusters phylogenetic trees using the k-means partitioning algorithm.
+Program   : KMeansPhylogeneticTreesClustering - 2022  
+Authors   : Benjamin Albertelli and Nadia Tahiri (University of Sherbrooke)  
+This program clusters phylogenetic trees using the k-means partitioning algorithm.  
 These trees may have the same (the multiple consensus tree problem) or different, but mutually overlapping, sets of leaves (the multiple supertree problem).
     
 Phylogenetic trees must be given in the Newick format (program input). A partitioning of the input trees in K clusters of trees is returned as output. 
@@ -43,17 +43,18 @@ If you need help for execution, please execute this line in the src folder :
 
 # Examples
 
-Please execute the following command line :
+Please execute the following command line :  
+
 => For trees: ./KMPTC -tree input_file cluster_validity_index α Kmin Kmax
 
-=> input_file: the input file for the program
-=> cluster_validity_index: the cluster validity index used in K-means (1 for Calinski-Harabasz and 2 for Ball-Hall)
-=> α: is the penalty parameter for species overlap in phylogenetic trees (must be between 0 and 1)
-=> Kmin: is the minimum number of clusters in K-means. 
-        - For CH, Kmin>=2,
-        - For BH, Kmin>=1.
-=> Kmax: the maximum number of clusters in K-means. 
-        - Kmax must be less or equal to N-1 (where N is the number of input trees).
+=> input_file: the input file for the program  
+=> cluster_validity_index: the cluster validity index used in K-means (1 for Calinski-Harabasz and 2 for Ball-Hall)  
+=> α: is the penalty parameter for species overlap in phylogenetic trees (must be between 0 and 1)  
+=> Kmin: is the minimum number of clusters in K-means.  
+- For CH, Kmin>=2,  
+- For BH, Kmin>=1.  
+=> Kmax: the maximum number of clusters in K-means.  
+- Kmax must be less or equal to N-1 (where N is the number of input trees).
 
 Command line execution examples:
 
@@ -66,13 +67,13 @@ Command line execution examples:
     $ ./KMPTC -tree ../data/all_trees_woese.txt 1 1 2 10
 
 # Input
-=> The input data sets are located in the folder "data".
+The input data sets are located in the folder "data".  
 You can also use your own data, please ensure that the file respect the needed format.
 
 # Output
-=> See the folder "output"
-The output is in the following files:
-1) stat.csv - for the clustering statistics;
+See the folder "output"  
+The output is in the following files:  
+1) stat.csv - for the clustering statistics.  
 2) output.txt - for the cluster content.
 
 # Clean Project
