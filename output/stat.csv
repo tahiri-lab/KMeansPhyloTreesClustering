@@ -1,1 +1,1 @@
-Criteria;NbTrees;NbEspeces;Percent;Kreal;Ktrouve;|Ktrouve-Kreal|;|Ktrouve-Kreal|/max(Ktrouve,Kreal));T;RI;ARI;Score;Partition;Time;K-medoids
+Criteria;NbTrees;NbSpieces;Percent;Kreal;Kfound;|Kfound-Kreal|;|Kfound-Kreal|/max(Kfound,Kreal));T;RI;ARI;Score;Partition;Time;K-medoids
