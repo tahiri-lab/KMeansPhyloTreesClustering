@@ -52,18 +52,19 @@ Please execute the following command line :
 => α: is the penalty parameter for species overlap in phylogenetic trees (must be between 0 and 1)  
 => Kmin: is the minimum number of clusters in K-means.  
 - For CH, Kmin>=2,  
-- For BH, Kmin>=1.  
+- For BH, Kmin>=1.   
+  
 => Kmax: the maximum number of clusters in K-means.  
 - Kmax must be less or equal to N-1 (where N is the number of input trees).
 
 Command line execution examples:
 
 1) input_file = data/Covid-19_trees.txt, cluster_validity_index = CH, α = 0.1, Kmin = 3, Kmax = 8):
-    
+
     $ ./KMPTC -tree ../data/Covid-19_trees.txt 1 0.1 3 8
         
 2) input_file = data/all_trees_woese.txt, cluster_validity_index = CH, α = 1, Kmin = 2, Kmax = 10):
-    
+
     $ ./KMPTC -tree ../data/all_trees_woese.txt 1 1 2 10
 
 # Input
