@@ -12,7 +12,7 @@ affiliations:
   - name:
     index:
 date: 17 October 2022
-bibliography: paper.lib
+bibliography: paper.bib
 
 ---
 
