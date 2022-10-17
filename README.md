@@ -59,11 +59,11 @@ Please execute the following command line :
 
 Command line execution examples:
 
-1) input_file = data/Covid-19_trees.txt, cluster_validity_index = CH, α = 0.1, Kmin = 3, Kmax = 8):
+input_file = data/Covid-19_trees.txt, cluster_validity_index = CH, α = 0.1, Kmin = 3, Kmax = 8):
 
     $ ./KMPTC -tree ../data/Covid-19_trees.txt 1 0.1 3 8
         
-2) input_file = data/all_trees_woese.txt, cluster_validity_index = CH, α = 1, Kmin = 2, Kmax = 10):
+input_file = data/all_trees_woese.txt, cluster_validity_index = CH, α = 1, Kmin = 2, Kmax = 10):
 
     $ ./KMPTC -tree ../data/all_trees_woese.txt 1 1 2 10
 
