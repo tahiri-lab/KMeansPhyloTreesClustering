@@ -1,0 +1,51 @@
+@article{tahiri2018new,
+  title={A new fast method for inferring multiple consensus trees using k-medoids},
+  author={Tahiri, Nadia and Willems, Matthieu and Makarenkov, Vladimir},
+  journal={BMC evolutionary biology},
+  volume={18},
+  number={1},
+  pages={1--12},
+  year={2018},
+  publisher={Springer}
+}
+
+@article{tahiri2022building,
+  title={Building alternative consensus trees and supertrees using k-means and Robinson and Foulds distance},
+  author={Tahiri, Nadia and Fichet, Bernard and Makarenkov, Vladimir},
+  journal={Bioinformatics},
+  volume={38},
+  number={13},
+  pages={3367--3376},
+  year={2022},
+  publisher={Oxford University Press}
+}
+
+@article{tahiri2022IFCS,
+  title={New metrics for classifying phylogenetic trees using k-means and the symmetric difference metric},
+  author={Tahiri, Nadia and and Koshkarov, Aleksandr},
+  journal={Conference proceedings Classification and Data Science in the Digital Age},
+  volume={1},
+  number={2198-3321},
+  pages={XIV, 360},
+  year={2022},
+  publisher={Springer}
+}
+
+@article{tahiri2022IFCS,
+  title={Inferring multiple consensus trees and supertrees using clustering: a review},
+  author={Makarenkov, Vladimir, Barseghyan, Gayane and Tahiri, Nadia},
+  journal={Data Mining is More Than Comprehensive Analysis},
+  volume={1},
+  number={1},
+  pages={28},
+  year={2022},
+  publisher={Springer Nature}
+}
+
+@article{tahiri2022invariant,
+  title={Invariant transformers of robinson and foulds distance matrices for convolutional neural network.},
+  author={Tahiri, Nadia and Veriga, Andrey and Koshkarov, Aleksandr and Morozov, Boris},
+  journal={Journal of Bioinformatics and Computational Biology},
+  pages={2250012--2250012},
+  year={2022}
+}

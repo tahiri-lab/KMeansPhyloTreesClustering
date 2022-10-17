@@ -4,6 +4,8 @@ install: main.cpp
 	g++ main.cpp fonctions.cpp hgt_int.cpp K-means.cpp Super-trees.cpp utils_tree.cpp -openmp -g -o KMPTC
 	chmod -R 777 * .
 	@echo ' '
+	@echo 'The program has been compiled correctly'
+	@echo ' '
 	
 help:
 	@echo 'Please execute the following command lines (on two steps):'
