@@ -1,0 +1,60 @@
+{
+  "_buildCommand2" : {
+    "command" : "prepareForIndexing",
+    "enableIndexBuildArena" : true,
+    "targets" : null
+  },
+  "buildCommand" : "build",
+  "configuredTargets" : [
+    {
+      "guid" : "8d98c1ed9bdc59489333d96b149b1d96208056f423a6b7e712c6f548fb2d4cbe"
+    }
+  ],
+  "containerPath" : "/Users/benjaminalbertelli/Desktop/Stage Sherbrooke/code/KMeansPhylogeneticTreesClustering/KMeansPhylogeneticTreesClustering.xcodeproj",
+  "continueBuildingAfterErrors" : true,
+  "enableIndexBuildArena" : false,
+  "hideShellScriptEnvironment" : false,
+  "parameters" : {
+    "action" : "indexbuild",
+    "activeArchitecture" : "x86_64",
+    "activeRunDestination" : {
+      "disableOnlyActiveArch" : false,
+      "platform" : "macosx",
+      "sdk" : "macosx12.3",
+      "sdkVariant" : "macos",
+      "supportedArchitectures" : [
+        "x86_64h",
+        "x86_64"
+      ],
+      "targetArchitecture" : "x86_64"
+    },
+    "arenaInfo" : {
+      "buildIntermediatesPath" : "/Users/benjaminalbertelli/Desktop/Stage Sherbrooke/code/KMeansPhylogeneticTreesClustering/src/KMeansPhylogeneticTreesClustering-dcnrnuajdjgtmjcbemiqghbxjear/Index/Build/Intermediates.noindex",
+      "buildProductsPath" : "/Users/benjaminalbertelli/Desktop/Stage Sherbrooke/code/KMeansPhylogeneticTreesClustering/src/KMeansPhylogeneticTreesClustering-dcnrnuajdjgtmjcbemiqghbxjear/Index/Build/Products",
+      "derivedDataPath" : "/Users/benjaminalbertelli/Desktop/Stage Sherbrooke/code/KMeansPhylogeneticTreesClustering/src",
+      "indexDataStoreFolderPath" : "/Users/benjaminalbertelli/Desktop/Stage Sherbrooke/code/KMeansPhylogeneticTreesClustering/src/KMeansPhylogeneticTreesClustering-dcnrnuajdjgtmjcbemiqghbxjear/Index/DataStore",
+      "indexEnableDataStore" : true,
+      "indexPCHPath" : "/Users/benjaminalbertelli/Desktop/Stage Sherbrooke/code/KMeansPhylogeneticTreesClustering/src/KMeansPhylogeneticTreesClustering-dcnrnuajdjgtmjcbemiqghbxjear/Index/PrecompiledHeaders",
+      "pchPath" : "/Users/benjaminalbertelli/Desktop/Stage Sherbrooke/code/KMeansPhylogeneticTreesClustering/src/KMeansPhylogeneticTreesClustering-dcnrnuajdjgtmjcbemiqghbxjear/Index/Build/Intermediates.noindex/PrecompiledHeaders"
+    },
+    "configurationName" : "Debug",
+    "overrides" : {
+      "synthesized" : {
+        "table" : {
+          "ENABLE_PREVIEWS" : "NO",
+          "INDEX_ARENA_INFO_REGULAR_BUILD_PRODUCTS_DIR" : "/Users/benjaminalbertelli/Desktop/Stage Sherbrooke/code/KMeansPhylogeneticTreesClustering/src/KMeansPhylogeneticTreesClustering-dcnrnuajdjgtmjcbemiqghbxjear/Build/Products",
+          "ONLY_ACTIVE_ARCH" : "YES"
+        }
+      }
+    }
+  },
+  "qos" : "utility",
+  "schemeCommand" : "launch",
+  "schemeCommand2" : "launch",
+  "shouldCollectMetrics" : false,
+  "showNonLoggedProgress" : true,
+  "useDryRun" : false,
+  "useImplicitDependencies" : true,
+  "useLegacyBuildLocations" : false,
+  "useParallelTargets" : true
+}

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>logFormatVersion</key>
+	<integer>10</integer>
+	<key>logs</key>
+	<dict>
+		<key>B1A3AA7A-0D7E-465C-8548-39F9861F87FC</key>
+		<dict>
+			<key>className</key>
+			<string>DBGConsoleLog</string>
+			<key>documentTypeString</key>
+			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
+			<key>fileName</key>
+			<string>B1A3AA7A-0D7E-465C-8548-39F9861F87FC.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>KMeansPhylogeneticTreesClustering project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>KMeansPhylogeneticTreesClustering</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Run KMeansPhylogeneticTreesClustering</string>
+			<key>timeStartedRecording</key>
+			<real>679875738.79156899</real>
+			<key>timeStoppedRecording</key>
+			<real>679875953.88624299</real>
+			<key>title</key>
+			<string>Run KMeansPhylogeneticTreesClustering</string>
+			<key>uniqueIdentifier</key>
+			<string>B1A3AA7A-0D7E-465C-8548-39F9861F87FC</string>
+		</dict>
+		<key>D3284667-DCE1-4411-AADE-20F1180FAD3D</key>
+		<dict>
+			<key>className</key>
+			<string>DBGConsoleLog</string>
+			<key>documentTypeString</key>
+			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
+			<key>fileName</key>
+			<string>D3284667-DCE1-4411-AADE-20F1180FAD3D.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>KMeansPhylogeneticTreesClustering project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>KMeansPhylogeneticTreesClustering</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Run KMeansPhylogeneticTreesClustering</string>
+			<key>timeStartedRecording</key>
+			<real>679867915.58001494</real>
+			<key>timeStoppedRecording</key>
+			<real>679875099.61576605</real>
+			<key>title</key>
+			<string>Run KMeansPhylogeneticTreesClustering</string>
+			<key>uniqueIdentifier</key>
+			<string>D3284667-DCE1-4411-AADE-20F1180FAD3D</string>
+		</dict>
+	</dict>
+</dict>
+</plist>
