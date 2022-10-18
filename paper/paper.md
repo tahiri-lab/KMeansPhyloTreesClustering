@@ -22,7 +22,7 @@ affiliations:
   - name: ENSEA, 6 avenue du Ponceau 95000 Cergy, France
     index: 2
 date: 18 October 2022
-bibliography: paper.bib
+bibliography: paper/paper.bib
 ---
 
 # Summary 
