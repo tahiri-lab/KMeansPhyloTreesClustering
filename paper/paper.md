@@ -1,19 +1,28 @@
 ---
-
-title: ''
+title: 'KMPTC: a new tool to classify phylogenetic trees with or without the same taxon sets'
 tags:
+  - bioinformatics
   - phylogeny
-  - 
+  - supertree
+  - consensus tree
+  - classification
+  - clustering
+  - Robinson and Foulds distance
 authors:
   - name: Benjamin Albertelli
-    orcid: 
+    affiliation: "1, 2"
   - name: Nadia Tahiri
+    affiliation: 1
+    orcid: 0000-0002-1818-208X
+    corresponding: true
+    email: Nadia.Tahiri@USherbrooke.ca
 affiliations:
-  - name:
-    index:
-date: 17 October 2022
+  - name: département d’Informatique, Université de Sherbrooke, 2500 Boulevard de l’Université, Sherbrooke, Québec J1K 2R1, Canada
+    index: 1
+  - name: ENSEA, 6 avenue du Ponceau 95000 Cergy, France
+    index: 2
+date: 18 October 2022
 bibliography: paper.bib
-
 ---
 
 # Summary 
@@ -28,7 +37,17 @@ KMeansPhylogeneticTreesClustering is a package that aims to bring together in a 
 
 # State of the field
 
+The main functionality of the algorithm allows the user to group trees by allowing him to define each of the input parameters. Let's take a concrete case:  
+ 
+- First, the user has to download and install the package on his machine. All these steps are detailed in the README.  
+  
+- Then, the user has two possibilities.  
+Firstly, he can run examples in order to familiarize himself with the use of the software. For that, with the help of the readme and its "example" part, it will be very easy for the user to execute an example.  
+Otherwise, he can choose to simply execute the program by choosing his criteria. Note that the file containing the trees to be grouped must be given in Newick format (program input). The user can then modify the validity index of the clusters used in the K-means, the penalty parameter for the overlap of species in the phylogenetic trees, the minimum and maximum number of clusters in the K-means. 
 
+To do this the user must run the command line ./KMPTC in the src folder. After that the algorithm will allow him to choose his own criteria.
+  
+- Finally, after execution, the user has access to the clustering statistics as well as to the distribution of the trees within the clusters. To do this, he must go to the files in the "output" folder. He can then find the partition found according to the criteria as well as the clustering score. 
 
 # Acknowledgements
 
