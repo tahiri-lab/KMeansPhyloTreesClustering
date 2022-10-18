@@ -62,6 +62,10 @@ Command line execution examples:
 input_file = data/Covid-19_trees.txt, cluster_validity_index = CH, α = 0.1, Kmin = 3, Kmax = 8):
 
     $ ./KMPTC -tree ../data/Covid-19_trees.txt 1 0.1 3 8
+    
+Or by using the Makefile instruction as follows (as in the previous example):
+
+    $ make execute
         
 input_file = data/all_trees_woese.txt, cluster_validity_index = CH, α = 1, Kmin = 2, Kmax = 10):
 
