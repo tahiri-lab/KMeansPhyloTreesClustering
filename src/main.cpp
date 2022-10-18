@@ -319,7 +319,7 @@ void Initialisation(int nargs, char ** argv){
             printf("Sorry but you have to choose a program to execute. Here are the possibilities :\n1) KMPTC\nPlease write the number of your choice :\n");
             scanf("%d", &choice);
             if (choice == 1){
-                argv[0] = "./KMPTC";
+                argv[0] = (char *)"./KMPTC";
             }
         }
         else{
@@ -328,7 +328,7 @@ void Initialisation(int nargs, char ** argv){
             if (choice == 1){
                 char rep[256];
                 getcwd(rep, 256);
-                argv[1] = "-tree";
+                argv[1] = (char *)"-tree";
                 printf("\nNow choose your .txt file containing the data.\n");
                 printf("Please write the path directory from the src folder.\n");
                 printf("Note that your actual directory path is :\n");

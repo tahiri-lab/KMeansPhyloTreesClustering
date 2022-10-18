@@ -876,7 +876,7 @@ void ajouterMatriceGene(double **mat,const char *outfile,int taille,char **noms)
         exit(-1);
     }
     else{
-        fprintf(out,"\n",taille);
+        fprintf(out,"\n%i",taille);
         for(i=1;i<=taille;i++){
             if(strcmp(noms[i],"") != 0){  //if(strlen(noms[i]) > 1){
                 fprintf(out,"\n%s",noms[i]);
