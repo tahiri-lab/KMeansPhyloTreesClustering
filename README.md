@@ -39,13 +39,13 @@ Then please execute these two lines.
 
 
 # Help
-If you need help for execution, please execute this line in the src folder :
+If you need help for execution, please execute this line in the src folder:
 
     $ make help
 
 # Examples
 
-Please execute the following command line :  
+Please execute the following command line:  
 
 => For trees: ./KMPTC -tree input_file cluster_validity_index α Kmin Kmax
 
@@ -85,6 +85,6 @@ The output is in the following files:
 
 # Clean Project
 
-To clean the project, please execute :
+To clean the project, please execute:
 
     $ make clean
