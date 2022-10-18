@@ -2,15 +2,17 @@
 A new fast method for clustering phylogenetic trees using K-means and inferring multiple supertrees.
 
 # About
-Program   : KMeansPhylogeneticTreesClustering - 2022  
-Authors   : Benjamin Albertelli and Nadia Tahiri (University of Sherbrooke)  
+**Program**   : KMeansPhylogeneticTreesClustering - 2022  
+**Authors**   : Benjamin Albertelli and Nadia Tahiri (University of Sherbrooke)  
+
 This program clusters phylogenetic trees using the k-means partitioning algorithm.  
 These trees may have the same (the multiple consensus tree problem) or different, but mutually overlapping, sets of leaves (the multiple supertree problem).
     
 Phylogenetic trees must be given in the Newick format (program input). A partitioning of the input trees in K clusters of trees is returned as output. 
 The optimal number of clusters can be determined either:
-     1) by the Calinski-Harabasz (CH) or 
-     2) by the Ball-Hall (BH) cluster validity index adapted for tree clustering.
+
+1) by the Calinski-Harabasz (CH) or 
+2) by the Ball-Hall (BH) cluster validity index adapted for tree clustering.
 
 A supertree can then be inferred for each cluster of trees.The Robinson and Foulds topological distance is used in the objective function of K-means.
 The list of the program parameters is specified below.
