@@ -1,4 +1,7 @@
-﻿﻿﻿﻿﻿﻿﻿﻿<h1  align="center"> KMPTC <p align='center'> [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ftahiri-lab%2FKMeansPhylogeneticTreesClustering&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com) </p>
+﻿﻿﻿﻿﻿﻿﻿﻿<h1  align="center"> KMPTC <p align='center'> 
+        [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+        [![Py version](https://img.shields.io/pypi/pyversions/pysd.svg)](https://pypi.python.org/pypi/pysd/)
+        [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ftahiri-lab%2FKMeansPhylogeneticTreesClustering&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com) </p>
 
 
 <h2  align="center">Multi-platform application for clustering phylogenetic trees using K-means and inferring multiple supertrees</h2>
