@@ -1,11 +1,34 @@
 ﻿﻿﻿﻿﻿﻿﻿﻿<h1  align="center"> KMPTC <p align='center'> [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ftahiri-lab%2FKMeansPhylogeneticTreesClustering&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com) </p>
 
-# KMeansPhylogeneticTreesClustering
+
+<h2  align="center">Multi-platform application for clustering phylogenetic trees using K-means and inferring multiple supertrees</h2>
+
+<details open>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About the project</a>
+    </li>
+    <li>
+      <a href="#Installation">Installation</a>
+    </li>
+    <li>
+      <a href="#Examples">Examples</a>
+    </li>
+      <a href="#contact">Contact</a>
+    </li>
+  </ol>
+</details>
+
+
+
+# About the project
 A new fast method for clustering phylogenetic trees using K-means and inferring multiple supertrees.
 
 # About
 **Program**   : KMeansPhylogeneticTreesClustering - 2022  
 **Authors**   : Benjamin Albertelli and Nadia Tahiri (University of Sherbrooke)  
+**Version**   : 1.0.0
 
 This program clusters phylogenetic trees using the k-means partitioning algorithm.  
 These trees may have the same (the multiple consensus tree problem) or different, but mutually overlapping, sets of leaves (the multiple supertree problem).
@@ -29,7 +52,7 @@ This package works with :
 
 Warning : that's not the minimal requirement, the software should work with previous versions of software.
 
-# How to install
+# Installation
 First copy and paste this link in your shell after you go to the folder where you want to download the software :
 
     $ git clone https://github.com/tahiri-lab/KMeansPhylogeneticTreesClustering.git
@@ -90,3 +113,7 @@ The output is in the following files:
 To clean the project, please execute:
 
     $ make clean
+
+
+# Contact
+Please email us at : <Nadia.Tahiri@USherbrooke.ca> for any question or feedback.
