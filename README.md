@@ -15,6 +15,7 @@
     <li>
       <a href="#Examples">Examples</a>
     </li>
+    <li>
       <a href="#contact">Contact</a>
     </li>
   </ol>
