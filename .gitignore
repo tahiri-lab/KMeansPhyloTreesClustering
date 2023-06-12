@@ -1,1 +1,5 @@
+#ide related folder
 .idea/
+
+#executable file
+src/KMPTC
