@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include "utils_tree.hpp"
 
 using namespace std;
 

@@ -190,8 +190,8 @@ int nbSpeciesNewick(string newick){
 //===================================================================================
 
 
-void newickToMatrix(string newick,struct InputTree *aTree){
-    
+void newickToMatrix(string newick, struct InputTree *aTree){
+
     int pos_racine=-1;
 
 
@@ -199,18 +199,19 @@ void newickToMatrix(string newick,struct InputTree *aTree){
     allocMemmory(aTree,aTree->size+1);
     pos_racine = lectureNewick(newick,aTree->ARETE,aTree->LONGUEUR,aTree->SpeciesName,&aTree->kt);
 
-  {
-    loadAdjacenceMatrix(aTree->Adjacence,aTree->ARETE, aTree->LONGUEUR,aTree->size,aTree->kt);
-    Floyd(aTree->Adjacence,aTree->ADD,aTree->Input,aTree->size,aTree->kt); //1ere fois
-  }
-  
+    {
+        loadAdjacenceMatrix(aTree->Adjacence,aTree->ARETE, aTree->LONGUEUR,aTree->size,aTree->kt);
+        Floyd(aTree->Adjacence,aTree->ADD,aTree->Input,aTree->size,aTree->kt); //1ere fois
+    }
 }
 
 //===================================================================================
 //===================================================================================
 //===================================================================================
 
-
+/*
+ * gets two trees with a Newick r
+ * **/
 int readInputFile(string tree1, string tree2, const char *tmpFile, struct InputTree *speciesTree_t, struct InputTree *geneTree_t,char *fichier_erreur){
     string newick;
     int finalTaille=0;
@@ -219,12 +220,13 @@ int readInputFile(string tree1, string tree2, const char *tmpFile, struct InputT
 
     newick = tree2;
     newickToMatrix(newick,geneTree_t);
+
     
      filtrerMatrice(speciesTree_t->Input,geneTree_t->Input,speciesTree_t->SpeciesName,geneTree_t->SpeciesName,speciesTree_t->size,geneTree_t->size,fichier_erreur);
-    
-    if((finalTaille=ecrireMatrice(speciesTree_t->Input,tmpFile,speciesTree_t->size,speciesTree_t->SpeciesName)) == -1)
-        return -2;
-    ajouterMatriceGene(geneTree_t->Input,tmpFile,geneTree_t->size,geneTree_t->SpeciesName);
+
+     if((finalTaille=ecrireMatrice(speciesTree_t->Input,tmpFile,speciesTree_t->size,speciesTree_t->SpeciesName)) == -1)
+         return -2;
+     ajouterMatriceGene(geneTree_t->Input,tmpFile,geneTree_t->size,geneTree_t->SpeciesName);
     
     if(finalTaille<0){
         finalTaille = 0;
@@ -277,12 +279,12 @@ void FreeCriteria(struct CRITERIA * Crit,int size){
 //===================================================================================
 
 void CreateSubStructures(struct InputTree * aTree,int inc,int binaire){
-    
+
     int n = aTree->size;
     int i,j;
     int kt=0;
     inc = 10;
-        
+
     //printf("n=%d",n);
     if(aTree->ARETE == NULL){
         aTree->ARETE    =(long int*)malloc(4*(2*(n+inc))*sizeof(long int));
@@ -291,13 +293,13 @@ void CreateSubStructures(struct InputTree * aTree,int inc,int binaire){
         for(i=0;i<2*(n+inc);i++)
             aTree->Adjacence[i]=(double*)malloc((2*(n+inc)+1)*sizeof(double));
     }
-//    printf("\nbinaire = %d",binaire);
+
+    //    printf("\nbinaire = %d",binaire);
     kt = aTree->kt = Tree_edges (aTree->ADD,aTree->ARETE,aTree->LONGUEUR,n,binaire);
 
     loadAdjacenceMatrix(aTree->Adjacence,aTree->ARETE, aTree->LONGUEUR,n,aTree->kt);
     Floyd(aTree->Adjacence,aTree->ADD,n,aTree->kt); // 4eme fois
-    
-  //===creation de degre
+    //===creation de degre
     aTree->degre = (int*)malloc(2*(n+inc)*sizeof(int));
     for(i=1;i<=2*n-2-kt;i++){
         aTree->degre[i]=0;
@@ -379,13 +381,13 @@ int readInput(int Type, const char *file,struct InputTree * aTree){
     FILE * in;
     
     //= ouverture du fichier
-    if((in = fopen(file,"r"))== NULL)
+    if((in = fopen(file,"r"))== NULL) {
         return -1;
+    }
 
     //= lecture de la taille des matrices
     fscanf(in,"%d",&size);
-    
-    //= allocation de la m�moire
+    //= allocation de la memoire
     aTree->size = size;
     size++; // more space for the root
     aTree->SpeciesName = (char **)malloc((size+1)*sizeof(char*));
@@ -407,11 +409,12 @@ int readInput(int Type, const char *file,struct InputTree * aTree){
 
     size--;
     //= reads species tree
-    for(i=1;i<=size;i++)
+    for(i = 1; i <= size; i++)
     {
         fscanf(in,"%s",name);
         if(Type == SPECIE) strcpy(aTree->SpeciesName[i],name);
-        for(j=1;j<=size;j++)
+        //std::cout << name << std::endl;
+        for( j = 1; j <= size; j++)
         {
             fscanf(in,"%lf",&val);
             if(Type == SPECIE) aTree->Input[i][j] = val;
@@ -419,11 +422,12 @@ int readInput(int Type, const char *file,struct InputTree * aTree){
     }
 
     //= read gene tree
-    for(i=1;i<=size;i++)
+    for(i = 1; i <= size; i++)
     {
         fscanf(in,"%s",name);
         if(Type == GENE) strcpy(aTree->SpeciesName[i],name);
-        for(j=1;j<=size;j++)
+        //std::cout << name << std::endl;
+        for( j = 1; j <= size; j++)
         {
             fscanf(in,"%lf",&val);
             if(Type == GENE) aTree->Input[i][j] = val;
@@ -431,6 +435,8 @@ int readInput(int Type, const char *file,struct InputTree * aTree){
     }
 
     strcpy(aTree->SpeciesName[size+1],"Root");
+
+    //std::cout << "Last species : " << aTree->SpeciesName[size] << std::endl;
     
     fclose(in);
     
@@ -446,50 +452,49 @@ int readParameters(struct Parameters * param){
     char input[100];
     char output[100];
     char hgtResultFile[100];
-    sprintf((*param).sort,"yes");
-      sprintf((*param).printWeb,"yes");
-    sprintf((*param).criterion,"bd");
-    sprintf((*param).verbose,"no");
-    sprintf((*param).mode,"multicheck");
-    sprintf((*param).viewtree,"no");
-    sprintf((*param).generoot,"midpoint");
-    sprintf((*param).speciesroot,"midpoint");
-    sprintf((*param).load,"no");
-    sprintf((*param).version,"consol");
-    sprintf((*param).multiple,"no");
-    sprintf((*param).multigene,"no");
-    sprintf((*param).path,"");
-    sprintf(input,"");
-    sprintf(output,"output.txt");
-    sprintf(hgtResultFile,"hgtresultfile.txt");
-    sprintf((*param).scenario,"unique");
-    sprintf((*param).subtree,"yes");
-    sprintf((*param).bootstrap,"no");
+    snprintf((*param).sort, sizeof((*param).sort), "yes");
+    snprintf((*param).printWeb, sizeof((*param).printWeb), "yes");
+    snprintf((*param).criterion, sizeof((*param).criterion), "bd");
+    snprintf((*param).verbose, sizeof((*param).verbose), "no");
+    snprintf((*param).mode, sizeof((*param).mode), "multicheck");
+    snprintf((*param).viewtree, sizeof((*param).viewtree), "no");
+    snprintf((*param).generoot, sizeof((*param).generoot), "midpoint");
+    snprintf((*param).speciesroot, sizeof((*param).speciesroot), "midpoint");
+    snprintf((*param).load, sizeof((*param).load), "no");
+    snprintf((*param).version, sizeof((*param).version), "consol");
+    snprintf((*param).multiple, sizeof((*param).multiple), "no");
+    snprintf((*param).multigene, sizeof((*param).multigene), "no");
+    snprintf((*param).path, sizeof((*param).path), "");
+    snprintf(input, sizeof(input), "");
+    snprintf(output, sizeof(output), "output.txt");
+    snprintf(hgtResultFile, sizeof(hgtResultFile), "hgtresultfile.txt");
+    snprintf((*param).scenario, sizeof((*param).scenario), "unique");
+    snprintf((*param).subtree, sizeof((*param).subtree), "yes");
+    snprintf((*param).bootstrap, sizeof((*param).bootstrap), "no");
     (*param).nbhgt = 100;
     (*param).bootmin = 0;
-    sprintf((*param).special,"no");
+    snprintf((*param).special, sizeof((*param).special), "no");
     (*param).rand_bootstrap = 0;
-    sprintf((*param).stepbystep,"no");
-    
+    snprintf((*param).stepbystep, sizeof((*param).stepbystep), "no");
 
-    sprintf((*param).inputfile,"%s%s",(*param).path,input);
-    sprintf((*param).input,"%sinput_.txt",(*param).path);
-    sprintf((*param).outputfile,"%s%s",(*param).path,output);
-    sprintf((*param).results,"%sresults.txt",(*param).path);
-    sprintf((*param).results_bouba,"%sresults2.txt",(*param).path);
-    sprintf((*param).hgtResultFile,"%s%s",(*param).path,hgtResultFile);
-    sprintf((*param).speciesTree,"%sspeciesTree.txt",(*param).path);
-    sprintf((*param).geneTree,"%sgeneTree.txt",(*param).path);
-    sprintf((*param).speciesRootfile,"%sspeciesRoot.txt",(*param).path);
-    sprintf((*param).speciesRootfileLeaves,"%sspeciesRootLeaves.txt",(*param).path);
-    sprintf((*param).geneRootfile,"%sgeneRoot.txt",(*param).path);
-    sprintf((*param).errorFile,"%serrorFile.txt",(*param).path);
-    sprintf((*param).geneRootfileLeaves,"%sgeneRootLeaves.txt",(*param).path);
-    sprintf((*param).speciesTreeWeb,"%sspeciesTreeWeb.txt",(*param).path);
-    sprintf((*param).geneTreeWeb,"%sgeneTreeWeb.txt",(*param).path);
-    sprintf((*param).outputWeb,"%soutputWeb.txt",(*param).path);
-    sprintf((*param).noMoreHgtfile,"%snomorehgt.txt",(*param).path);
-    sprintf((*param).prehgtfile,"%sprehgt.txt",(*param).path);
+    snprintf((*param).inputfile, sizeof((*param).inputfile), "%s%s", (*param).path, input);
+    snprintf((*param).input, sizeof((*param).input), "%sinput_.txt", (*param).path);
+    snprintf((*param).outputfile, sizeof((*param).outputfile), "%s%s", (*param).path, output);
+    snprintf((*param).results, sizeof((*param).results), "%sresults.txt", (*param).path);
+    snprintf((*param).results_bouba, sizeof((*param).results_bouba), "%sresults2.txt", (*param).path);
+    snprintf((*param).hgtResultFile, sizeof((*param).hgtResultFile), "%s%s", (*param).path, hgtResultFile);
+    snprintf((*param).speciesTree, sizeof((*param).speciesTree), "%sspeciesTree.txt", (*param).path);
+    snprintf((*param).geneTree, sizeof((*param).geneTree), "%sgeneTree.txt", (*param).path);
+    snprintf((*param).speciesRootfile, sizeof((*param).speciesRootfile), "%sspeciesRoot.txt", (*param).path);
+    snprintf((*param).speciesRootfileLeaves, sizeof((*param).speciesRootfileLeaves), "%sspeciesRootLeaves.txt", (*param).path);
+    snprintf((*param).geneRootfile, sizeof((*param).geneRootfile), "%sgeneRoot.txt", (*param).path);
+    snprintf((*param).errorFile, sizeof((*param).errorFile), "%serrorFile.txt", (*param).path);
+    snprintf((*param).geneRootfileLeaves, sizeof((*param).geneRootfileLeaves), "%sgeneRootLeaves.txt", (*param).path);
+    snprintf((*param).speciesTreeWeb, sizeof((*param).speciesTreeWeb), "%sspeciesTreeWeb.txt", (*param).path);
+    snprintf((*param).geneTreeWeb, sizeof((*param).geneTreeWeb), "%sgeneTreeWeb.txt", (*param).path);
+    snprintf((*param).outputWeb, sizeof((*param).outputWeb), "%soutputWeb.txt", (*param).path);
+    snprintf((*param).noMoreHgtfile, sizeof((*param).noMoreHgtfile), "%snomorehgt.txt", (*param).path);
+    snprintf((*param).prehgtfile, sizeof((*param).prehgtfile), "%sprehgt.txt", (*param).path);
     
     return 0;
 }
