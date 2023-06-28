@@ -1,7 +1,7 @@
 all: install help execute clean
 	
 install: main.cpp
-	g++ main.cpp fonctions.cpp hgt_int.cpp K-means.cpp Super-trees.cpp utils_tree.cpp -openmp -g -o KMPTC
+	g++ -std=c++11 main.cpp fonctions.cpp hgt_int.cpp K-means.cpp Super-trees.cpp utils_tree.cpp -openmp -g -o KMPTC
 	chmod -R 777 * .
 	@echo ' '
 	@echo 'The program has been compiled correctly'
@@ -29,7 +29,7 @@ help:
 	@echo ' '
 	
 execute:
-	@echo 'We gonna execute this line as example :'
+	@echo 'We are going to execute this line as example :'
 	@echo '===> ./KMPTC -tree ../data/Covid-19_trees.txt 1 0.2 3 8'
 	@echo ' '
 	$. ./KMPTC -tree ../data/Covid-19_trees.txt 1 0.2 3 8

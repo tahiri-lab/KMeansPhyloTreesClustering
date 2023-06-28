@@ -12,16 +12,11 @@
 int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees, int intParam, double alpha, int kmin, int kmax){
      // Variables
     time_t tbegin,tend;
-    double texec=0.;
+    double texec=0.0;
 
     // Start timer
     tbegin=time(NULL);                // get the current calendar time
-    
-/*     printf ("Consensus'tree K-means partitioning\n");
-    printf("Nadia Tahiri and Vladimir Makarenkov - Departement d'informatique - Universite du Quebec a Montreal\n");
-    printf ("Original code by :  Pierre Legendre - Departement de sciences biologiques - Universite de Montreal.\n");
-    printf ("(c) Pierre Legendre, 1999\n");
- */
+
     //Varriables
     double **Matrice_RF;
     double **Ww;
@@ -73,14 +68,6 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
             // Appel des algorithmes des calcules des distances : RF
             main_hgt(tree1,tree2,distances);
             Matrice_RF[line][column]=distances[0];
-            
-            /*if(Matrice_RF[line][column]<=0.0){
-                Matrice_RF[line][column]=0.0;
-            }
-            
-            if(isnan(Matrice_RF[line][column])){
-                Matrice_RF[line][column]=0.0;
-            }*/
 
             //Recuperer le nombre d'espèces communes
             n_identique[line][column]=distances[3];
@@ -90,10 +77,7 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
             
             // pour remplir la symétrique de la matrice RF sans réaliser de calcul (car matrice carrée symétrique)
             Matrice_RF[column][line]=Matrice_RF[line][column];
-            //printf("%lf ", Matrice_RF[line][column]);
-
         }
-        //printf("\n");
     }
     
     double avg_RF = 0.0;
@@ -108,11 +92,6 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
         }
     }
     
-    /*cout<<nb_avg_RF<<endl;
-    cout<<avg_RF<<endl;
-    avg_RF = avg_RF/(nb_avg_RF*1.0);
-    cout<<avg_RF<<endl;*/
-    
     avg_RF = avg_RF/(nb_avg_RF*1.0);
     // RF = Mean(RF) + Alpha*Terme2, where Mean(RF) is the average of all RF between trees (where number of same leave is more than 3)
     for(int line=0;line<mesTrees.size()-1;line++){
@@ -123,16 +102,7 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
             }
         }
     }
-    
-    //printf("MATRICE RF\n");
-    //for(int line=0;line<mesTrees.size();line++){
-        //printf("\n");
-        //for(int colonne=0;colonne<mesTrees.size();colonne++){
-            //printf("%lf(%lf)", Matrice_RF[line][colonne]*(2*n_identique[line][colonne]-6),2*n_identique[line][colonne]-6);
-        //}
-    //}
-    
-    
+
     //creation de la matrice de distances RF : mat
     for (int i=0; i<mesTrees.size(); i++){
         for (int j=0; j<mesTrees.size(); j++){
@@ -161,6 +131,6 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
 
     // Compute execution time
     texec=difftime(tend,tbegin);    // tend-tbegin (result in second)
-    /* cout<<"\nTEMPS D'EXECUTION "<<texec<<endl; */
+    //cout<<"\nTEMPS D'EXECUTION "<<texec<<endl;
     return 0;
 }

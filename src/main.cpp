@@ -47,11 +47,13 @@ int main(int nargs, char ** argv) {
     char contenu[100];
 
     Initialisation(nargs, argv);
-    nargs = 7;
+    //nargs = 7;
 
     presenterProgramme();
     
     if(ExtraireDonneesLC(argv[1],champs,contenu)==1){
+
+        //if program is launched with -tree argument
         if(strcmp("tree",champs) == 0){
             fstream fichier(argv[2]);
             int intParam = 0;
@@ -108,7 +110,7 @@ int main(int nargs, char ** argv) {
             strcpy(cl2[3], "?");
             vector <int> tabIndices;
             if( !fichier ){
-                cout << "File "<<argv[2]<<" no exist."<<endl;
+                std::cout << "File "<<argv[2]<<" no exist."<<std::endl;
             }else{
                 while( !fichier.eof()){
                     mesTrees.push_back("");//creation d'une ligne vide
@@ -122,13 +124,17 @@ int main(int nargs, char ** argv) {
                 if (kmax>mesTrees.size()-1||kmax<1){
                     kmax = int (mesTrees.size()-1);
                 }
+
+                //call to main_consense, a consensus algorithm to classify super trees
                 main_consense(cl2,tabIndices,mesTrees,intParam,alpha,kmin,kmax);
 
                 //vider les vecteurs
                 mesTrees.clear();
                 tabIndices.clear();
             }
-        }else if(strcmp("matrice",champs) == 0){
+
+        //if program is launched with -matrice argument
+        } else if (strcmp("matrice",champs) == 0) {
             if(nargs > 7){
                 printf("\nbad input..\nusage:%s {-matrice} nameFile [cluster_validity_index] [alpha] [kmin] [kmax]\n",argv[0]);
                 exit(1);
@@ -251,7 +257,6 @@ int main(int nargs, char ** argv) {
 //===================================================================================
 
 int ExtraireDonneesLC(const char * chaine, char *champs, char * contenu){
-
     int tailleChaine;
 
     if(chaine[0] != '-'){
@@ -314,6 +319,9 @@ void presenterProgramme(){
 void Initialisation(int nargs, char ** argv){
     //Allow the user to use the program without executing the example line but choosing arguments step by step
     int choice = 0;
+
+    std::cout<<"nargs vaut : "<<nargs<<std::endl;
+
     if(nargs != 7){
         if(nargs < 1){
             printf("Sorry but you have to choose a program to execute. Here are the possibilities :\n1) KMPTC\nPlease write the number of your choice :\n");

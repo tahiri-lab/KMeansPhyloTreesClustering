@@ -16,6 +16,7 @@
 #include <limits>
 #include <string>
 #include <cstring>
+#include "utils_tree.hpp"
 
 using namespace std;
 

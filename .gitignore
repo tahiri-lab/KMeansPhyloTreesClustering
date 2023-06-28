@@ -1,0 +1,9 @@
+#ide related folder
+.idea/
+
+#executable file
+src/KMPTC
+
+#input and output files
+../data/*
+../output/*
