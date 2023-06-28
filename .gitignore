@@ -7,3 +7,5 @@ src/KMPTC
 #input and output files
 ../data/*
 ../output/*
+../output/output.txt
+../output/stat.csv
