@@ -5,6 +5,8 @@
 src/KMPTC
 
 #input and output files
-../data/*
-../output/*
-../output/
+data/
+output/
+
+output/stat.csv
+output/output.txt
