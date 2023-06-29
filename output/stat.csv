@@ -1,1 +1,0 @@
-Criteria;NbTrees;NbSpieces;Percent;Kreal;Kfound;|Kfound-Kreal|;|Kfound-Kreal|/max(Kfound,Kreal));T;RI;ARI;Score;Partition;Time;K-medoids
