@@ -17,6 +17,7 @@
 #include <cstring>
 #include <iostream>
 #include <iomanip>
+#include <fstream>
 
 using namespace std;
 
@@ -41,6 +42,11 @@ int ecrireMatrice(double **, const char *, int, char **);
 void ajouterMatriceGene(double **, const char *, int, char **);
 void TrierMatrices(double **, char **, char **, int);
 int lectureNewick(string, long int *, double *, char **, int *);
+
+/**
+ * functions by Arthur Debeaupte
+ * */
+void writeInputTreeToFile(const std::string& filename, InputTree& tree);
 
 
 #endif /* utils_tree_hpp */
