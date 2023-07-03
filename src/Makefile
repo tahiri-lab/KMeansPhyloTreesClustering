@@ -2,6 +2,9 @@ all: install help execute clean
 	
 install: main.cpp
 	g++ -std=c++11 main.cpp fonctions.cpp hgt_int.cpp K-means.cpp Super-trees.cpp utils_tree.cpp -openmp -g -o KMPTC
+	@if [ ! -d "../output" ]; then mkdir "../output"; fi
+	@if [ ! -d "../output/stat.csv" ]; then touch "../output/stat.csv"; fi
+	@if [ ! -d "../output/output.txt" ]; then touch "../output/output.txt"; fi
 	chmod -R 777 * .
 	@echo ' '
 	@echo 'The program has been compiled correctly'
