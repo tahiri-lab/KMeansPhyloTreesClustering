@@ -51,7 +51,7 @@ The list of the program parameters is specified below.
 # Requirements
 This package works with : 
 
-- boost 1.78.0_1 for boost regex library (boost has to be added to your PATH)
+- boost 1.78.0_1 for boost regex library (boost has to be added to your PATH, check doc/Boost_Installation.pdf)
 - git 2.35.1
 - macOS Monterey version 12.5
 - macOS Terminal version 2.12.7
@@ -109,6 +109,8 @@ The input data sets are located in the folder "data".
 You can also use your own data, please ensure that the file respect the needed format.
 
 # Output
+Output folder will be created on your machine when executing "make install" command from src directory.
+
 See the folder "output"  
 The output is in the following files:  
 1) stat.csv - for the clustering statistics.  
