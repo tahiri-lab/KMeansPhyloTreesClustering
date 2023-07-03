@@ -7,4 +7,6 @@ src/KMPTC
 #input and output files
 data/
 output/
-output/output.txt
+
+#trees files
+treeFiles/

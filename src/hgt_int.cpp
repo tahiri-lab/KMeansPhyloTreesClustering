@@ -6,8 +6,7 @@
 //
 
 #include "hgt_int.hpp"
-#include "fonctions.hpp"
-#include "utils_tree.hpp"
+
 
 extern int rand_bootstrap;
 
@@ -107,7 +106,9 @@ void main_hgt(string tree1, string tree2, double *distances){
         distances[0]=distances[0]/((2.0*nb_same_espece)-6.0)+alpha*((min(SpeciesTree.size,GeneTree.size)-(1.0*nb_same_espece))/(1.0*min(SpeciesTree.size,GeneTree.size))); //normalisation par le nombre d'espèces communes entre les deux arbres
     }
 
-
+    /** Ability to print InputTree structures to see what's inside **/
+    //writeInputTreeToFile("../treeFiles/GeneTree.txt", GeneTreeReduce);
+    //writeInputTreeToFile("../treeFiles/SpeciesTree.txt", SpeciesTreeReduce);
 
     distances[1]=aCrit.LS;
     distances[2]=aCrit.BD;

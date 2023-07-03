@@ -1349,3 +1349,112 @@ int lectureNewick(string newick, long int * ARETE, double * LONGUEUR, char ** le
     }
     return n;
 }
+
+
+/**
+ * utils functions created by Arthur Debeaupte
+ * */
+
+void writeInputTreeToFile(const std::string& filename, InputTree& tree) {
+    std::ofstream file(filename);
+
+    if (!file) {
+        std::cerr << "Failed to create the file: " << filename << std::endl;
+        return;
+    }
+
+    file << "size : " << tree.size << std::endl;
+
+    file << "\nADD : " << std::endl;
+    if (tree.ADD != NULL) {
+        for (int i = 0; i < tree.size; i++) {
+            for (int j = 0; j < tree.size; j++) {
+                file << tree.ADD[i][j] << " ";
+            }
+            file << std::endl;
+        }
+    } else {
+        file << "NULL" << std::endl;
+    }
+
+    file << "\nInput : " << std::endl;
+    if (tree.Input != NULL) {
+        for (int i = 0; i < tree.size; i++) {
+            for (int j = 0; j < tree.size; j++) {
+                file << tree.Input[i][j] << " ";
+            }
+            file << std::endl;
+        }
+    } else {
+        file << "NULL" << std::endl;
+    }
+
+    file << "\nSpeciesName : " << std::endl;
+    if (tree.SpeciesName != NULL) {
+        for (int i = 0; i < tree.size; i++) {
+            file << tree.SpeciesName[i] << std::endl;
+        }
+    } else {
+        file << "NULL" << std::endl;
+    }
+
+    file << "\nRoot : " << tree.Root << std::endl;
+
+    file << "\nAdjacence : ";
+    if (tree.Adjacence != NULL ) {
+        for (int i = 0; i < tree.size; i++) {
+            for (int j = 0; j < tree.size; j++) {
+                file << std::fixed << std::setprecision(2) << tree.Adjacence[i][j] << " ";
+            }
+            file << std::endl;
+        }
+    } else {
+        file << "NULL" << std::endl;
+    }
+
+    file << "\nARETE : ";
+    if (tree.ARETE != NULL) {
+        for (int i = 0; i < tree.size; i++) {
+            file << tree.ARETE[i] << " ";
+        }
+        file << std::endl;
+    } else {
+        file << " NULL" << std::endl;
+    }
+
+    file << "\nLONGUEUR : ";
+    if (tree.LONGUEUR != NULL) {
+        for (int i = 0; i < tree.size; i++) {
+            file << tree.LONGUEUR[i] << " ";
+        }
+        file << std::endl;
+    } else {
+        file << "NULL" << std::endl;
+    }
+
+    file << "\nW :" << std::endl;
+    if (tree.W != NULL) {
+        for (int i = 0; i < tree.size; i++) {
+            for (int j = 0; j < tree.size; j++) {
+                file << tree.W[i][j] << " ";
+            }
+            file << std::endl;
+        }
+    } else {
+        file << "NULL" << std::endl;
+    }
+
+    file << "\nkt : " << tree.kt << std::endl;
+
+    file << "\ndegre : ";
+    if (tree.degre != NULL) {
+        for (int i = 0; i < tree.size; i++) {
+            file << tree.degre[i] << " ";
+        }
+        file << std::endl;
+    } else {
+        file << "NULL" << std::endl;
+    }
+
+    file.close();
+}
