@@ -10,7 +10,7 @@
 
 extern int rand_bootstrap;
 
-int compteur=0;
+int compteur = 0;
 
 //========================================================================================================
 //============================================ MAIN ======================================================
@@ -107,14 +107,16 @@ void main_hgt(string tree1, string tree2, double *distances){
     }
 
     /** Ability to print InputTree structures to see what's inside **/
-    //writeInputTreeToFile("../treeFiles/GeneTree.txt", GeneTreeReduce);
-    //writeInputTreeToFile("../treeFiles/SpeciesTree.txt", SpeciesTreeReduce);
+    //writeInputTreeToFile("GeneTree.txt", GeneTreeReduce);
+    //writeInputTreeToFile("SpeciesTreeTest.txt", SpeciesTreeReduce);
+
 
     distances[1]=aCrit.LS;
     distances[2]=aCrit.BD;
     distances[3]=nb_same_espece;
 
     distances[4]=nb_leaves;
+    //writeCriteriaToFile("criteria2.txt", aCrit);
 
     FreeCriteria(&aCrit,SpeciesTreeReduce.size);
     freeInputTree(&SpeciesTree,SpeciesTree.size);

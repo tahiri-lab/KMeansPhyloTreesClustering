@@ -47,6 +47,7 @@ int lectureNewick(string, long int *, double *, char **, int *);
  * functions by Arthur Debeaupte
  * */
 void writeInputTreeToFile(const std::string& filename, InputTree& tree);
+void writeCriteriaToFile(const std::string& filename, CRITERIA& criteria);
 
 
 #endif /* utils_tree_hpp */
