@@ -7,7 +7,6 @@
 
 #include "utils_tree.hpp"
 
-
 //==============================================
 //=
 //==============================================
@@ -219,7 +218,6 @@ void odp1(double **D, int *X, int *i1, int *j1, int n)
 
 int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binaire)
 {
-
     struct EDGE { unsigned int U; unsigned int V; double LN;};
     struct EDGE *Path,*Tree;
     int i,j,k,p,P,*X;
@@ -417,7 +415,7 @@ int Bipartition_Table (double **D, int **B, int *PLACE, int n)
 
     for(k=2;k<=n-1;k++)
     {
-        /* Point 2.1 of the algorithm (see the referenced article by Makarenkov and Leclerc) */
+        /* Point 2.1 of the algorithm (see the referenced article by Makarenkov and) */
 
         DIS=(D[X[1]][X[k]]+D[X[k]][X[k+1]]-D[X[1]][X[k+1]])/2;
         DIS1=(D[X[1]][X[k+1]]+D[X[k]][X[k+1]]-D[X[1]][X[k]])/2;
@@ -513,7 +511,6 @@ int Bipartition_Table (double **D, int **B, int *PLACE, int n)
         m=M;
     }
 
-
     /* memeory liberation */
     free(MaxCol);
     free(X);
@@ -521,7 +518,6 @@ int Bipartition_Table (double **D, int **B, int *PLACE, int n)
     free(Path);
 
     return m;
-
 }
 
 //==============================================================
@@ -1352,11 +1348,18 @@ int lectureNewick(string newick, long int * ARETE, double * LONGUEUR, char ** le
 
 
 /**
- * utils functions created by Arthur Debeaupte
+ * utils functions created by Arthur Debeaupte (debeaupte.arthur@gmail.com)
  * */
 
+/**
+ * @brief creates a txt file in "treeFiles" dir, representing the content of an InputTree structure
+ *
+ * @param filename : has to be "filename.txt"
+ * @param tree
+ * */
 void writeInputTreeToFile(const std::string& filename, InputTree& tree) {
-    std::ofstream file(filename);
+    std::string finalFileName = "../treeFiles/" + filename;
+    std::ofstream file(finalFileName);
 
     if (!file) {
         std::cerr << "Failed to create the file: " << filename << std::endl;
@@ -1450,6 +1453,80 @@ void writeInputTreeToFile(const std::string& filename, InputTree& tree) {
     if (tree.degre != NULL) {
         for (int i = 0; i < tree.size; i++) {
             file << tree.degre[i] << " ";
+        }
+        file << std::endl;
+    } else {
+        file << "NULL" << std::endl;
+    }
+
+    file.close();
+}
+
+
+/**
+ * @brief creates a txt file in "treeFiles" dir, representing the content of a CRITERIA structure
+ *
+ * @param filename
+ * @param criteria : the structure you want to print in a file
+ * */
+void writeCriteriaToFile(const std::string& filename, CRITERIA& criteria) {
+    std::string finalFileName = "../treeFiles/" + filename;
+    std::ofstream file(finalFileName);
+
+    if (!file) {
+        std::cerr << "Failed to create the file: " << filename << std::endl;
+        return;
+    }
+
+    file << "LS : " << criteria.LS << std::endl;
+    file << "rLS : " << criteria.rLS << std::endl;
+    file << "BD : " << criteria.BD << std::endl;
+    file << "rBD : " << criteria.rBD << std::endl;
+    file << "rRF : " << criteria.rRF << std::endl;
+    file << "diff_bd : " << criteria.diff_bd << std::endl;
+    file << "RF : " << criteria.RF << std::endl;
+    file << "QD : " << criteria.QD << std::endl;
+    file << "m : " << criteria.m << std::endl;
+    file << "nbHgtFound : " << criteria.nbHgtFound << std::endl;
+
+    file << "B : " << std::endl;
+    if (criteria.B != NULL) {
+        for (int i = 0; i < criteria.m; i++) {
+            for (int j = 0; j < criteria.m; j++) {
+                file << criteria.B[i][j] << " ";
+            }
+            file << std::endl;
+        }
+    } else {
+        file << "NULL" << std::endl;
+    }
+
+    file << "BI : " << std::endl;
+    if (criteria.BI != NULL) {
+        for (int i = 0; i < criteria.m; i++) {
+            for (int j = 0; j < criteria.m; j++) {
+                file << criteria.BI[i][j] << " ";
+            }
+            file << std::endl;
+        }
+    } else {
+        file << "NULL" << std::endl;
+    }
+
+    file << "PLACE : ";
+    if (criteria.PLACE != NULL) {
+        for (int i = 0; i < criteria.m; i++) {
+            file << criteria.PLACE[i] << " ";
+        }
+        file << std::endl;
+    } else {
+        file << "NULL" << std::endl;
+    }
+
+    file << "PLACEI : ";
+    if (criteria.PLACEI != NULL) {
+        for (int i = 0; i < criteria.m; i++) {
+            file << criteria.PLACEI[i] << " ";
         }
         file << std::endl;
     } else {

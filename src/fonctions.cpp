@@ -158,6 +158,9 @@ void computeCriteria(double ** Matrix1, double ** Matrix2, int size,struct CRITE
     aCrit->RF = RF;
     aCrit->QD = QD;
 
+    //writeCriteriaToFile("criteria.txt", *aCrit);
+    //Here, aCrit->B is an infinite line of 0
+
 }
 
 //=================================================================
