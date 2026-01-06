@@ -32,8 +32,7 @@
 A new fast method for clustering phylogenetic trees using K-means and inferring multiple supertrees.
 
 # About
-**Program**   : KMeansPhylogeneticTreesClustering - 2022  
-**Authors**   : Benjamin Albertelli and Nadia Tahiri (University of Sherbrooke)  
+**Program**   : KMeansPhylogeneticTreesClustering - 2022   
 **Version**   : 1.0.0
 
 This program clusters phylogenetic trees using the k-means partitioning algorithm.  
