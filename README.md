@@ -3,7 +3,7 @@
         [![Contributions](https://img.shields.io/badge/contributions-welcome-blue.svg)](https://pysd.readthedocs.io/en/latest/development/development_index.html)
         <!--[![Py version](https://img.shields.io/pypi/pyversions/pysd.svg)](https://pypi.python.org/pypi/pysd/)-->
         [![GitHub release](https://img.shields.io/github/v/release/tahiri-lab/KMeansPhylogeneticTreesClustering.svg?maxAge=3600)](https://github.com/tahiri-lab/KMeansPhylogeneticTreesClustering/releases/)
-        [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ftahiri-lab%2FKMeansPhylogeneticTreesClustering&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com) </p>
+      </p>
 
 
 <h2  align="center">Multi-platform application for clustering phylogenetic trees using K-means and inferring multiple supertrees</h2>
