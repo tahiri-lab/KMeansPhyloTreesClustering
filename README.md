@@ -5,7 +5,6 @@
         [![GitHub release](https://img.shields.io/github/v/release/tahiri-lab/KMeansPhylogeneticTreesClustering.svg?maxAge=3600)](https://github.com/tahiri-lab/KMeansPhylogeneticTreesClustering/releases/)
       </p>
 
-nadia
 <h2  align="center">Multi-platform application for clustering phylogenetic trees using K-means and inferring multiple supertrees</h2>
 
 <details open>
