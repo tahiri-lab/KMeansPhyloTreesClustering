@@ -106,8 +106,7 @@ FILE *Output4;
 // =============================================================================================================
 // =============================================================================================================
 
-int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double ** n_identique,double ** Ww, vector<int> tabIndices, int intParam, int *n_leaves,int k_min, int k_max, int alpha)
-{
+int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double ** n_identique,double ** Ww, vector<int> tabIndices, int intParam, int *n_leaves,int k_min, int k_max, int alpha){
     //*****************Define variables******************************************//
     // Variables
     map<int,string>  mapIndicesTreesFinal;
@@ -687,8 +686,7 @@ m60:
 //**********************************FUNCTIONS***********************************
 //******************************************************************************
 
-void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat/* ,double* coord */,int* ishort,double* weight,double* colsum,int &ntran, char* nameb, int N)
-{
+void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat/* ,double* coord */,int* ishort,double* weight,double* colsum,int &ntran, char* nameb, int N){
     int p1=0,p2=0;
 
     int j=0;
@@ -762,9 +760,7 @@ void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat/* ,double* coord *
 // =============================================================================================================
 // =============================================================================================================
 
-void Assign(int &iran,int &n,int &nmax,int &k1,int &kmax,int* list,int* howmany,int* no,int &idebug,int &iassign,int &iseed, int random_number)
-
-{
+void Assign(int &iran,int &n,int &nmax,int &k1,int &kmax,int* list,int* howmany,int* no,int &idebug,int &iassign,int &iseed, int random_number){
     int k=0, i=0, ii=0, kk=0, how=0, isum=0;
     char namea[MAX_PATH_LENGTH];
     double turn=0;
@@ -848,8 +844,7 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int &kmax,int* list,int* howmany,
 // =============================================================================================================
 // =============================================================================================================
 
-void CompSST(int &n,int &nmax,int &p,int &pmax,double** mat,double* weight,int* ishort,double &SST)
-{
+void CompSST(int &n,int &nmax,int &p,int &pmax,double** mat,double* weight,int* ishort,double &SST){
     double    sx=0,sx2=0,var=0,temp=0,dfln=0;     //Real*8 mat(nmax,pmax),weight(pmax),sx,sx2,var,temp,dfln,SST
     int j=0, i=0;
     dfln=n;        //dfln=dfloat(n)
@@ -881,8 +876,7 @@ void CompSST(int &n,int &nmax,int &p,int &pmax,double** mat,double* weight,int* 
 // in an equiprobable way. This property has been checked through intensive
 // simulations.
 
-void Permute(int &iseed,int &n,int &nmax,int *iordre)
-{
+void Permute(int &iseed,int &n,int &nmax,int *iordre){
     int i=0,j=0,itemp=0,km1=0,m=0;            //Integer iseed,n,i,j,itemp,km1,m
     //Integer iordre(nmax)
     m=n;        //m=n
@@ -907,8 +901,7 @@ m8:        // j = 1 + rand(iseed)*m;        //    8    j = 1 + rand(iseed)*m
 // =============================================================================================================
 
 //compute rand index
-double f_RI(int Strouve[],int Sref[],int N)
-{
+double f_RI(int Strouve[],int Sref[],int N){
     double comb = 1.0;
 
     for (int i=N; i>=(N-2+1); i--)
@@ -944,8 +937,7 @@ double f_RI(int Strouve[],int Sref[],int N)
 // =============================================================================================================
 
 //compute adjusted rand index
-double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N)
-{
+double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N){
     int kReal = atoi(K_real);
     int tabCongruence [kReal+1][group+1];
     int sumLigne [kReal+1];
@@ -1031,8 +1023,7 @@ double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N)
 // Modification Centroids: this whole subroutine
 
 //stat output
-void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group/* ,double RI,double ARI */,double score,int **listr,double *allScore,int k1, int k2, vector <string> monTableau)
-{
+void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group/* ,double RI,double ARI */,double score,int **listr,double *allScore,int k1, int k2, vector <string> monTableau){
 
     //Compute Rand index between Strouve and Sref
     double RI = f_RI(Strouve,Sref,N);
@@ -1120,8 +1111,7 @@ void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char 
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_super_tree(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk,vector <string> monTableau, int alpha)
-{
+double FO_super_tree(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk,vector <string> monTableau, int alpha){
     double *clusterK_same = new double [kmax+1];
     int *nk_CH = new int [kmax+1];
     int cluster_k=0;
@@ -1302,7 +1292,7 @@ double FO_super_tree(int &n,int &kmax,double** mat,double* Dvec,int* list,int* h
 // =============================================================================================================
 // =============================================================================================================
 
-double DistanceCH(int &n,int &kmax,double** mat,int* list,double** Ww,double FO_new,double facteur) {
+double DistanceCH(int &n,int &kmax,double** mat,int* list,double** Ww,double FO_new,double facteur){
 
     double SSB=0.0;
     double SSW=0.0;
@@ -1360,8 +1350,7 @@ double DistanceCH(int &n,int &kmax,double** mat,int* list,double** Ww,double FO_
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_W(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk,vector <string> monTableau)
-{
+double FO_W(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk,vector <string> monTableau){
     double *clusterK_same = new double [kmax+1];
     int *nk_W = new int [kmax+1];
     int cluster_k=0;
@@ -1517,7 +1506,7 @@ double FO_W(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,do
 // =============================================================================================================
 // =============================================================================================================
 
-double DistanceW(int &n,int &kmax,double** mat, int* list, double** Ww, double FO_new, double facteur) {
+double DistanceW(int &n,int &kmax,double** mat, int* list, double** Ww, double FO_new, double facteur){
 
 
     double distance_total = 100000000.0;
@@ -1567,8 +1556,7 @@ double arrondir(double num,int digits){
 // =============================================================================================================
 
 //Convert the partition found by the same number cluster that the partition ref
-void conv2sameRef(int *Strouve,int *Sref, int n)
-{
+void conv2sameRef(int *Strouve,int *Sref, int n){
     int k = 0;
 
     cout<<"Number of trees in the input file: "<<n<<endl;
