@@ -112,22 +112,22 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
     map<int,string> mapIndicesTreesFinal;
     vector <string> indicesTrees;
     time_t tbegin2,tend2;
-    double texec2=0.;
+    double texec2 = 0.;
 
     double W = 0.0;
     double CH = MIN_CH_VALUE;
-    bool use_weight=false;
+    bool use_weight = false;
 
-    double CHr_max=INITIAL_MAX_CH;
-    int CHr_group=0;
+    double CHr_max = INITIAL_MAX_CH;
+    int CHr_group = 0;
 
-    double W_min=MAX_W_VALUE;
-    double W_max=MIN_CH_VALUE;
-    int W_group=0;
+    double W_min = MAX_W_VALUE;
+    double W_max = MIN_CH_VALUE;
+    int W_group = 0;
     double FO_new = MAX_FO_VALUE;
 
     // Start timer
-    tbegin2=time(NULL);                // get the current calendar time
+    tbegin2 = time(NULL);                // get the current calendar time
 
     int N = int (monTableau.size()); //quantity of initial tree
     int i=0, j=0;        //Counters
