@@ -109,10 +109,10 @@ FILE *Output4;
 int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double ** n_identique,double ** Ww, vector<int> tabIndices, int intParam, int *n_leaves,int k_min, int k_max, int alpha){
     //*****************Define variables******************************************//
     // Variables
-    map<int,string>  mapIndicesTreesFinal;
+    map<int,string> mapIndicesTreesFinal;
     vector <string> indicesTrees;
     time_t tbegin2,tend2;
-        double texec2=0.;
+    double texec2=0.;
 
     double W = 0.0;
     double CH = MIN_CH_VALUE;
@@ -126,8 +126,8 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
     int W_group=0;
     double FO_new = MAX_FO_VALUE;
 
-        // Start timer
-        tbegin2=time(NULL);                // get the current calendar time
+    // Start timer
+    tbegin2=time(NULL);                // get the current calendar time
 
     int N = int (monTableau.size()); //quantity of initial tree
     int i=0, j=0;        //Counters
@@ -138,14 +138,14 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
     int k1=0, k2=0;  //added declarations for variables
     int hard_max_k=0; //--Setting the max k1
 
-        int random_number=100; //--Fixed random number
+    int random_number=100; //--Fixed random number
     int iassign=2;  // 1 equal, 2 random
-        int iran=100;   //--Number of random position
-        int nran=100;  //--Number of Random start VM
+    int iran=100;   //--Number of random position
+    int nran=100;  //--Number of Random start VM
 
     int nmax=N;    //--Maximum number of object -Parameter (nmax=10000,pmax=250,kmax=100)
     int pmax=N;      //--Maximum data point (variable))
-     int kmax=N;      // Maximum number of groups
+    int kmax=N;      // Maximum number of groups
 
     char *criteria = argv[0];
     char *N_especes = argv[1];
@@ -158,7 +158,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
         Strouve[linej]= 0;
     }
 
-    double    **sx,**sx2,**xbar,**var;    //sx(kmax,pmax),sx2(kmax,pmax),xbar(kmax,pmax),var(kmax,pmax)
+    double **sx,**sx2,**xbar,**var;    //sx(kmax,pmax),sx2(kmax,pmax),xbar(kmax,pmax),var(kmax,pmax)
     double **tree_cluster_leaves = new double *[n];
     for(int i=0;i<n;i++){
         tree_cluster_leaves[i]=new double [DISTANCE_ARRAY_SIZE];
@@ -238,7 +238,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
         }
     }
 
-    int    **howmanyr;        //howmanyr(kmax,kmax)
+    int **howmanyr;        //howmanyr(kmax,kmax)
     howmanyr = new int*[kmax+1];
     for (i=0;i<=kmax;i++){
         howmanyr[i] = new int [kmax+1];
@@ -288,7 +288,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
 
 //***********************  Read data file  **********************************
 
-       int max_k1 = k_max;
+    int max_k1 = k_max;
 
     if (N<=k_min) max_k1=N-1;
 
@@ -515,7 +515,6 @@ m60:
         nbInit =0;
         nbFin =0;
 
-
         for(int i=0;i<tabIndices.size();i++){
             nbFin+=tabIndices.at(i);
             for (int j=nbInit; j<nbFin; j++){
@@ -673,7 +672,6 @@ m60:
         delete [] tree_cluster_leaves[i];
     }
     delete [] tree_cluster_leaves;
-
 
     return 0;
 }
@@ -1024,7 +1022,6 @@ double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N){
 
 //stat output
 void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group/* ,double RI,double ARI */,double score,int **listr,double *allScore,int k1, int k2, vector <string> monTableau){
-
     //Compute Rand index between Strouve and Sref
     double RI = f_RI(Strouve,Sref,N);
 
@@ -1067,7 +1064,6 @@ void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char 
 
     }
     fprintf (Output4,");");
-
     
     // for(int i=k2; i<=k1; i++){
         // cout<<"K = "<<i<<" "<<criteria<<" = "<<allScore[i]<<" : ";
@@ -1116,8 +1112,8 @@ double FO_super_tree(int &n,int &kmax,double** mat,double* Dvec,int* list,int* h
     int *nk_CH = new int [kmax+1];
     int cluster_k=0;
     double RF = 0.0;
-    double Dref=0;     //Real*8 Dref,D1,SSE,Dvec(kmax),weight(pmax)
-    int    kref=0;        //Integer list(nmax),howmany(kmax),kref
+    double Dref = 0;     //Real*8 Dref,D1,SSE,Dvec(kmax),weight(pmax)
+    int kref = 0;        //Integer list(nmax),howmany(kmax),kref
     //Integer ishort(pmax)
     // Compute squared distances to group centroids. Assign objects to nearest one
     SSE=0;        //SSE=0.0
@@ -1187,8 +1183,7 @@ double FO_super_tree(int &n,int &kmax,double** mat,double* Dvec,int* list,int* h
     }
     for (int i=1;i<=n; i++){
         if(nk_CH[list[i]]>1){
-            for (int k=1;k<=kk;k++)            //do 12 k=1,kk
-            {
+            for (int k=1;k<=kk;k++){            //do 12 k=1,kk
                 //Calcul de la distance RF de chaque point i
                 // et assignation du point i au bon cluster
                 // Compute a RF distance to the centroid k
@@ -1293,9 +1288,8 @@ double FO_super_tree(int &n,int &kmax,double** mat,double* Dvec,int* list,int* h
 // =============================================================================================================
 
 double DistanceCH(int &n,int &kmax,double** mat,int* list,double** Ww,double FO_new,double facteur){
-
-    double SSB=0.0;
-    double SSW=0.0;
+    double SSB = 0.0;
+    double SSW = 0.0;
     double dist_all = 0.0;
     double RF;
     double distance_total = 0.0;
@@ -1353,10 +1347,10 @@ double DistanceCH(int &n,int &kmax,double** mat,int* list,double** Ww,double FO_
 double FO_W(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk,vector <string> monTableau){
     double *clusterK_same = new double [kmax+1];
     int *nk_W = new int [kmax+1];
-    int cluster_k=0;
+    int cluster_k = 0;
     double RF = 0.0;
-    double Dref=0;       //Real*8 Dref,D1,SSE,Dvec(kmax),weight(pmax)
-    int    kref=0;        //Integer list(nmax),howmany(kmax),kref
+    double Dref = 0;       //Real*8 Dref,D1,SSE,Dvec(kmax),weight(pmax)
+    int    kref = 0;        //Integer list(nmax),howmany(kmax),kref
     //Integer ishort(pmax)
     // Compute squared distances to group centroids. Assign objects to nearest one
     SSE=0;        //SSE=0.0
@@ -1507,19 +1501,15 @@ double FO_W(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,do
 // =============================================================================================================
 
 double DistanceW(int &n,int &kmax,double** mat, int* list, double** Ww, double FO_new, double facteur){
-
-
     double distance_total = 100000000.0;
     double *clusterK_same = new double [kmax+1];
     int *nk_W = new int [kmax+1];
     int k_cluster = 0;
 
-
     for(int k=1;k<=kmax; k++){
         nk_W[k]=0;
         clusterK_same[k]=0.0;
     }
-
 
     for(int k=1;k<=kmax; k++){
         nk_W[list[k]]++;
@@ -1588,7 +1578,6 @@ void conv2sameRef(int *Strouve,int *Sref, int n){
         nk_trouve[i]=0;
         nk_ref[i]=0;
     }
-
 
     //Compter le nombre d'éléments par cluster
     //For Strouve
