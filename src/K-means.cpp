@@ -21,6 +21,25 @@
 #include "K-means.hpp"
 #include "hgt_int.hpp"
 
+// =============================================================================================================
+// CONSTANTS
+// =============================================================================================================
+const double MIN_CH_VALUE = -1e10;              // Minimum Calinski-Harabasz index value
+const double MAX_W_VALUE = 1e9;                 // Maximum W clustering validity index value
+const double MAX_FO_VALUE = 1e10;               // Maximum objective function value
+const double INITIAL_SSE_REF = 1.0e20;          // Initial sum of squared errors reference value
+const double INITIAL_MIN_W = 1e9;               // Initial minimum W value for optimization
+const double INITIAL_MAX_CH = -1e10;            // Initial maximum CH value
+const int MAX_ITERATIONS = 100;                 // Maximum K-means iterations per cluster size
+const int RAND_MAX_VALUE = 32767;               // Maximum random number from rand()
+const int MAX_FILENAME_LENGTH = 300;            // Maximum length for filename strings
+const int MAX_PATH_LENGTH = 255;                // Maximum length for file paths
+const int DISTANCE_ARRAY_SIZE = 4;              // Size of Robinson-Foulds distance array
+const int ROUNDING_PRECISION = 3;               // Decimal places for rounding distance values
+const int CONVERGENCE_THRESHOLD_DIVISOR = 1000; // Divisor for convergence threshold check
+const double MIN_DISTANCE = 1000000.0;          // Minimum distance value for clustering
+// =============================================================================================================
+
 FILE *Output4;
 
 
@@ -97,16 +116,16 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
         double texec2=0.;
 
     double W = 0.0;
-    double CH = -10000000000.0;
+    double CH = MIN_CH_VALUE;
     bool use_weight=false;
 
-    double CHr_max=-10000000000.0;
+    double CHr_max=INITIAL_MAX_CH;
     int CHr_group=0;
 
-    double W_min=1000000.0;
-    double W_max=-10000000000;
+    double W_min=MAX_W_VALUE;
+    double W_max=MIN_CH_VALUE;
     int W_group=0;
-    double FO_new = 10000000000.0;
+    double FO_new = MAX_FO_VALUE;
 
         // Start timer
         tbegin2=time(NULL);                // get the current calendar time
@@ -143,7 +162,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
     double    **sx,**sx2,**xbar,**var;    //sx(kmax,pmax),sx2(kmax,pmax),xbar(kmax,pmax),var(kmax,pmax)
     double **tree_cluster_leaves = new double *[n];
     for(int i=0;i<n;i++){
-        tree_cluster_leaves[i]=new double [4];
+        tree_cluster_leaves[i]=new double [DISTANCE_ARRAY_SIZE];
     }
 
     sx = new double*[kmax+1];
@@ -163,9 +182,9 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
     vector <int> centroid_k_pos;
     string centroid_C_min = "";
 
-    double *distances_RF_norm = new double[4];
+    double *distances_RF_norm = new double[DISTANCE_ARRAY_SIZE];
 
-    for(int linej=0;linej<4;linej++){
+    for(int linej=0;linej<DISTANCE_ARRAY_SIZE;linej++){
         distances_RF_norm[linej]= 0.0;
     }
 
@@ -265,7 +284,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
 
 //  Modification Centroids: add ",nameb" to next line
     char *nameb;
-    nameb = new char [300];
+    nameb = new char [MAX_FILENAME_LENGTH];
 
 
 //***********************  Read data file  **********************************
@@ -279,7 +298,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
     k2=k_min;
     if(intParam==1){
         for (i=0; i<=kmax; i++){
-            CHr[i] = -10000000000.0;
+            CHr[i] = MIN_CH_VALUE;
         }
 
         if (k1<=2) {
@@ -291,8 +310,8 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
         }
     }else if(intParam==2){
         for (i=0; i<=kmax; i++){
-            Wr[i] = 1000000000.0;
-            Wr_ln[i] = -10000000000.0;
+            Wr[i] = MAX_W_VALUE;
+            Wr_ln[i] = MIN_CH_VALUE;
             diff_W[i] = 0.0;
             V_W[i] = 0.0;
         }
@@ -321,7 +340,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
 
     for(int i1=0; i1<n; i1++){
         for(int i2=0; i2<n; i2++){
-            mat[i1][i2] = arrondir(mat[i1][i2],3);
+            mat[i1][i2] = arrondir(mat[i1][i2],ROUNDING_PRECISION);
         }
     }
 
@@ -341,8 +360,8 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
     }
 
     iseed=0;
-    double CH_new = -10000000000.0;
-    double W_new = 1000000000.0;
+    double CH_new = MIN_CH_VALUE;
+    double W_new = MAX_W_VALUE;
 
     //initialize Sref
     int Sref [N];
@@ -375,7 +394,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
     }
 
     for (iran=1;iran<=nran; iran++) {
-        CH_new = -10000000000.0;
+        CH_new = MIN_CH_VALUE;
         CHk = 0;
         use_weight = false;
         wk = 0;
@@ -388,15 +407,15 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
             Assign(iran,n,nmax,k1,kmax,list,howmany,no,idebug,iassign,iseed, random_number);
         }
         // Big loop on number of groups, downwards from k1 to k2 (k1>=k2) - - - - - -
-        niter=100; //changed VM
+        niter=MAX_ITERATIONS; //changed VM
 
         //initialisation de Strouve de la liste realiser aleatoirement
         for (kk=k1;kk>=k2;kk--){
-            SSEref=1.0e20;
-            W = 1000000000.0;
-            CH = -10000000000.0;
-            FO_new = 10000000000.0;
-            W_new = 10000000000.0;
+            SSEref=INITIAL_SSE_REF;
+            W = MAX_W_VALUE;
+            CH = MIN_CH_VALUE;
+            FO_new = MAX_FO_VALUE;
+            W_new = MAX_FO_VALUE;
 
             for (nit=1;nit<=niter;nit++){
                 if(idebug==1){
@@ -457,7 +476,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
 
                   // Compute sum of squared error statistic (SSE) = within-group sum of squares
 
-                if(fabs(SSEref-SSE)>(SSE/1000.0))            //if(dabs(SSEref-SSE).gt.SSE/1000.0) then
+                if(fabs(SSEref-SSE)>(SSE/CONVERGENCE_THRESHOLD_DIVISOR))            //if(dabs(SSEref-SSE).gt.SSE/1000.0) then
                 {
                     SSEref=SSE;//SSEref=SSE
                 }else{
@@ -470,7 +489,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
             /* printf ("Convergence not reached in %d iterations.",niter);// write(*,*) 'Convergence not reached in ',niter,' iterations.' */
 m60:
             // Concatenate the two closest groups before going to the next value of kk
-            Dref=1000000.0;    //Dref=1000000.0
+            Dref=MIN_DISTANCE;    //Dref=1000000.0
             D1=0.0;        //D1=0.0
             i1ref=1;        //i1ref=igr1
             i2ref=kk;        //i2ref=igr2
@@ -747,7 +766,7 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int &kmax,int* list,int* howmany,
 
 {
     int k=0, i=0, ii=0, kk=0, how=0, isum=0;
-    char namea[255];
+    char namea[MAX_PATH_LENGTH];
     double turn=0;
 
     if ((iassign==1) || (iassign==2)){
@@ -767,7 +786,7 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int &kmax,int* list,int* howmany,
         if(iassign==1) return;
         // Assign objects at random to the groups
         if(iran==1){
-            for (i=1;i<=(random_number+100);i++)  turn=rand()/(1.0*(rand() % 32767));
+            for (i=1;i<=(random_number+100);i++)  turn=rand()/(1.0*(rand() % RAND_MAX_VALUE));
         }                            //end if
         Permute(iseed,n,nmax,list);
         return;
@@ -872,7 +891,7 @@ void Permute(int &iseed,int &n,int &nmax,int *iordre)
     for (i=1;i<=km1;i++)            //      do 10 i=1,km1
     {
 m8:        // j = 1 + rand(iseed)*m;        //    8    j = 1 + rand(iseed)*m
-        j=1+(rand()/32767.0)*m;
+        j=1+(rand()/RAND_MAX_VALUE)*m;
 
         if(j>m) goto m8;            //if(j.gt.m) goto 8
         itemp = iordre[m];            //itemp = iordre(m)
