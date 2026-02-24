@@ -49,7 +49,6 @@ The list of the program parameters is specified below.
 # Requirements
 This package works with : 
 
-- boost 1.78.0_1 for boost regex library (boost has to be added to your PATH, check doc/Boost_Installation.pdf)
 - git 2.35.1
 - macOS Monterey version 12.5
 - macOS Terminal version 2.12.7
