@@ -6,7 +6,9 @@
 //
 
 #include <iostream>
-#include <boost/regex.hpp>
+#include <regex>
+#include <cstring>
+#include <unistd.h>
 #include "structures.h"
 #include <fstream>
 #include <sstream>
