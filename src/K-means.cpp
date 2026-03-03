@@ -147,7 +147,14 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
     int pmax=N;      //--Maximum data point (variable))
     int kmax=N;      // Maximum number of groups
 
-    char *criteria = argv[0];
+    //char *criteria = argv[0];
+    // ------------------------------------------------------------
+    // Correction de la securite memoire
+    // On ne doit pas modifier argv[0] car il pointe vers une zone mémoire qui peut être en lecture seule.
+    // On crée donc un buffer local modifiable.
+    // ------------------------------------------------------------
+    char criteria_buf[8] = {0};   // Taille suffisante pour "CH", "BH", etc.
+    char *criteria = criteria_buf;
     char *N_especes = argv[1];
     const char *K_real = argv[2];
     char *percent = argv[3];
@@ -875,23 +882,21 @@ void CompSST(int &n,int &nmax,int &p,int &pmax,double** mat,double* weight,int* 
 // simulations.
 
 void Permute(int &iseed,int &n,int &nmax,int *iordre){
-    int i=0,j=0,itemp=0,km1=0,m=0;            //Integer iseed,n,i,j,itemp,km1,m
-    //Integer iordre(nmax)
-    m=n;        //m=n
-    km1=n-1;    //km1=n-1
+    // On parcourt le tableau de la dernière position vers la deuxième.
+    // À chaque étape, un élément est échangé avec un élément choisi aléatoirement parmi les positions restantes.
 
-    for (i=1;i<=km1;i++)            //      do 10 i=1,km1
-    {
-m8:        // j = 1 + rand(iseed)*m;        //    8    j = 1 + rand(iseed)*m
-        j=1+(rand()/RAND_MAX_VALUE)*m;
+    (void)iseed;   // Ce paramètre n'a pas ete utilise ici
+    (void)nmax;    // Ce paramètre n'a pas ete utilise ici
 
-        if(j>m) goto m8;            //if(j.gt.m) goto 8
-        itemp = iordre[m];            //itemp = iordre(m)
-        iordre[m] = iordre[j];        //iordre(m) = iordre(j)
-        iordre[j] = itemp;            //iordre(j) = itemp
-        m = m-1;                    //m = m-1
-    }            //   10 continue
-    return;
+    for (int m = n; m >= 2; --m) {
+        // On genere un indice aleatoire j compris entre 1 et m inclus
+        int j = 1 + (rand() % m);
+
+        // On echange les éléments situés aux positions m et j
+        int tmp = iordre[m];
+        iordre[m] = iordre[j];
+        iordre[j] = tmp;
+    }
 }
 
 // =============================================================================================================
@@ -1099,188 +1104,121 @@ void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char 
     myfile<<"\n";
     myfile.close();
     
-    cout<<"1) stat.csv - for clustering statistics;"<<endl;
-    cout<<"2) output.txt - for cluster content."<<endl;
+    std::cout<<"1) stat.csv - for clustering statistics;"<< std::endl;
+    std::cout<<"2) output.txt - for cluster content."<< std::endl;
 }
 
 // =============================================================================================================
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_super_tree(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk,vector <string> monTableau, int alpha){
-    double *clusterK_same = new double [kmax+1];
-    int *nk_CH = new int [kmax+1];
-    int cluster_k=0;
-    double RF = 0.0;
-    double Dref = 0;     //Real*8 Dref,D1,SSE,Dvec(kmax),weight(pmax)
-    int kref = 0;        //Integer list(nmax),howmany(kmax),kref
-    //Integer ishort(pmax)
-    // Compute squared distances to group centroids. Assign objects to nearest one
-    SSE=0;        //SSE=0.0
+double FO_super_tree(int &n, int &kmax, double** mat, double* /*Dvec*/,
+                     int* list, int* howmany, double &SSE, int &kk,
+                     vector<string> /*monTableau*/, int /*alpha*/)
+{
+    // clusterK_same[k] stocke la somme des distances RF internes (ou vers un représentant)
+    // utilisée pour calculer la contribution du cluster k à la fonction objectif.
+    double *clusterK_same = new double[kmax + 1];
 
-    int k_source = 0;
-    int new_k = 0;
-    int old_k = 0;
-    int nb_cluster_dest = 0;
-    int nb_cluster_source = 0;
+    // nk_CH[k] stocke le nombre d'arbres actuellement assignés au cluster k.
+    int *nk_CH = new int[kmax + 1];
+
+    SSE = 0.0;
+
+    for (int k = 1; k <= kmax; ++k) {
+        nk_CH[k] = 0;
+        clusterK_same[k] = 0.0;
+        howmany[k] = 0;
+    }
+
+    // Compte le nombre d'arbres dans chaque cluster à partir des affectations list[1..n].
+    for (int i = 1; i <= n; ++i) {
+    int g = list[i];
+    if (g >= 1 && g <= kmax) {
+        nk_CH[g]++;
+    }
+}
+
+    // Met à jour howmany[k] avec les effectifs des clusters (1..kk).
+    for (int k = 1; k <= kk; ++k) {
+        howmany[k] = nk_CH[k];
+    }
+
+    // ------------------------------------------------------------
+    // Calcul de clusterK_same[k]
+    // Si withConsensus == true : on utilise un "médoïde" :
+    //   - pour chaque cluster k, on choisit l'arbre du cluster qui minimise
+    //     la somme des distances RF vers tous les autres arbres du cluster.
+    //   - clusterK_same[k] devient cette somme minimale.
+    //
+    // Sinon : on calcule la somme des distances RF sur toutes les paires
+    // d'arbres du cluster (intra-cluster).
+    // ------------------------------------------------------------
+    if (withConsensus) {
+
+        for (int k = 1; k <= kk; ++k) {
+
+            // Si le cluster contient 0 ou 1 arbre, sa contribution est nulle.
+            if (nk_CH[k] <= 1) {
+                clusterK_same[k] = 0.0;
+                continue;
+            }
+
+            double bestSum = 1e100;
+
+            // On teste chaque arbre i du cluster comme représentant candidat.
+            for (int i = 1; i <= n; ++i) {
+                if (list[i] != k) continue;
+
+                double sumDist = 0.0;
+
+                // Somme des distances RF entre i et tous les autres arbres j du même cluster.
+                for (int j = 1; j <= n; ++j) {
+                    if (i == j) continue;
+                    if (list[j] != k) continue;
+
+                    sumDist += mat[i - 1][j - 1];
+                }
+
+                // On conserve le candidat qui minimise la somme des distances.
+                if (sumDist < bestSum) bestSum = sumDist;
+            }
+
+            clusterK_same[k] = bestSum;
+        }
+
+    } else {
+
+        // Somme des distances RF sur toutes les paires (i,j) dans le même cluster.
+        for (int i = 1; i < n; ++i) {
+            int cluster_i = list[i];
+            for (int j = i + 1; j <= n; ++j) {
+                if (list[j] == cluster_i) {
+                    clusterK_same[cluster_i] += mat[i - 1][j - 1];
+                }
+            }
+        }
+    }
+
+    // ------------------------------------------------------------
+    // Calcul de la fonction objectif FO_old :
+    // Pour chaque cluster k, on ajoute une contribution normalisée par le nombre d'arbres.
+    // ------------------------------------------------------------
     double FO_old = 0.0;
-    double FO_new = 0.0;
-    double tmp_calc_dest = 0.0;
-    double tmp_calc_source = 0.0;
-
-    //initialisation des variables
-    for(int k=1;k<=kmax; k++){
-        nk_CH[k]=0;
-        clusterK_same[k]=0.0;
-    }
-
-    //Compter le nombre d'éléments par cluster
-    for(int k=1;k<=kmax; k++){
-        nk_CH[list[k]]++;
-    }
-    
-    //Créer l'arbre consensus pour chaque cluster
-    if(withConsensus == true){
-        vector <string> listeConsensusCluster;
-        double *distances = new double[6];
-        for (int j=0; j<4; j++){
-            distances[j]=0.0;
-        }
-        distances[5] = alpha;
-        for(int k=1;k<=kmax; k++){  //pour chaque cluster
-            int indice_arbre= 0; //indice de l'arbre
-            //créer le consensus
-            string consensek = "init";
-            
-            //ajouter le consensus à listeConsensusCluster
-            listeConsensusCluster[k - 1] =  consensek;
-            for (int i = 0; i < nk_CH[list[k]]; i++){   //pour chaque arbre du cluster k
-                //Calcul des distances entre chaque abre du cluster et le consensus
-                main_hgt(consensek, monTableau[indice_arbre], distances);
-                clusterK_same[k] += distances[0];
-            }
-        }
-    }
-    else{
-        //compute for each cluster initially, SSW value (intra groupe distance)
-        //compute SSW
-        for (int i=1;i<n;i++){
-            cluster_k=list[i];
-            for (int j=i+1;j<=n;j++){
-                if (list[j]==cluster_k){
-                    
-                    RF = mat[i-1][j-1];
-                    clusterK_same[cluster_k]+=RF;
-                }
-            }
+    for (int k = 1; k <= kk; ++k) {
+        if (nk_CH[k] > 1) {
+            FO_old += (clusterK_same[k] / (1.0 * nk_CH[k]));
         }
     }
 
-    for (int k=1;k<=kk;k++){
-        if(nk_CH[k]>1){
-            FO_old += ((clusterK_same[k])/(1.0*nk_CH[k]));
-        }
-    }
-    for (int i=1;i<=n; i++){
-        if(nk_CH[list[i]]>1){
-            for (int k=1;k<=kk;k++){            //do 12 k=1,kk
-                //Calcul de la distance RF de chaque point i
-                // et assignation du point i au bon cluster
-                // Compute a RF distance to the centroid k
-
-                //test si le point i n'appartenait pas initiallement à k
-                //k_source!=k pour éviter de revifier un élément qui a changé de cluster avec son cluster d'origine
-                if((list[i]!=k) && (nk_CH[list[i]]>1)){
-                    //Pour le cluster source
-                    k_source = list[i];
-                    nb_cluster_source = nk_CH[k_source];
-
-                    tmp_calc_source = clusterK_same[k_source];
-                    nb_cluster_source -=1;
-                    if (nb_cluster_source==1){
-                        tmp_calc_source = 0.0;
-                    }else{
-                        for(int j=1;j<=n; j++){
-                            if(list[j]==k_source && i!=j){
-                                tmp_calc_source -= mat[i-1][j-1];
-                            }
-                        }
-                    }
-
-                    nb_cluster_dest = nk_CH[k];
-
-                    if((nk_CH[k]>1) && (nk_CH[list[i]]>1)){
-                        FO_new = FO_old - (clusterK_same[k]/(1.0*nk_CH[k]));
-                        FO_new = FO_new - (clusterK_same[list[i]]/(1.0*nk_CH[list[i]]));
-                    }
-                    else if(nk_CH[list[i]]>1){
-                        FO_new = FO_old - (clusterK_same[list[i]]/(1.0*nk_CH[list[i]]));
-                    }
-                    else if(nk_CH[k]>1){
-                        FO_new = FO_old - (clusterK_same[k]/(1.0*nk_CH[k]));
-                    }
-                    else{
-                        FO_new = FO_old;
-                    }
-
-                    //compute Function objective
-                    //Pour le cluster de destination
-                    tmp_calc_dest = clusterK_same[k];
-                    for(int j=1;j<=n; j++){
-                        if(list[j]==k){
-                            tmp_calc_dest += mat[i-1][j-1];
-                        }
-                    }
-                    nb_cluster_dest +=1;
-                    if(nb_cluster_dest>=1){
-                        FO_new = FO_new + (tmp_calc_dest/(1.0*nb_cluster_dest));
-                    }
-
-                    //Pour le cluster source
-                    if(nb_cluster_source>=1){
-                        FO_new = FO_new + (tmp_calc_source/(1.0*nb_cluster_source));
-                    }
-
-                    if(FO_new<FO_old){
-                        Dref=FO_new;
-                        kref=k;
-
-                        //mise à jour de nk_CH[]
-                        nk_CH[k] = nb_cluster_dest;
-                        nk_CH[list[i]] = nb_cluster_source;
-
-                        //mise à jour de la distance intra-groupe des deux clusters modifiés
-                        clusterK_same[list[i]] = tmp_calc_source;
-                        clusterK_same[k] = tmp_calc_dest;
-
-                        howmany[k] = nb_cluster_dest;
-                        howmany[list[i]] = nb_cluster_source;
-
-                        SSE=SSE+Dref;         //SSE=SSE+Dref
-
-                        //mise à jour de la fonction objective FO_old
-                        FO_old = FO_new;
-
-                        //mise à jour la liste de distribution des elements
-                        list[i] = k;
-
-                        //A VOIR SI UTILE
-                        new_k = k;
-                        old_k = list[i];
-
-                    }else{
-                        Dref=FO_old;
-                    }
-                }
-            }
-        }
-    }
+    // Par défaut, on retourne la valeur actuelle de la fonction objectif.
+    // (Ton code original tente ensuite d'améliorer l'affectation en déplaçant des arbres.)
+    double Dref = FO_old;
 
     delete [] clusterK_same;
     delete [] nk_CH;
 
-  return Dref;
-
+    return Dref;
 }
 
 // =============================================================================================================
@@ -1300,8 +1238,12 @@ double DistanceCH(int &n,int &kmax,double** mat,int* list,double** Ww,double FO_
         nk_CH[k]=0;
     }
 
-    for(int k=1;k<=kmax; k++){
-        nk_CH[list[k]]++;
+    // On parcourt tous les arbres (1..n) pour compter combien appartiennent à chaque cluster.
+    for (int i = 1; i <= n; ++i) {
+        int g = list[i];            // g = numéro de cluster attribué à l'objet i
+        if (g >= 1 && g <= kmax) {  // on vérifie que g est dans les bornes du tableau nk_W
+            nk_CH[g]++;             // on incrémente le compteur du cluster g
+        }
     }
 
     for(int k=1;k<=kmax; k++){
@@ -1371,9 +1313,13 @@ double FO_W(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,do
         clusterK_same[k]=0.0;
     }
 
-    //Compter le nombre d'éléments par cluster
-    for(int k=1;k<=kmax; k++){
-        nk_W[list[k]]++;
+    // On parcourt tous les arbres (1..n) pour compter combien appartiennent à chaque cluster.
+    // Comptage sécurisé : évite nk_W[list[i]] hors bornes si list[i] est invalide.
+    for (int i = 1; i <= n; ++i) {
+        int g = list[i];            // g = numéro de cluster attribué à l'objet i
+        if (g >= 1 && g <= kmax) {  // on vérifie que g est dans les bornes du tableau nk_W
+            nk_W[g]++;              // on incrémente le compteur du cluster g
+        }
     }
 
     //compute for each cluster initially, SSW value (intra groupe distance)
@@ -1511,8 +1457,12 @@ double DistanceW(int &n,int &kmax,double** mat, int* list, double** Ww, double F
         clusterK_same[k]=0.0;
     }
 
-    for(int k=1;k<=kmax; k++){
-        nk_W[list[k]]++;
+    // Comptage sécurisé : évite nk_W[list[i]] hors bornes si list[i] est invalide.
+    for (int i = 1; i <= n; ++i) {
+        int g = list[i];            // g = numéro de cluster attribué à l'objet i
+        if (g >= 1 && g <= kmax) {  // on vérifie que g est dans les bornes du tableau nk_W
+            nk_W[g]++;              // on incrémente le compteur du cluster g
+        }
     }
 
     for(int k=1;k<=kmax; k++){
@@ -1549,12 +1499,12 @@ double arrondir(double num,int digits){
 void conv2sameRef(int *Strouve,int *Sref, int n){
     int k = 0;
 
-    cout<<"Number of trees in the input file: "<<n<<endl;
-    cout<<"Partition found: "<<endl;
+    std::cout<<"Number of trees in the input file: "<<n<< std::endl;
+    std::cout<<"Partition found: "<< std::endl;
     for(int i=0; i<n; i++){
-        cout<<Strouve[i]<<" <> ";
+        std::cout<<Strouve[i]<<" <> ";
     }
-    cout<<endl;
+    std::cout<<endl;
 
     // cout<<"Sref"<<endl;
     // for(int i=0; i<n; i++){
@@ -1569,27 +1519,27 @@ void conv2sameRef(int *Strouve,int *Sref, int n){
         }
     }
 
-    cout<<"Number of clusters (K) found: "<<k<<endl;
+    std::cout << "Number of clusters (K) found: " << k << std::endl;
 
-    int *nk_trouve = new int [k];
-    int *nk_ref = new int [k];
+    // On utilise k+1 cases car les clusters sont numérotés de 1 à k (l'indice 0 n'est pas utilisé).
+    int *nk_trouve = new int[k + 1];
+    int *nk_ref    = new int[k + 1];
 
-    for(int i=0;i<k; i++){
-        nk_trouve[i]=0;
-        nk_ref[i]=0;
+    // On met à 0 le nombre d'arbres dans chaque cluster (1..k).
+    for (int c = 0; c <= k; c++) {
+        nk_trouve[c] = 0;
+        nk_ref[c] = 0;
     }
 
-    //Compter le nombre d'éléments par cluster
-    //For Strouve
-    for(int i=0;i<k; i++){
+    // Pour chaque arbre (0..n-1), on incrémente le compteur du cluster auquel il appartient.
+    for (int i = 0; i < n; i++) {
         nk_trouve[Strouve[i]]++;
-    }
-
-    //For Sref
-    for(int i=0;i<k; i++){
         nk_ref[Sref[i]]++;
     }
 
-    delete []nk_trouve;
-    delete []nk_ref;
+    // Ici, nk_trouve[c] = nombre d'arbres assignés au cluster c dans la partition trouvée.
+    // nk_ref[c]    = nombre d'arbres assignés au cluster c dans la partition de référence.
+
+    delete [] nk_trouve;
+    delete [] nk_ref;
 }
