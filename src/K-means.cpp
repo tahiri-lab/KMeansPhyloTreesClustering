@@ -621,16 +621,40 @@ m60:
     texec2=difftime(tend2,tbegin2);    // tend-tbegin (result in second)
     fprintf (Output4,"%.3f;\n",texec2);
 
-    //}// fin de random start
+    // cleanup resources
+    kmeans_cleanup(Output4, kmax, n,
+                   sx, sx2, xbar, var,
+                   listr, howmanyr,
+                   Dvec, CHr, Wr, Wr_ln,
+                   diff_W, V_W, SSEr,
+                   vect, mean, weight,
+                   list, no, iordre, howmany,
+                   nobest, nnitr, ishort,
+                   nameb, nk, distances_RF_norm,
+                   tree_cluster_leaves);
 
-    // Print results
+    return 0;
+}
 
+void kmeans_cleanup(FILE *Output4,
+                    int kmax, int n,
+                    double **sx, double **sx2, double **xbar,
+                    double **var, int **listr, int **howmanyr,
+                    double *Dvec, double *CHr, double *Wr,
+                    double *Wr_ln, double *diff_W, double *V_W,
+                    double *SSEr, double *vect, double *mean,
+                    double *weight, int *list, int *no,
+                    int *iordre, int *howmany,
+                    int *nobest, int *nnitr, int *ishort,
+                    char *nameb, int *nk,
+                    double *distances_RF_norm,
+                    double **tree_cluster_leaves)
+{
+    //Close output files
+    if (Output4) fclose(Output4);
 
-    // *********************Close output files ***************************
-    fclose(Output4);
-    //*********************** Remove matrix ******************************
-
-    for (i=0;i<=kmax;i++){
+    //Remove matrix
+    for (int i = 0; i <= kmax; ++i) {
         delete [] sx[i];
         delete [] sx2[i];
         delete [] xbar[i];
@@ -638,7 +662,6 @@ m60:
         delete [] listr[i];
         delete [] howmanyr[i];
     }
-
     delete [] sx;
     delete [] sx2;
     delete [] xbar;
@@ -647,44 +670,32 @@ m60:
     delete [] howmanyr;
 
     delete [] Dvec;
-
     delete [] CHr;
     delete [] Wr;
     delete [] Wr_ln;
     delete [] diff_W;
     delete [] V_W;
-
     delete [] SSEr;
-
     delete [] vect;
     delete [] mean;
     delete [] weight;
-
     delete [] list;
     delete [] no;
     delete [] iordre;
-
     delete [] howmany;
     delete [] nobest;
     delete [] nnitr;
-
     delete [] ishort;
-
     delete [] nameb;
     delete [] nk;
     delete [] distances_RF_norm;
 
-    for (int i=0;i<n;i++)
-    {
+    for (int i = 0; i < n; ++i)
         delete [] tree_cluster_leaves[i];
-    }
     delete [] tree_cluster_leaves;
-
-    return 0;
 }
 
-
- //      end
+//      end
 //************************End of Main
 
 //******************************************************************************

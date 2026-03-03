@@ -23,6 +23,21 @@ extern bool withConsensus;
 
 int main_kmeans(char **,vector <string>, double **, double **, double **, vector<int>, int, int *, int, int, int);
 
+//Cleans up kmeans variables and memory allocations
+void kmeans_cleanup(FILE *Output4,
+                    int kmax, int n,
+                    double **sx, double **sx2, double **xbar,
+                    double **var, int **listr, int **howmanyr,
+                    double *Dvec, double *CHr, double *Wr,
+                    double *Wr_ln, double *diff_W, double *V_W,
+                    double *SSEr, double *vect, double *mean,
+                    double *weight, int *list, int *no,
+                    int *iordre, int *howmany,
+                    int *nobest, int *nnitr, int *ishort,
+                    char *nameb, int *nk,
+                    double *distances_RF_norm,
+                    double **tree_cluster_leaves);
+
 //--Read the data
 void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat/* ,double* coord */,int* ishort,double* weight,double* colsum,int &ntran,char* nameb,int N);
 
