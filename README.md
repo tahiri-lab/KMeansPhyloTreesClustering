@@ -123,5 +123,4 @@ To clean the project, please execute:
 # Contact
 Please email us at : <Nadia.Tahiri@USherbrooke.ca> for any question or feedback.
 
-
 ### Remerciements
