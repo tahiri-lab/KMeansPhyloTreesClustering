@@ -942,6 +942,12 @@ double f_RI(int Strouve[],int Sref[],int N){
 //compute adjusted rand index
 double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N){
     int kReal = atoi(K_real);
+    if(kReal <= 0){
+        // If K_real is not a valid positive integer (e.g. "?"),
+        // fall back to using the detected 'group' value to avoid
+        // creating zero-sized VLA and prevent out-of-bounds access.
+        kReal = group;
+    }
     int tabCongruence [kReal+1][group+1];
     int sumLigne [kReal+1];
     int sumColonne[group+1];
@@ -1504,7 +1510,7 @@ void conv2sameRef(int *Strouve,int *Sref, int n){
     for(int i=0; i<n; i++){
         std::cout<<Strouve[i]<<" <> ";
     }
-    std::cout<<endl;
+    std::cout<<std::endl;
 
     // cout<<"Sref"<<endl;
     // for(int i=0; i<n; i++){

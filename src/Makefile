@@ -1,7 +1,8 @@
 all: install help execute clean
 	
+
 install: main.cpp
-	g++ -std=c++11 main.cpp fonctions.cpp hgt_int.cpp K-means.cpp Super-trees.cpp utils_tree.cpp -openmp -g -o KMPTC
+	g++ -std=c++11 main.cpp fonctions.cpp hgt_int.cpp K-means.cpp Super-trees.cpp utils_tree.cpp -fopenmp -g -o KMPTC
 	@if [ ! -d "../output" ]; then mkdir "../output"; fi
 	@if [ ! -d "../output/stat.csv" ]; then touch "../output/stat.csv"; fi
 	@if [ ! -d "../output/output.txt" ]; then touch "../output/output.txt"; fi
@@ -42,3 +43,19 @@ clean:
 	$(RM) *.o input_.txt
 	$(RM) KMPTC
 	@echo ' '
+
+.PHONY: pybind clean-py
+
+# Build the pybind11 Python extension
+PYEXT_NAME = KMPTC_core
+PY_SRC = py_wrapper.cpp
+PY_INCLUDES = $(shell python3 -m pybind11 --includes)
+PY_SUFFIX = $(shell python3-config --extension-suffix)
+
+pybind: $(PY_SRC)
+	@echo 'Building Python extension $(PYEXT_NAME)'
+	g++ -O3 -shared -std=c++11 -fPIC $(PY_INCLUDES) $(PY_SRC) -o $(PYEXT_NAME)$(PY_SUFFIX)
+
+clean-py:
+	$(RM) $(PYEXT_NAME)*$(PY_SUFFIX)
+	@echo 'Removed Python extension files'
