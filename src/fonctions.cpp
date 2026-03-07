@@ -467,8 +467,8 @@ int readParameters(struct Parameters * param){
     snprintf((*param).version, sizeof((*param).version), "consol");
     snprintf((*param).multiple, sizeof((*param).multiple), "no");
     snprintf((*param).multigene, sizeof((*param).multigene), "no");
-    snprintf((*param).path, sizeof((*param).path), "");
-    snprintf(input, sizeof(input), "");
+    (*param).path[0] = '\0';
+    input[0] = '\0';
     snprintf(output, sizeof(output), "output.txt");
     snprintf(hgtResultFile, sizeof(hgtResultFile), "hgtresultfile.txt");
     snprintf((*param).scenario, sizeof((*param).scenario), "unique");
