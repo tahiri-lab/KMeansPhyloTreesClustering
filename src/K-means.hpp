@@ -52,7 +52,7 @@ double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N);
 void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group,double score,int **listr,double *allScore,int k1, int k2 ,vector <string> monTableau);
 
 //SUPERTREES
-double FO_super_tree(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk,vector <string> monTableau, int alpha);
+double FO_super_tree(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk);
 
 //fonctions sans passer par le centroid pour supertree
 double DistanceCH(int &n,int &kmax,double** mat,int* list,double** Ww,double FO_new, double facteur);
