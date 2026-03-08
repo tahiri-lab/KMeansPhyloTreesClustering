@@ -602,14 +602,14 @@ m60:
         {
             strcpy(criteria, "CH");
             conv2sameRef(Strouve,Sref,N);
-            outStat(Strouve,Sref,criteria,N,N_especes,percent,K_real,CHr_group,CHr_max,listr,CHr,k1,k2,monTableau);
+            outStat(Strouve,Sref,criteria,N,N_especes,percent,K_real,CHr_group,CHr_max,/*listr,CHr,k1,k2,*/monTableau);
         }break;
 
         case 2:
         {
             strcpy(criteria, "BH");
             conv2sameRef(Strouve,Sref,N);
-            outStat(Strouve,Sref,criteria,N,N_especes,percent,K_real,W_group,W_max,listr,Wr,k1,k2,monTableau);
+            outStat(Strouve,Sref,criteria,N,N_especes,percent,K_real,W_group,W_max,/*listr,Wr,k1,k2,*/monTableau);
         }break;
 
     }
@@ -1043,7 +1043,7 @@ double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N){
 // Modification Centroids: this whole subroutine
 
 //stat output
-void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group/* ,double RI,double ARI */,double score,int **listr,double *allScore,int k1, int k2, vector <string> monTableau){
+void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group,double score,/*int **listr,double *allScore,int k1, int k2,*/ vector <string> monTableau){
     //Compute Rand index between Strouve and Sref
     double RI = f_RI(Strouve,Sref,N);
 

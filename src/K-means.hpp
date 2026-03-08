@@ -49,7 +49,7 @@ void CompSST(int &n,int &p,double** mat,double* weight,int* ishort,double &SST);
 void Permute(int &iseed,int &n,int &nmax,int *iordre);
 double f_RI(int Strouve[],int Sref[],int N);
 double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N);
-void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group,double score,int **listr,double *allScore,int k1, int k2 ,vector <string> monTableau);
+void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group,double score,/*int **listr,double *allScore,int k1, int k2,*/ vector <string> monTableau);
 
 //SUPERTREES
 double FO_super_tree(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int &kk);
