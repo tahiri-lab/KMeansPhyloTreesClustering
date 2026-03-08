@@ -92,11 +92,9 @@ int main(int nargs, char ** argv) {
                 kmin = atoi(argv[5]);
                 validationKmin(intParam,kmin);
                 kmax = atoi(argv[6]);
-            }else{
-                if(nargs > 7){
+            }else if(nargs > 7){
                     printf("\nbad input..\nusage:%s -tree nameFile [cluster_validity_index] [alpha] [kmin] [kmax]\n",argv[0]);
                     exit(1);
-                }
             }
 
             vector <string> mesTrees;
