@@ -410,7 +410,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
 
 
         if(iassign!=4){
-            Assign(iran,n,nmax,k1,kmax,list,howmany,no,idebug,iassign,iseed, random_number);
+            Assign(iran,n,nmax,k1,list,howmany,no,iassign,iseed, random_number);
         }
         // Big loop on number of groups, downwards from k1 to k2 (k1>=k2) - - - - - -
         niter=MAX_ITERATIONS; //changed VM
@@ -776,7 +776,7 @@ void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat,int* ishort,double
 // =============================================================================================================
 // =============================================================================================================
 
-void Assign(int &iran,int &n,int &nmax,int &k1,int &kmax,int* list,int* howmany,int* no,int &idebug,int &iassign,int &iseed, int random_number){
+void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign,int &iseed, int random_number){
     int k=0, i=0, ii=0, kk=0, how=0, isum=0;
     char namea[MAX_PATH_LENGTH];
     double turn=0;
