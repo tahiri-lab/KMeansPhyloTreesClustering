@@ -116,7 +116,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     double W = 0.0;
     double CH = MIN_CH_VALUE;
-    bool use_weight = false;
 
     double CHr_max = INITIAL_MAX_CH;
     int CHr_group = 0;
@@ -132,7 +131,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     int N = int (monTableau.size()); //quantity of initial tree
     int i=0, j=0;        //Counters
     int n=N, p=N;        //,pmax,kmax; //      Integer p,pmax,kmax
-    int ntran=0, iseed=0, niter=0, kk=0, nit=0;        //added declarations for variables
+    int iseed=0, niter=0, kk=0, nit=0;        //added declarations for variables
     int nnit=0, k=0, i1ref=0, i2ref=0;        //added declarations for variables
     int idebug=0 ; // 0, no debug, 1 debug
     int k1=0, k2=0;  //added declarations for variables
@@ -340,7 +339,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
      //--Read the data from files
-    ReadData1(n,nmax,p,pmax,mat,ishort,weight,nameb,N);    //Call ReadData11(n,nmax,p,pmax,mat,coord,ishort,w,mean,ntran,namea)
+    ReadData1(n,nmax,p,pmax,mat,ishort,weight,nameb,N);
 
     CompSST(n,p,mat,weight,ishort,SST);
 
@@ -402,7 +401,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     for (iran=1;iran<=nran; iran++) {
         CH_new = MIN_CH_VALUE;
         CHk = 0;
-        use_weight = false;
         wk = 0;
         realk = 0;
         unique = 0;
