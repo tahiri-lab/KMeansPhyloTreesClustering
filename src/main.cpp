@@ -62,29 +62,29 @@ int main(int nargs, char ** argv) {
             double alpha = 0.0;
             int kmin=0;
             int kmax=0;
-            if(nargs==3){
+            if(nargs==3){ //default parameters
                 intParam = 1;
                 alpha = 1;
                 kmin = 2;
-            }else if (nargs==4){
+            }else if (nargs==4){ //if the user choose to only specify the cluster validity index.
                 intParam = atoi(argv[3]);
                 validation(intParam);
                 alpha = 1;
                 validationKmin(intParam,kmin);
-            }else if (nargs==5){
+            }else if (nargs==5){ //if the user choose to only specify the cluster validity index and the alpha parameter.
                 intParam = atoi(argv[3]);
                 validation(intParam);
                 alpha = atof(argv[4]);
                 validationAlpha(alpha);
                 validationKmin(intParam,kmin);
-            }else if (nargs==6){
+            }else if (nargs==6){ //if the user choose to specify all the parameters except kmax.
                 intParam = atoi(argv[3]);
                 validation(intParam);
                 alpha = atof(argv[4]);
                 validationAlpha(alpha);
                 kmin = atoi(argv[5]);
                 validationKmin(intParam,kmin);
-            }else if (nargs==7){
+            }else if (nargs==7){ //if the user choose to specify all the parameters.
                 intParam = atoi(argv[3]);
                 validation(intParam);
                 alpha = atof(argv[4]);
