@@ -55,7 +55,7 @@ void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char 
 double FO_super_tree(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int &kk);
 
 //fonctions sans passer par le centroid pour supertree
-double DistanceCH(int &n,int &kmax,double** mat,int* list,double** Ww,double FO_new, double facteur);
+double DistanceCH(int &n,int &kmax,double** mat,int* list,double FO_new);
 
 // CRITERE W
 double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int &kk);

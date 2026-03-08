@@ -443,7 +443,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
                 number_cluster = 0;
 
                 if(intParam==1){
-                    CH_new = DistanceCH(n,kmax,mat,list,Ww,FO_new,facteur);
+                    CH_new = DistanceCH(n,kmax,mat,list,FO_new);
                     if(CH_new>CHr[kk]){
                         SSEr[kk]=SSE;        //SSEr(kk)=SSE
                         nobest[kk]=iran;    //nobest(kk)=iran
@@ -1241,7 +1241,7 @@ double FO_super_tree(int &n, int &kmax, double** mat,
 // =============================================================================================================
 // =============================================================================================================
 
-double DistanceCH(int &n,int &kmax,double** mat,int* list,double** Ww,double FO_new,double facteur){
+double DistanceCH(int &n,int &kmax,double** mat,int* list,double FO_new){
     double SSB = 0.0;
     double SSW = 0.0;
     double dist_all = 0.0;
