@@ -58,7 +58,7 @@ int main(int nargs, char ** argv) {
         //if program is launched with -tree argument
         if(strcmp("tree",champs) == 0){
             fstream fichier(argv[2]);
-            int intParam = 0;
+            int intParam = 0; //Cluster validity index parameter (0: exit, 1: CH, 2: BH)
             double alpha = 0.0;
             int kmin=0;
             int kmax=0;
