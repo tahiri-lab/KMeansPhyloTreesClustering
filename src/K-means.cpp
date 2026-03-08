@@ -437,7 +437,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
                 if(intParam==1){
                     FO_new = FO_super_tree(n,kmax,mat,list,howmany,SSE,kk);
                 }else if(intParam==2){
-                    FO_new = FO_W(n,kmax,mat,Dvec,list,howmany,SSE,kk,monTableau);
+                    FO_new = FO_W(n,kmax,mat,list,howmany,SSE,kk);
                 }
 
                 number_cluster = 0;
@@ -1302,7 +1302,7 @@ double DistanceCH(int &n,int &kmax,double** mat,int* list,double** Ww,double FO_
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_W(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk,vector <string> monTableau){
+double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int &kk){
     double *clusterK_same = new double [kmax+1];
     int *nk_W = new int [kmax+1];
     int cluster_k = 0;

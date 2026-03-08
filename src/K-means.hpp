@@ -58,7 +58,7 @@ double FO_super_tree(int &n,int &kmax,double** mat,int* list,int* howmany,double
 double DistanceCH(int &n,int &kmax,double** mat,int* list,double** Ww,double FO_new, double facteur);
 
 // CRITERE W
-double FO_W(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk,vector <string> monTableau);
+double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int &kk);
 double DistanceW(int &n,int &kmax,double** mat, int* list, double** Ww, double FO_new, double facteur);
 
 double arrondir(double num,int digits);
