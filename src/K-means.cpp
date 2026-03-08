@@ -435,7 +435,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
 
                 // Compute distances to group centroids and assign objects to nearest one
                 if(intParam==1){
-                    FO_new = FO_super_tree(n,kmax,mat,Dvec,list,howmany,SSE,kk);
+                    FO_new = FO_super_tree(n,kmax,mat,list,howmany,SSE,kk);
                 }else if(intParam==2){
                     FO_new = FO_W(n,kmax,mat,Dvec,list,howmany,SSE,kk,monTableau);
                 }
@@ -1129,7 +1129,7 @@ void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char 
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_super_tree(int &n, int &kmax, double** mat, double* /*Dvec*/,
+double FO_super_tree(int &n, int &kmax, double** mat,
                      int* list, int* howmany, double &SSE, int &kk)
 {
     // clusterK_same[k] stocke la somme des distances RF internes (ou vers un représentant)
