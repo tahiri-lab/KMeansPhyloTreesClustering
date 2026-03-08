@@ -342,7 +342,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
      //--Read the data from files
     ReadData1(n,nmax,p,pmax,mat,ishort,weight,nameb,N);    //Call ReadData11(n,nmax,p,pmax,mat,coord,ishort,w,mean,ntran,namea)
 
-    CompSST(n,nmax,p,pmax,mat,weight,ishort,SST);
+    CompSST(n,p,mat,weight,ishort,SST);
 
     for(int i1=0; i1<n; i1++){
         for(int i2=0; i2<n; i2++){
@@ -860,7 +860,7 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
 // =============================================================================================================
 // =============================================================================================================
 
-void CompSST(int &n,int &nmax,int &p,int &pmax,double** mat,double* weight,int* ishort,double &SST){
+void CompSST(int &n,int &p,double** mat,double* weight,int* ishort,double &SST){
     double    sx=0,sx2=0,var=0,temp=0,dfln=0;     //Real*8 mat(nmax,pmax),weight(pmax),sx,sx2,var,temp,dfln,SST
     int j=0, i=0;
     dfln=n;        //dfln=dfloat(n)

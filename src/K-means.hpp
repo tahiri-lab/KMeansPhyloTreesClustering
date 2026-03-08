@@ -45,7 +45,7 @@ void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat,int* ishort,double
 void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign,int &iseed, int random_number);
 
 //--Squared distances to group centroids. Assign objects to nearest one
-void CompSST(int &n,int &nmax,int &p,int &pmax,double** mat,double* weight,int* ishort,double &SST);
+void CompSST(int &n,int &p,double** mat,double* weight,int* ishort,double &SST);
 void Permute(int &iseed,int &n,int &nmax,int *iordre);
 double f_RI(int Strouve[],int Sref[],int N);
 double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N);
