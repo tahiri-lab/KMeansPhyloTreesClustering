@@ -21,7 +21,7 @@ using namespace std;
 
 extern bool withConsensus;
 
-int main_kmeans(char **, vector <string>, double **, vector<int>, int, int, int);
+int main_kmeans(char **, vector <string>, double **, vector<int>, bool, int, int);
 
 //Cleans up kmeans variables and memory allocations
 void kmeans_cleanup(FILE *Output4,

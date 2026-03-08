@@ -126,7 +126,8 @@ int main(int nargs, char ** argv) {
                 }
 
                 //call to main_consense, a consensus algorithm to classify super trees
-                main_consense(cl2,tabIndices,mesTrees,intParam,alpha,kmin,kmax);
+                bool isBH = (intParam == 2);
+                main_consense(cl2,tabIndices,mesTrees,isBH,alpha,kmin,kmax);
 
                 //vider les vecteurs
                 mesTrees.clear();
@@ -223,7 +224,8 @@ int main(int nargs, char ** argv) {
                 double alpha = atof(argv[4]);
                 //appel de l'algorithme de K-means:
                 if(mesTrees.size()>3){
-                    main_kmeans(cl2,mesTrees,Matrice_RF,tabIndices,intParam,kmin,kmax);
+                    bool isBH = (intParam == 2);
+                    main_kmeans(cl2,mesTrees,Matrice_RF,tabIndices,isBH,kmin,kmax);
                 }
 
                 //vider les vectors

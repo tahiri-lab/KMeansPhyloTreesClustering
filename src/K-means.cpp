@@ -106,7 +106,7 @@ FILE *Output4;
 // =============================================================================================================
 // =============================================================================================================
 
-int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<int> tabIndices, int intParam, int k_min, int k_max){
+int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<int> tabIndices, bool isBH, int k_min, int k_max){
     //*****************Define variables******************************************//
     // Variables
     map<int,string> mapIndicesTreesFinal;
@@ -302,7 +302,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     k1=max_k1;
     double facteur = 1.0;
     k2=k_min;
-    if(intParam==1){
+    if(!isBH){
         for (i=0; i<=kmax; i++){
             CHr[i] = MIN_CH_VALUE;
         }
@@ -314,7 +314,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         if (k_min<2){
             k2=2;
         }
-    }else if(intParam==2){
+    }else if(isBH){
         for (i=0; i<=kmax; i++){
             Wr[i] = MAX_W_VALUE;
             Wr_ln[i] = MIN_CH_VALUE;
@@ -434,15 +434,15 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                 nnit=nit;
 
                 // Compute distances to group centroids and assign objects to nearest one
-                if(intParam==1){
+                if(!isBH){
                     FO_new = FO_super_tree(n,kmax,mat,list,howmany,SSE,kk);
-                }else if(intParam==2){
+                }else if(isBH){
                     FO_new = FO_W(n,kmax,mat,list,howmany,SSE,kk);
                 }
 
                 number_cluster = 0;
 
-                if(intParam==1){
+                if(!isBH){
                     CH_new = DistanceCH(n,kmax,mat,list,FO_new);
                     if(CH_new>CHr[kk]){
                         SSEr[kk]=SSE;        //SSEr(kk)=SSE
@@ -459,7 +459,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                         for (int i=1;i<=kk;i++)                //do 67 i=1,kk
                           {howmanyr[kk][i]=howmany[i];}    //67    howmanyr(kk,i)=howmany(i)
                     }
-                }else if(intParam==2){
+                }else if(isBH){
                     W_new = DistanceW(n,kmax,list,FO_new);
 
                     if(W_new<Wr[kk]){
@@ -530,7 +530,7 @@ m60:
             nbInit+=tabIndices.at(i);
         }
 
-        if(intParam==1){
+        if(!isBH){
             for (k=k1;k>=k2;k--){
                 if (CHr[k]>=CHr_max){
                     CHr_group=k;
@@ -560,7 +560,7 @@ m60:
                     CHr_group=realk;
                 }
             }
-        }else if(intParam==2){
+        }else if(isBH){
             for (k=k1;k>=k2;k--){
                 if (Wr[k]<=W_min){
                     //pour connaitre le nombre de partition adéquate.
@@ -597,21 +597,14 @@ m60:
     }  //fin random start
 
     // Print results
-    switch (intParam){
-        case 1:
-        {
-            strcpy(criteria, "CH");
-            conv2sameRef(Strouve,Sref,N);
-            outStat(Strouve,Sref,criteria,N,N_especes,percent,K_real,CHr_group,CHr_max,/*listr,CHr,k1,k2,*/monTableau);
-        }break;
-
-        case 2:
-        {
-            strcpy(criteria, "BH");
-            conv2sameRef(Strouve,Sref,N);
-            outStat(Strouve,Sref,criteria,N,N_especes,percent,K_real,W_group,W_max,/*listr,Wr,k1,k2,*/monTableau);
-        }break;
-
+    if (!isBH){
+        strcpy(criteria, "CH");
+        conv2sameRef(Strouve,Sref,N);
+        outStat(Strouve,Sref,criteria,N,N_especes,percent,K_real,CHr_group,CHr_max,/*listr,CHr,k1,k2,*/monTableau);
+    }else if(isBH){
+        strcpy(criteria, "BH");
+        conv2sameRef(Strouve,Sref,N);
+        outStat(Strouve,Sref,criteria,N,N_especes,percent,K_real,W_group,W_max,/*listr,Wr,k1,k2,*/monTableau);
     }
 
     // End timer
