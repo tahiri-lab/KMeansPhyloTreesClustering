@@ -106,7 +106,7 @@ FILE *Output4;
 // =============================================================================================================
 // =============================================================================================================
 
-int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double ** n_identique,double ** Ww, vector<int> tabIndices, int intParam, int *n_leaves,int k_min, int k_max, int alpha){
+int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<int> tabIndices, int intParam, int k_min, int k_max){
     //*****************Define variables******************************************//
     // Variables
     map<int,string> mapIndicesTreesFinal;

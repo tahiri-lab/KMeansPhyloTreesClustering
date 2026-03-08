@@ -112,7 +112,7 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
  
     //appel de l'algorithme de K-means:
     if(mesTrees.size()>3){
-        main_kmeans(argv,mesTrees,Matrice_RF,n_identique,Ww,tabIndices,intParam,n_leaves,kmin,kmax, alpha);
+        main_kmeans(argv,mesTrees,Matrice_RF,tabIndices,intParam,kmin,kmax);
     }
         
     //Liberation of memory
