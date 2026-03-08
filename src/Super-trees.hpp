@@ -14,6 +14,6 @@
 
 using namespace std;
 
-int main_consense(char **, vector<int>, vector <string>, int, double, int, int);
+int main_consense(char **, vector<int>, vector <string>, bool, double, int, int);
 
 #endif /* Super_trees_hpp */

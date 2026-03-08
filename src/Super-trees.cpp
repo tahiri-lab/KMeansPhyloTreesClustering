@@ -9,7 +9,7 @@
 #include "hgt_int.hpp"
 #include "K-means.hpp"
 
-int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees, int intParam, double alpha, int kmin, int kmax){
+int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees, bool isBH, double alpha, int kmin, int kmax){
      // Variables
     time_t tbegin,tend;
     double texec=0.0;
@@ -112,7 +112,7 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
  
     //appel de l'algorithme de K-means:
     if(mesTrees.size()>3){
-        main_kmeans(argv,mesTrees,Matrice_RF,n_identique,Ww,tabIndices,intParam,n_leaves,kmin,kmax, alpha);
+        main_kmeans(argv,mesTrees,Matrice_RF,tabIndices,isBH,kmin,kmax);
     }
         
     //Liberation of memory
