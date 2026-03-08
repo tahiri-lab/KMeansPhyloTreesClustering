@@ -340,7 +340,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
     }
 
      //--Read the data from files
-    ReadData1(n,nmax,p,pmax,mat,ishort,weight,mean,ntran,nameb,N);    //Call ReadData11(n,nmax,p,pmax,mat,coord,ishort,w,mean,ntran,namea)
+    ReadData1(n,nmax,p,pmax,mat,ishort,weight,nameb,N);    //Call ReadData11(n,nmax,p,pmax,mat,coord,ishort,w,mean,ntran,namea)
 
     CompSST(n,nmax,p,pmax,mat,weight,ishort,SST);
 
@@ -702,7 +702,7 @@ void kmeans_cleanup(FILE *Output4,
 //**********************************FUNCTIONS***********************************
 //******************************************************************************
 
-void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat/* ,double* coord */,int* ishort,double* weight,double* colsum,int &ntran, char* nameb, int N){
+void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat,int* ishort,double* weight, char* nameb, int N){
     int p1=0,p2=0;
 
     int j=0;

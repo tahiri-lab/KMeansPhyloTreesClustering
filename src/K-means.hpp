@@ -39,7 +39,7 @@ void kmeans_cleanup(FILE *Output4,
                     double **tree_cluster_leaves);
 
 //--Read the data
-void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat/* ,double* coord */,int* ishort,double* weight,double* colsum,int &ntran,char* nameb,int N);
+void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat,int* ishort,double* weight,char* nameb,int N);
 
 //--Calculate the kmeans
 void Assign(int &iran,int &n,int &nmax,int &k1,int &kmax,int* list,int* howmany,int* no,int &idebug,int &iassign,int &iseed, int random_number);
