@@ -460,7 +460,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
                           {howmanyr[kk][i]=howmany[i];}    //67    howmanyr(kk,i)=howmany(i)
                     }
                 }else if(intParam==2){
-                    W_new = DistanceW(n,kmax,mat,list,Ww,FO_new,facteur);
+                    W_new = DistanceW(n,kmax,list,FO_new);
 
                     if(W_new<Wr[kk]){
                         SSEr[kk]=SSE;        //SSEr(kk)=SSE
@@ -1462,7 +1462,7 @@ double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int
 // =============================================================================================================
 // =============================================================================================================
 
-double DistanceW(int &n,int &kmax,double** mat, int* list, double** Ww, double FO_new, double facteur){
+double DistanceW(int &n, int &kmax, int* list, double FO_new){
     double distance_total = 100000000.0;
     double *clusterK_same = new double [kmax+1];
     int *nk_W = new int [kmax+1];

@@ -59,7 +59,7 @@ double DistanceCH(int &n,int &kmax,double** mat,int* list,double FO_new);
 
 // CRITERE W
 double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int &kk);
-double DistanceW(int &n,int &kmax,double** mat, int* list, double** Ww, double FO_new, double facteur);
+double DistanceW(int &n, int &kmax, int* list, double FO_new);
 
 double arrondir(double num,int digits);
 void conv2sameRef(int *Strouve,int *Sref, int N);
