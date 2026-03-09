@@ -132,7 +132,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     int n=treeAmount, p=treeAmount;        //,pmax,kmax; //      Integer p,pmax,kmax
     int iseed=0, niter=0, kk=0, nit=0;        //added declarations for variables
     int nnit=0, i1ref=0, i2ref=0;        //added declarations for variables
-    int idebug=0 ; // 0, no debug, 1 debug
+    bool debug=false;
     int k1=0, k2=0;  //added declarations for variables
     int hard_max_k=0; //--Setting the max k1
 
@@ -421,7 +421,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
             W_new = MAX_FO_VALUE;
 
             for (nit=1;nit<=niter;nit++){
-                if(idebug==1){
+                if(debug){
                     printf ("Iteration = %d",nit);
                     printf ("SSEref = %lf",SSEref);
                     for (int i=1;i<=n;i++){
