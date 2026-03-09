@@ -767,18 +767,18 @@ void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat,int* ishort,double
 // =============================================================================================================
 
 void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign,int &iseed, int random_number){
-    int k=0, i=0, ii=0, kk=0, how=0, isum=0;
+    int ii=0, how=0, isum=0;
     char namea[MAX_PATH_LENGTH];
     double turn=0;
 
     if ((iassign==1) || (iassign==2)){
         how=n/(k1*1.0);
-        for (k=1;k<=(k1-1);k++) {howmany[k]=how;}
+        for (int k=1;k<=(k1-1);k++) {howmany[k]=how;}
         howmany[k1]=n-(k1-1)*how;
         ii=0;
 
-        for (k=1;k<=k1;k++){
-            for (kk=1;kk<=howmany[k];kk++){
+        for (int k=1;k<=k1;k++){
+            for (int kk=1;kk<=howmany[k];kk++){
                ii++;
                list[ii]=k;
             }
@@ -788,7 +788,7 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
         if(iassign==1) return;
         // Assign objects at random to the groups
         if(iran==1){
-            for (i=1;i<=(random_number+100);i++)  turn=rand()/(1.0*(rand() % RAND_MAX_VALUE));
+            for (int i=1;i<=(random_number+100);i++)  turn=rand()/(1.0*(rand() % RAND_MAX_VALUE));
         }                            //end if
         Permute(iseed,n,nmax,list);
         return;
@@ -804,12 +804,12 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
         if ((Input3 = fopen(namea,"r"))==0) { printf("\n %s :Open Failed....",namea); exit(1); }
         printf ("File of group assignments: %s\n",namea);
 
-        for (k=1;k<=k1;k++){
+        for (int k=1;k<=k1;k++){
             fscanf(Input3,"%d",&howmany[k]);
         }
 
         isum=0;
-        for (k=1;k<=k1;k++){
+        for (int k=1;k<=k1;k++){
             isum=isum+howmany[k];
         }
 
@@ -818,20 +818,20 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
             exit(1);
         }
 
-        for (i=1;i<=n;i++) {
+        for (int i=1;i<=n;i++) {
             list[i]=-1;
         }
 
-        for (k=1;k<=k1;k++){
-            for (i=1;i<=howmany[k];i++){
+        for (int k=1;k<=k1;k++){
+            for (int i=1;i<=howmany[k];i++){
                 fscanf(Input3, "%d", &no[i]);
             }
-            for (i=1;i<=howmany[k];i++){
+            for (int i=1;i<=howmany[k];i++){
                 list[no[i]]=k;
             }
         }
 
-        for (i=1;i<=n;i++){
+        for (int i=1;i<=n;i++){
             if(list[i]==-1){
                 printf("Overlapping assignments to groups.");
                 exit(1);
