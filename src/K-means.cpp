@@ -131,7 +131,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     int treeAmount = int (monTableau.size()); //quantity of initial tree
     int n=treeAmount, p=treeAmount;        //,pmax,kmax; //      Integer p,pmax,kmax
     int iseed=0, niter=0, kk=0, nit=0;        //added declarations for variables
-    int nnit=0, k=0, i1ref=0, i2ref=0;        //added declarations for variables
+    int nnit=0, i1ref=0, i2ref=0;        //added declarations for variables
     int idebug=0 ; // 0, no debug, 1 debug
     int k1=0, k2=0;  //added declarations for variables
     int hard_max_k=0; //--Setting the max k1
@@ -507,7 +507,7 @@ m60:
 
             howmany[i1ref]=howmany[i1ref]+howmany[i2ref];
 
-            for (k=(i2ref+1);k<=kk;k++){
+            for (int k=(i2ref+1);k<=kk;k++){
                 howmany[k-1]=howmany[k];
             }
 
@@ -528,7 +528,7 @@ m60:
         }
 
         if(!isBH){
-            for (k=k1;k>=k2;k--){
+            for (int k=k1;k>=k2;k--){
                 if (CHr[k]>=CHr_max){
                     CHr_group=k;
                     CHr_max=CHr[k];
@@ -558,7 +558,7 @@ m60:
                 }
             }
         }else if(isBH){
-            for (k=k1;k>=k2;k--){
+            for (int k=k1;k>=k2;k--){
                 if (Wr[k]<=W_min){
                     //pour connaitre le nombre de partition adéquate.
                     W_group=k;
