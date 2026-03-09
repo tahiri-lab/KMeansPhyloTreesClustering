@@ -129,11 +129,11 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     tbegin2 = time(NULL);                // get the current calendar time
 
     int treeAmount = int (monTableau.size()); //quantity of initial tree
-    int n=treeAmount, p=treeAmount;        //,pmax,kmax; //      Integer p,pmax,kmax
-    int iseed=0, niter=0, kk=0, nit=0;        //added declarations for variables
-    int nnit=0, i1ref=0, i2ref=0;        //added declarations for variables
+    int n=treeAmount, p=treeAmount;
+    int iseed=0, niter=0, kk=0, nit=0;
+    int nnit=0, i1ref=0, i2ref=0;
     bool debug=false;
-    int k1=0, k2=0;  //added declarations for variables
+    int k1=0, k2=0;
     int hard_max_k=0; //--Setting the max k1
 
     int random_number=100; //--Fixed random number
@@ -337,7 +337,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
       k1=max_k1;
     }
 
-     //--Read the data from files
+    //--Read the data from files
     ReadData1(n,nmax,p,pmax,mat,ishort,weight,nameb,treeAmount);
 
     CompSST(n,p,mat,weight,ishort,SST);
@@ -367,7 +367,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     double CH_new = MIN_CH_VALUE;
     double W_new = MAX_W_VALUE;
 
-    //initialize Sref
     int Sref [treeAmount];
     for (int j=0; j<treeAmount; j++){
         Sref[j]=0;
@@ -392,7 +391,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     int *nk = new int [kmax+1];
 
-    //initialisation des variables
     for(int k=1;k<=kmax; k++){
         nk[k]=0;
     }
@@ -442,12 +440,12 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                 if(!isBH){
                     CH_new = DistanceCH(n,kmax,mat,list,FO_new);
                     if(CH_new>CHr[kk]){
-                        SSEr[kk]=SSE;        //SSEr(kk)=SSE
-                        nobest[kk]=iran;    //nobest(kk)=iran
+                        SSEr[kk]=SSE;
+                        nobest[kk]=iran;
 
-                        nnitr[kk]=nnit;    //nnitr(kk)=nnit
+                        nnitr[kk]=nnit;
                         CH=CH_new;
-                        CHr[kk]=CH;  //CHr(kk)=CH
+                        CHr[kk]=CH;
                         for (int i=1;i<=n;i++)            //do 65 i=1,n
                         {
                             listr[kk][i]=list[i];
@@ -460,9 +458,9 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                     W_new = DistanceW(n,kmax,list,FO_new);
 
                     if(W_new<Wr[kk]){
-                        SSEr[kk]=SSE;        //SSEr(kk)=SSE
-                        nobest[kk]=iran;    //nobest(kk)=iran
-                        nnitr[kk]=nnit;    //nnitr(kk)=nnit
+                        SSEr[kk]=SSE;
+                        nobest[kk]=iran;
+                        nnitr[kk]=nnit;
 
                         W=W_new;
                         Wr[kk]=W;
@@ -477,11 +475,11 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                     }
                 }
 
-                  // Compute sum of squared error statistic (SSE) = within-group sum of squares
+                // Compute sum of squared error statistic (SSE) = within-group sum of squares
 
                 if(fabs(SSEref-SSE)>(SSE/CONVERGENCE_THRESHOLD_DIVISOR))            //if(dabs(SSEref-SSE).gt.SSE/1000.0) then
                 {
-                    SSEref=SSE;//SSEref=SSE
+                    SSEref=SSE;
                 }else{
                     goto m60;
                 }
@@ -492,8 +490,8 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
             /* printf ("Convergence not reached in %d iterations.",niter);// write(*,*) 'Convergence not reached in ',niter,' iterations.' */
 m60:
             // Concatenate the two closest groups before going to the next value of kk
-            Dref=MIN_DISTANCE;    //Dref=1000000.0
-            D1=0.0;        //D1=0.0
+            Dref=MIN_DISTANCE;
+            D1=0.0;
             i1ref=1;        //i1ref=igr1
             i2ref=kk;        //i2ref=igr2
 
@@ -511,7 +509,7 @@ m60:
                 howmany[k-1]=howmany[k];
             }
 
-          }    //end for each k
+        }   //end for each k
         //--------------------------------------------------------------------
         // Affichage des organisation des groupes pour chaque nran (random start)
         //--------------------------------------------------------------------
@@ -703,13 +701,13 @@ void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat,int* ishort,double
     p = N;
     //printf("\nData:\nn:%d p:%d\n", n,p);
 
-    if(n>nmax)    //if(n.gt.nmax) Stop
+    if(n>nmax)
     {
         printf ("Too many objects. Use a sample of objects or recompile program to increase nmax.");                //     +'Too many objects. Use a sample of objects or recompile program.'
         exit(1);
     }
 
-    if(p>pmax)    // if(p.gt.pmax) Stop 'Too many variables. Recompile the program.'
+    if(p>pmax)
     {
         printf ("Too many variables. Use a sample of objects or recompile program to increase pmax.");                //     +'Too many objects. Use a sample of objects or recompile program.'
         exit(1);
@@ -858,12 +856,12 @@ void CompSST(int &n,int &p,double** mat,double* weight,int* ishort,double &SST){
 
     for (j=1;j<=p;j++)        // do 22 j=1,p
     {
-        sx=0.0;        //sx=0.0
-        sx2=0.0;        //sx2=0.0
+        sx=0.0;
+        sx2=0.0;
         for (i=1;i<=p;i++)        // do 20 i=1,n
         {
             temp=mat[i-1][j-1];
-            sx=sx+temp;                //sx=sx+temp
+            sx=sx+temp;
             sx2=sx2+temp*temp;        //20 sx2=sx2+temp*temp
         }
         var=sx2-(sx*sx/(1.0*dfln));            //var=sx2-(sx*sx/dfln)
@@ -1301,7 +1299,7 @@ double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int
     int    kref = 0;        //Integer list(nmax),howmany(kmax),kref
     //Integer ishort(pmax)
     // Compute squared distances to group centroids. Assign objects to nearest one
-    SSE=0;        //SSE=0.0
+    SSE=0;
 
     int k_source = 0;
     int new_k = 0;
@@ -1313,7 +1311,6 @@ double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int
     double tmp_calc_dest = 0.0;
     double tmp_calc_source = 0.0;
 
-    //initialisation des variables
     for(int k=1;k<=kmax; k++){
         nk_W[k]=0;
         clusterK_same[k]=0.0;
