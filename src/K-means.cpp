@@ -129,7 +129,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     tbegin2 = time(NULL);                // get the current calendar time
 
     int N = int (monTableau.size()); //quantity of initial tree
-    int i=0, j=0;        //Counters
     int n=N, p=N;        //,pmax,kmax; //      Integer p,pmax,kmax
     int iseed=0, niter=0, kk=0, nit=0;        //added declarations for variables
     int nnit=0, k=0, i1ref=0, i2ref=0;        //added declarations for variables
@@ -175,7 +174,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     xbar = new double*[kmax+1];
     var = new double*[kmax+1];
 
-    for (i=0;i<=kmax;i++){
+    for (int i=0;i<=kmax;i++){
         sx[i] = new double[pmax+1];
         sx2[i] = new double[pmax+1];
         xbar[i] = new double[pmax+1];
@@ -193,8 +192,8 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         distances_RF_norm[linej]= 0.0;
     }
 
-    for (i=0; i<=kmax; i++){
-        for (j=0; j<=pmax; j++){
+    for (int i=0; i<=kmax; i++){
+        for (int j=0; j<=pmax; j++){
             sx[i][j] = 0.0;
             sx2[i][j] = 0.0;
             xbar[i][j] = 0.0;
@@ -215,7 +214,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     V_W = new double [kmax+1];
 
 
-    for (i=0; i<=kmax; i++){
+    for (int i=0; i<=kmax; i++){
         Dvec[i] = 0.0;
         SSEr[i] = 0.0;
     }
@@ -224,7 +223,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     vect = new double [pmax+1];
     mean = new double [pmax+1];
     weight = new double [pmax+1];
-    for (i=0; i<=pmax; i++){
+    for (int i=0; i<=pmax; i++){
         vect[i] = 0.0;
         mean[i] = 0.0;
         weight[i] = 0.0;
@@ -234,24 +233,24 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     int **listr;                    //listr(kmax,nmax),
     listr = new int*[kmax+1];
-    for (i=0;i<=kmax;i++){
+    for (int i=0;i<=kmax;i++){
         listr[i] = new int [nmax+1];
     }
 
-    for (i=0; i<=kmax; i++){
-        for (j=0; j<=nmax; j++){
+    for (int i=0; i<=kmax; i++){
+        for (int j=0; j<=nmax; j++){
             listr[i][j] = 1;
         }
     }
 
     int **howmanyr;        //howmanyr(kmax,kmax)
     howmanyr = new int*[kmax+1];
-    for (i=0;i<=kmax;i++){
+    for (int i=0;i<=kmax;i++){
         howmanyr[i] = new int [kmax+1];
     }
 
-    for (i=0; i<=kmax; i++){
-        for (j=0; j<=kmax; j++){
+    for (int i=0; i<=kmax; i++){
+        for (int j=0; j<=kmax; j++){
             howmanyr[i][j] = 0;
         }
     }
@@ -262,7 +261,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     no = new int [nmax+1];
     iordre = new int [nmax+1];
 
-    for (i=0; i<=nmax; i++){
+    for (int i=0; i<=nmax; i++){
         list[i] = 0;
         no[i] = 0;
         iordre[i] = 0;
@@ -273,7 +272,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     nobest = new int [kmax+1];
     nnitr = new int [kmax+1];
 
-    for (i=0; i<=kmax; i++){
+    for (int i=0; i<=kmax; i++){
         howmany[i] = 0;
         nobest[i] = 0;
         nnitr[i] = 0;
@@ -282,7 +281,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     int *ishort;            //ishort(pmax);
     ishort = new int [pmax+1];
 
-    for (i=0; i<=pmax; i++){
+    for (int i=0; i<=pmax; i++){
         ishort[i] = 0;
     }
 
@@ -302,7 +301,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     double facteur = 1.0;
     k2=k_min;
     if(!isBH){
-        for (i=0; i<=kmax; i++){
+        for (int i=0; i<=kmax; i++){
             CHr[i] = MIN_CH_VALUE;
         }
 
@@ -314,7 +313,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
             k2=2;
         }
     }else if(isBH){
-        for (i=0; i<=kmax; i++){
+        for (int i=0; i<=kmax; i++){
             Wr[i] = MAX_W_VALUE;
             Wr_ln[i] = MIN_CH_VALUE;
             diff_W[i] = 0.0;
@@ -350,17 +349,17 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     // Compute vector 'mean' of overall means
-    for (j=1;j<=p;j++){
+    for (int j=1;j<=p;j++){
         mean[j]=0;
     }
 
-    for (i=1;i<=n;i++){
-        for (j=1;j<=p;j++){
+    for (int i=1;i<=n;i++){
+        for (int j=1;j<=p;j++){
             mean[j]=mean[j]+mat[i-1][ishort[j]-1];
         }
     }
 
-    for (j=1;j<=p;j++){
+    for (int j=1;j<=p;j++){
         mean[j]=mean[j]/(n*1.0);//18 mean(j)=mean(j)/dfloat(n)
     }
 
@@ -385,7 +384,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     int unique = 0;
     int CHk = 0;
     int wk = 0;
-    for (i=0; i<=kmax; i++){
+    for (int i=0; i<=kmax; i++){
         howmany[i] = 0;
         nobest[i] = 0;
         nnitr[i] = 0;
@@ -425,7 +424,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                 if(idebug==1){
                     printf ("Iteration = %d",nit);
                     printf ("SSEref = %lf",SSEref);
-                    for (i=1;i<=n;i++){
+                    for (int i=1;i<=n;i++){
                         printf ("%d",list[i]);
                     }
                 }
@@ -499,7 +498,7 @@ m60:
             i2ref=kk;        //i2ref=igr2
 
             //Group "i2ref" disappears
-            for (i=1;i<=n;i++){
+            for (int i=1;i<=n;i++){
                 if(list[i]==i2ref){
                     list[i]=i1ref;
                 }
