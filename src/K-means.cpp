@@ -128,8 +128,8 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     // Start timer
     tbegin2 = time(NULL);                // get the current calendar time
 
-    int N = int (monTableau.size()); //quantity of initial tree
-    int n=N, p=N;        //,pmax,kmax; //      Integer p,pmax,kmax
+    int treeAmount = int (monTableau.size()); //quantity of initial tree
+    int n=treeAmount, p=treeAmount;        //,pmax,kmax; //      Integer p,pmax,kmax
     int iseed=0, niter=0, kk=0, nit=0;        //added declarations for variables
     int nnit=0, k=0, i1ref=0, i2ref=0;        //added declarations for variables
     int idebug=0 ; // 0, no debug, 1 debug
@@ -141,9 +141,9 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     int iran=100;   //--Number of random position
     int nran=100;  //--Number of Random start VM
 
-    int nmax=N;    //--Maximum number of object -Parameter (nmax=10000,pmax=250,kmax=100)
-    int pmax=N;      //--Maximum data point (variable))
-    int kmax=N;      // Maximum number of groups
+    int nmax=treeAmount;    //--Maximum number of object -Parameter (nmax=10000,pmax=250,kmax=100)
+    int pmax=treeAmount;      //--Maximum data point (variable))
+    int kmax=treeAmount;      // Maximum number of groups
 
     //char *criteria = argv[0];
     // ------------------------------------------------------------
@@ -157,9 +157,9 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     const char *K_real = argv[2];
     char *percent = argv[3];
 
-    int Strouve[N];
+    int Strouve[treeAmount];
 
-    for(int linej=0;linej<N;linej++){
+    for(int linej=0;linej<treeAmount;linej++){
         Strouve[linej]= 0;
     }
 
@@ -295,7 +295,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     int max_k1 = k_max;
 
-    if (N<=k_min) max_k1=N-1;
+    if (treeAmount<=k_min) max_k1=treeAmount-1;
 
     k1=max_k1;
     double facteur = 1.0;
@@ -338,7 +338,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
      //--Read the data from files
-    ReadData1(n,nmax,p,pmax,mat,ishort,weight,nameb,N);
+    ReadData1(n,nmax,p,pmax,mat,ishort,weight,nameb,treeAmount);
 
     CompSST(n,p,mat,weight,ishort,SST);
 
@@ -368,8 +368,8 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     double W_new = MAX_W_VALUE;
 
     //initialize Sref
-    int Sref [N];
-    for (int j=0; j<N; j++){
+    int Sref [treeAmount];
+    for (int j=0; j<treeAmount; j++){
         Sref[j]=0;
     }
 
@@ -550,7 +550,7 @@ m60:
                         }
                     }
 
-                    for(int iz=1; iz<=N; iz++){
+                    for(int iz=1; iz<=treeAmount; iz++){
                         listr[CHr_group][iz]=CH_conversion[listr[CHr_group][iz]];
                         Strouve[iz-1]=CH_conversion[listr[CHr_group][iz]];
                     }
@@ -580,7 +580,7 @@ m60:
                         }
                     }
 
-                    for(int iz=1; iz<=N; iz++){
+                    for(int iz=1; iz<=treeAmount; iz++){
                         listr[W_group][iz]=W_conversion[listr[W_group][iz]];
                         Strouve[iz-1]=W_conversion[listr[W_group][iz]];
                     }
@@ -596,12 +596,12 @@ m60:
     // Print results
     if (!isBH){
         strcpy(criteria, "CH");
-        conv2sameRef(Strouve,Sref,N);
-        outStat(Strouve,Sref,criteria,N,N_especes,percent,K_real,CHr_group,CHr_max,/*listr,CHr,k1,k2,*/monTableau);
+        conv2sameRef(Strouve,Sref,treeAmount);
+        outStat(Strouve,Sref,criteria,treeAmount,N_especes,percent,K_real,CHr_group,CHr_max,/*listr,CHr,k1,k2,*/monTableau);
     }else if(isBH){
         strcpy(criteria, "BH");
-        conv2sameRef(Strouve,Sref,N);
-        outStat(Strouve,Sref,criteria,N,N_especes,percent,K_real,W_group,W_max,/*listr,Wr,k1,k2,*/monTableau);
+        conv2sameRef(Strouve,Sref,treeAmount);
+        outStat(Strouve,Sref,criteria,treeAmount,N_especes,percent,K_real,W_group,W_max,/*listr,Wr,k1,k2,*/monTableau);
     }
 
     // End timer
