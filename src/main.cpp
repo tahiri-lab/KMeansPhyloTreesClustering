@@ -58,33 +58,33 @@ int main(int nargs, char ** argv) {
         //if program is launched with -tree argument
         if(strcmp("tree",champs) == 0){
             fstream fichier(argv[2]);
-            int intParam = 0;
+            int intParam = 0; //Cluster validity index parameter (0: exit, 1: CH, 2: BH)
             double alpha = 0.0;
             int kmin=0;
             int kmax=0;
-            if(nargs==3){
+            if(nargs==3){ //default parameters
                 intParam = 1;
                 alpha = 1;
                 kmin = 2;
-            }else if (nargs==4){
+            }else if (nargs==4){ //if the user choose to only specify the cluster validity index.
                 intParam = atoi(argv[3]);
                 validation(intParam);
                 alpha = 1;
                 validationKmin(intParam,kmin);
-            }else if (nargs==5){
+            }else if (nargs==5){ //if the user choose to only specify the cluster validity index and the alpha parameter.
                 intParam = atoi(argv[3]);
                 validation(intParam);
                 alpha = atof(argv[4]);
                 validationAlpha(alpha);
                 validationKmin(intParam,kmin);
-            }else if (nargs==6){
+            }else if (nargs==6){ //if the user choose to specify all the parameters except kmax.
                 intParam = atoi(argv[3]);
                 validation(intParam);
                 alpha = atof(argv[4]);
                 validationAlpha(alpha);
                 kmin = atoi(argv[5]);
                 validationKmin(intParam,kmin);
-            }else if (nargs==7){
+            }else if (nargs==7){ //if the user choose to specify all the parameters.
                 intParam = atoi(argv[3]);
                 validation(intParam);
                 alpha = atof(argv[4]);
@@ -92,11 +92,9 @@ int main(int nargs, char ** argv) {
                 kmin = atoi(argv[5]);
                 validationKmin(intParam,kmin);
                 kmax = atoi(argv[6]);
-            }else{
-                if(nargs > 7){
+            }else if(nargs > 7){
                     printf("\nbad input..\nusage:%s -tree nameFile [cluster_validity_index] [alpha] [kmin] [kmax]\n",argv[0]);
                     exit(1);
-                }
             }
 
             vector <string> mesTrees;
@@ -128,7 +126,8 @@ int main(int nargs, char ** argv) {
                 }
 
                 //call to main_consense, a consensus algorithm to classify super trees
-                main_consense(cl2,tabIndices,mesTrees,intParam,alpha,kmin,kmax);
+                bool isBH = (intParam == 2);
+                main_consense(cl2,tabIndices,mesTrees,isBH,alpha,kmin,kmax);
 
                 //vider les vecteurs
                 mesTrees.clear();
@@ -225,7 +224,8 @@ int main(int nargs, char ** argv) {
                 double alpha = atof(argv[4]);
                 //appel de l'algorithme de K-means:
                 if(mesTrees.size()>3){
-                    main_kmeans(cl2,mesTrees,Matrice_RF,n_identique,Ww,tabIndices,intParam, n_leaves,kmin,kmax, alpha);
+                    bool isBH = (intParam == 2);
+                    main_kmeans(cl2,mesTrees,Matrice_RF,tabIndices,isBH,kmin,kmax);
                 }
 
                 //vider les vectors

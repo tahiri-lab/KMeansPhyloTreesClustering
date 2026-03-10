@@ -106,7 +106,7 @@ FILE *Output4;
 // =============================================================================================================
 // =============================================================================================================
 
-int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double ** n_identique,double ** Ww, vector<int> tabIndices, int intParam, int *n_leaves,int k_min, int k_max, int alpha){
+int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<int> tabIndices, bool isBH, int k_min, int k_max){
     //*****************Define variables******************************************//
     // Variables
     map<int,string> mapIndicesTreesFinal;
@@ -116,7 +116,6 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
 
     double W = 0.0;
     double CH = MIN_CH_VALUE;
-    bool use_weight = false;
 
     double CHr_max = INITIAL_MAX_CH;
     int CHr_group = 0;
@@ -132,7 +131,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
     int N = int (monTableau.size()); //quantity of initial tree
     int i=0, j=0;        //Counters
     int n=N, p=N;        //,pmax,kmax; //      Integer p,pmax,kmax
-    int ntran=0, iseed=0, niter=0, kk=0, nit=0;        //added declarations for variables
+    int iseed=0, niter=0, kk=0, nit=0;        //added declarations for variables
     int nnit=0, k=0, i1ref=0, i2ref=0;        //added declarations for variables
     int idebug=0 ; // 0, no debug, 1 debug
     int k1=0, k2=0;  //added declarations for variables
@@ -302,7 +301,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
     k1=max_k1;
     double facteur = 1.0;
     k2=k_min;
-    if(intParam==1){
+    if(!isBH){
         for (i=0; i<=kmax; i++){
             CHr[i] = MIN_CH_VALUE;
         }
@@ -314,7 +313,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
         if (k_min<2){
             k2=2;
         }
-    }else if(intParam==2){
+    }else if(isBH){
         for (i=0; i<=kmax; i++){
             Wr[i] = MAX_W_VALUE;
             Wr_ln[i] = MIN_CH_VALUE;
@@ -340,9 +339,9 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
     }
 
      //--Read the data from files
-    ReadData1(n,nmax,p,pmax,mat,ishort,weight,mean,ntran,nameb,N);    //Call ReadData11(n,nmax,p,pmax,mat,coord,ishort,w,mean,ntran,namea)
+    ReadData1(n,nmax,p,pmax,mat,ishort,weight,nameb,N);
 
-    CompSST(n,nmax,p,pmax,mat,weight,ishort,SST);
+    CompSST(n,p,mat,weight,ishort,SST);
 
     for(int i1=0; i1<n; i1++){
         for(int i2=0; i2<n; i2++){
@@ -402,7 +401,6 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
     for (iran=1;iran<=nran; iran++) {
         CH_new = MIN_CH_VALUE;
         CHk = 0;
-        use_weight = false;
         wk = 0;
         realk = 0;
         unique = 0;
@@ -410,7 +408,7 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
 
 
         if(iassign!=4){
-            Assign(iran,n,nmax,k1,kmax,list,howmany,no,idebug,iassign,iseed, random_number);
+            Assign(iran,n,nmax,k1,list,howmany,no,iassign,iseed, random_number);
         }
         // Big loop on number of groups, downwards from k1 to k2 (k1>=k2) - - - - - -
         niter=MAX_ITERATIONS; //changed VM
@@ -434,16 +432,16 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
                 nnit=nit;
 
                 // Compute distances to group centroids and assign objects to nearest one
-                if(intParam==1){
-                    FO_new = FO_super_tree(n,kmax,mat,Dvec,list,howmany,SSE,kk,monTableau, alpha);
-                }else if(intParam==2){
-                    FO_new = FO_W(n,kmax,mat,Dvec,list,howmany,SSE,kk,monTableau);
+                if(!isBH){
+                    FO_new = FO_super_tree(n,kmax,mat,list,howmany,SSE,kk);
+                }else if(isBH){
+                    FO_new = FO_W(n,kmax,mat,list,howmany,SSE,kk);
                 }
 
                 number_cluster = 0;
 
-                if(intParam==1){
-                    CH_new = DistanceCH(n,kmax,mat,list,Ww,FO_new,facteur);
+                if(!isBH){
+                    CH_new = DistanceCH(n,kmax,mat,list,FO_new);
                     if(CH_new>CHr[kk]){
                         SSEr[kk]=SSE;        //SSEr(kk)=SSE
                         nobest[kk]=iran;    //nobest(kk)=iran
@@ -459,8 +457,8 @@ int main_kmeans(char **argv,vector <string> monTableau, double ** mat, double **
                         for (int i=1;i<=kk;i++)                //do 67 i=1,kk
                           {howmanyr[kk][i]=howmany[i];}    //67    howmanyr(kk,i)=howmany(i)
                     }
-                }else if(intParam==2){
-                    W_new = DistanceW(n,kmax,mat,list,Ww,FO_new,facteur);
+                }else if(isBH){
+                    W_new = DistanceW(n,kmax,list,FO_new);
 
                     if(W_new<Wr[kk]){
                         SSEr[kk]=SSE;        //SSEr(kk)=SSE
@@ -530,7 +528,7 @@ m60:
             nbInit+=tabIndices.at(i);
         }
 
-        if(intParam==1){
+        if(!isBH){
             for (k=k1;k>=k2;k--){
                 if (CHr[k]>=CHr_max){
                     CHr_group=k;
@@ -560,7 +558,7 @@ m60:
                     CHr_group=realk;
                 }
             }
-        }else if(intParam==2){
+        }else if(isBH){
             for (k=k1;k>=k2;k--){
                 if (Wr[k]<=W_min){
                     //pour connaitre le nombre de partition adéquate.
@@ -597,21 +595,14 @@ m60:
     }  //fin random start
 
     // Print results
-    switch (intParam){
-        case 1:
-        {
-            strcpy(criteria, "CH");
-            conv2sameRef(Strouve,Sref,N);
-            outStat(Strouve,Sref,criteria,N,N_especes,percent,K_real,CHr_group,CHr_max,listr,CHr,k1,k2,monTableau);
-        }break;
-
-        case 2:
-        {
-            strcpy(criteria, "BH");
-            conv2sameRef(Strouve,Sref,N);
-            outStat(Strouve,Sref,criteria,N,N_especes,percent,K_real,W_group,W_max,listr,Wr,k1,k2,monTableau);
-        }break;
-
+    if (!isBH){
+        strcpy(criteria, "CH");
+        conv2sameRef(Strouve,Sref,N);
+        outStat(Strouve,Sref,criteria,N,N_especes,percent,K_real,CHr_group,CHr_max,/*listr,CHr,k1,k2,*/monTableau);
+    }else if(isBH){
+        strcpy(criteria, "BH");
+        conv2sameRef(Strouve,Sref,N);
+        outStat(Strouve,Sref,criteria,N,N_especes,percent,K_real,W_group,W_max,/*listr,Wr,k1,k2,*/monTableau);
     }
 
     // End timer
@@ -621,16 +612,40 @@ m60:
     texec2=difftime(tend2,tbegin2);    // tend-tbegin (result in second)
     fprintf (Output4,"%.3f;\n",texec2);
 
-    //}// fin de random start
+    // cleanup resources
+    kmeans_cleanup(Output4, kmax, n,
+                   sx, sx2, xbar, var,
+                   listr, howmanyr,
+                   Dvec, CHr, Wr, Wr_ln,
+                   diff_W, V_W, SSEr,
+                   vect, mean, weight,
+                   list, no, iordre, howmany,
+                   nobest, nnitr, ishort,
+                   nameb, nk, distances_RF_norm,
+                   tree_cluster_leaves);
 
-    // Print results
+    return 0;
+}
 
+void kmeans_cleanup(FILE *Output4,
+                    int kmax, int n,
+                    double **sx, double **sx2, double **xbar,
+                    double **var, int **listr, int **howmanyr,
+                    double *Dvec, double *CHr, double *Wr,
+                    double *Wr_ln, double *diff_W, double *V_W,
+                    double *SSEr, double *vect, double *mean,
+                    double *weight, int *list, int *no,
+                    int *iordre, int *howmany,
+                    int *nobest, int *nnitr, int *ishort,
+                    char *nameb, int *nk,
+                    double *distances_RF_norm,
+                    double **tree_cluster_leaves)
+{
+    //Close output files
+    if (Output4) fclose(Output4);
 
-    // *********************Close output files ***************************
-    fclose(Output4);
-    //*********************** Remove matrix ******************************
-
-    for (i=0;i<=kmax;i++){
+    //Remove matrix
+    for (int i = 0; i <= kmax; ++i) {
         delete [] sx[i];
         delete [] sx2[i];
         delete [] xbar[i];
@@ -638,7 +653,6 @@ m60:
         delete [] listr[i];
         delete [] howmanyr[i];
     }
-
     delete [] sx;
     delete [] sx2;
     delete [] xbar;
@@ -647,51 +661,39 @@ m60:
     delete [] howmanyr;
 
     delete [] Dvec;
-
     delete [] CHr;
     delete [] Wr;
     delete [] Wr_ln;
     delete [] diff_W;
     delete [] V_W;
-
     delete [] SSEr;
-
     delete [] vect;
     delete [] mean;
     delete [] weight;
-
     delete [] list;
     delete [] no;
     delete [] iordre;
-
     delete [] howmany;
     delete [] nobest;
     delete [] nnitr;
-
     delete [] ishort;
-
     delete [] nameb;
     delete [] nk;
     delete [] distances_RF_norm;
 
-    for (int i=0;i<n;i++)
-    {
+    for (int i = 0; i < n; ++i)
         delete [] tree_cluster_leaves[i];
-    }
     delete [] tree_cluster_leaves;
-
-    return 0;
 }
 
-
- //      end
+//      end
 //************************End of Main
 
 //******************************************************************************
 //**********************************FUNCTIONS***********************************
 //******************************************************************************
 
-void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat/* ,double* coord */,int* ishort,double* weight,double* colsum,int &ntran, char* nameb, int N){
+void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat,int* ishort,double* weight, char* nameb, int N){
     int p1=0,p2=0;
 
     int j=0;
@@ -765,7 +767,7 @@ void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat/* ,double* coord *
 // =============================================================================================================
 // =============================================================================================================
 
-void Assign(int &iran,int &n,int &nmax,int &k1,int &kmax,int* list,int* howmany,int* no,int &idebug,int &iassign,int &iseed, int random_number){
+void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign,int &iseed, int random_number){
     int k=0, i=0, ii=0, kk=0, how=0, isum=0;
     char namea[MAX_PATH_LENGTH];
     double turn=0;
@@ -849,7 +851,7 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int &kmax,int* list,int* howmany,
 // =============================================================================================================
 // =============================================================================================================
 
-void CompSST(int &n,int &nmax,int &p,int &pmax,double** mat,double* weight,int* ishort,double &SST){
+void CompSST(int &n,int &p,double** mat,double* weight,int* ishort,double &SST){
     double    sx=0,sx2=0,var=0,temp=0,dfln=0;     //Real*8 mat(nmax,pmax),weight(pmax),sx,sx2,var,temp,dfln,SST
     int j=0, i=0;
     dfln=n;        //dfln=dfloat(n)
@@ -1032,7 +1034,7 @@ double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N){
 // Modification Centroids: this whole subroutine
 
 //stat output
-void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group/* ,double RI,double ARI */,double score,int **listr,double *allScore,int k1, int k2, vector <string> monTableau){
+void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group,double score,/*int **listr,double *allScore,int k1, int k2,*/ vector <string> monTableau){
     //Compute Rand index between Strouve and Sref
     double RI = f_RI(Strouve,Sref,N);
 
@@ -1118,9 +1120,8 @@ void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char 
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_super_tree(int &n, int &kmax, double** mat, double* /*Dvec*/,
-                     int* list, int* howmany, double &SSE, int &kk,
-                     vector<string> /*monTableau*/, int /*alpha*/)
+double FO_super_tree(int &n, int &kmax, double** mat,
+                     int* list, int* howmany, double &SSE, int &kk)
 {
     // clusterK_same[k] stocke la somme des distances RF internes (ou vers un représentant)
     // utilisée pour calculer la contribution du cluster k à la fonction objectif.
@@ -1231,7 +1232,7 @@ double FO_super_tree(int &n, int &kmax, double** mat, double* /*Dvec*/,
 // =============================================================================================================
 // =============================================================================================================
 
-double DistanceCH(int &n,int &kmax,double** mat,int* list,double** Ww,double FO_new,double facteur){
+double DistanceCH(int &n,int &kmax,double** mat,int* list,double FO_new){
     double SSB = 0.0;
     double SSW = 0.0;
     double dist_all = 0.0;
@@ -1292,7 +1293,7 @@ double DistanceCH(int &n,int &kmax,double** mat,int* list,double** Ww,double FO_
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_W(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,double &SSE,int &kk,vector <string> monTableau){
+double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int &kk){
     double *clusterK_same = new double [kmax+1];
     int *nk_W = new int [kmax+1];
     int cluster_k = 0;
@@ -1452,7 +1453,7 @@ double FO_W(int &n,int &kmax,double** mat,double* Dvec,int* list,int* howmany,do
 // =============================================================================================================
 // =============================================================================================================
 
-double DistanceW(int &n,int &kmax,double** mat, int* list, double** Ww, double FO_new, double facteur){
+double DistanceW(int &n, int &kmax, int* list, double FO_new){
     double distance_total = 100000000.0;
     double *clusterK_same = new double [kmax+1];
     int *nk_W = new int [kmax+1];
