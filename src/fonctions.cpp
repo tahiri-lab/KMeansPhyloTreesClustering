@@ -114,7 +114,6 @@ void freeReducedTree(struct InputTree *aTree,int n){
 }
 
 
-//==
 
 
 void computeCriteria(double ** Matrix1, double ** Matrix2, int size,struct CRITERIA *aCrit,double *L1, long int *A1,double *L2, long int *A2){
@@ -279,7 +278,6 @@ void CreateSubStructures(struct InputTree * aTree,int inc,int binaire){
 
     loadAdjacenceMatrix(aTree->Adjacence,aTree->ARETE, aTree->LONGUEUR,n,aTree->kt);
     Floyd(aTree->Adjacence,aTree->ADD,n,aTree->kt); // 4eme fois
-    //===creation de degre
     aTree->degre = (int*)malloc(2*(n+inc)*sizeof(int));
     for(i=1;i<=2*n-2-kt;i++){
         aTree->degre[i]=0;
@@ -343,7 +341,6 @@ bool file_exists(const char * filename)
     }
 }
 
-//== read the species or the gene tree in the input file
 
 int readInput(int Type, const char *file,struct InputTree * aTree){
 
@@ -385,7 +382,6 @@ int readInput(int Type, const char *file,struct InputTree * aTree){
     {
         fscanf(in,"%s",name);
         if(Type == SPECIE) strcpy(aTree->SpeciesName[i],name);
-        //std::cout << name << std::endl;
         for( j = 1; j <= size; j++)
         {
             fscanf(in,"%lf",&val);
@@ -398,7 +394,6 @@ int readInput(int Type, const char *file,struct InputTree * aTree){
     {
         fscanf(in,"%s",name);
         if(Type == GENE) strcpy(aTree->SpeciesName[i],name);
-        //std::cout << name << std::endl;
         for( j = 1; j <= size; j++)
         {
             fscanf(in,"%lf",&val);
@@ -408,7 +403,6 @@ int readInput(int Type, const char *file,struct InputTree * aTree){
 
     strcpy(aTree->SpeciesName[size+1],"Root");
 
-    //std::cout << "Last species : " << aTree->SpeciesName[size] << std::endl;
     
     fclose(in);
     
