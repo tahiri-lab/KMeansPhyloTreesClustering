@@ -165,21 +165,21 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     double **sx,**sx2,**xbar,**var;    //sx(kmax,pmax),sx2(kmax,pmax),xbar(kmax,pmax),var(kmax,pmax)
-    double **tree_cluster_leaves = new double *[n];
+    double **tree_cluster_leaves = safe_malloc<double*>(n);
     for(int i=0;i<n;i++){
-        tree_cluster_leaves[i]=new double [DISTANCE_ARRAY_SIZE];
+        tree_cluster_leaves[i] = safe_malloc<double>(DISTANCE_ARRAY_SIZE);
     }
 
-    sx = new double*[kmax+1];
-    sx2 = new double*[kmax+1];
-    xbar = new double*[kmax+1];
-    var = new double*[kmax+1];
+    sx = safe_malloc<double*>(kmax+1);
+    sx2 = safe_malloc<double*>(kmax+1);
+    xbar = safe_malloc<double*>(kmax+1);
+    var = safe_malloc<double*>(kmax+1);
 
     for (i=0;i<=kmax;i++){
-        sx[i] = new double[pmax+1];
-        sx2[i] = new double[pmax+1];
-        xbar[i] = new double[pmax+1];
-        var[i] = new double[pmax+1];
+        sx[i] = safe_malloc<double>(pmax+1);
+        sx2[i] = safe_malloc<double>(pmax+1);
+        xbar[i] = safe_malloc<double>(pmax+1);
+        var[i] = safe_malloc<double>(pmax+1);
     }
 
     //variables centroids (trees and indices)
@@ -187,7 +187,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     vector <int> centroid_k_pos;
     string centroid_C_min = "";
 
-    double *distances_RF_norm = new double[DISTANCE_ARRAY_SIZE];
+    double *distances_RF_norm = safe_malloc<double>(DISTANCE_ARRAY_SIZE);
 
     for(int linej=0;linej<DISTANCE_ARRAY_SIZE;linej++){
         distances_RF_norm[linej]= 0.0;
@@ -205,14 +205,14 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     // double *Dvec,*CHr, *BHr,*SSEr, *Silr, *LogSSr, *Wr, *diff_W, *V_W, *Wr_ln, *Gapr;
     double *Dvec,*SSEr,*diff_W, *V_W, *Wr_ln, *CHr, *Wr;
-    Dvec = new double [kmax+1];
-    SSEr = new double [kmax+1];
+    Dvec = safe_malloc<double>(kmax+1);
+    SSEr = safe_malloc<double>(kmax+1);
 
-    CHr = new double [kmax+1];
-    Wr = new double [kmax+1];
-    Wr_ln = new double [kmax+1];
-    diff_W = new double [kmax+1];
-    V_W = new double [kmax+1];
+    CHr = safe_malloc<double>(kmax+1);
+    Wr = safe_malloc<double>(kmax+1);
+    Wr_ln = safe_malloc<double>(kmax+1);
+    diff_W = safe_malloc<double>(kmax+1);
+    V_W = safe_malloc<double>(kmax+1);
 
 
     for (i=0; i<=kmax; i++){
@@ -221,9 +221,9 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     double *vect,*mean,*weight;        //vect(pmax),mean(pmax),weight(pmax),
-    vect = new double [pmax+1];
-    mean = new double [pmax+1];
-    weight = new double [pmax+1];
+    vect = safe_malloc<double>(pmax+1);
+    mean = safe_malloc<double>(pmax+1);
+    weight = safe_malloc<double>(pmax+1);
     for (i=0; i<=pmax; i++){
         vect[i] = 0.0;
         mean[i] = 0.0;
@@ -233,9 +233,9 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     double D1=0,Dref=0,SSE=0,SSEref=0,SST=0;
 
     int **listr;                    //listr(kmax,nmax),
-    listr = new int*[kmax+1];
+    listr = safe_malloc<int*>(kmax+1);
     for (i=0;i<=kmax;i++){
-        listr[i] = new int [nmax+1];
+        listr[i] = safe_malloc<int>(nmax+1);
     }
 
     for (i=0; i<=kmax; i++){
@@ -245,9 +245,9 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     int **howmanyr;        //howmanyr(kmax,kmax)
-    howmanyr = new int*[kmax+1];
+    howmanyr = safe_malloc<int*>(kmax+1);
     for (i=0;i<=kmax;i++){
-        howmanyr[i] = new int [kmax+1];
+        howmanyr[i] = safe_malloc<int>(kmax+1);
     }
 
     for (i=0; i<=kmax; i++){
@@ -258,9 +258,9 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
 
     int *list,*no, *iordre;        //list(nmax),no(nmax), iordre(nmax)
-    list = new int [nmax+1];
-    no = new int [nmax+1];
-    iordre = new int [nmax+1];
+    list = safe_malloc<int>(nmax+1);
+    no = safe_malloc<int>(nmax+1);
+    iordre = safe_malloc<int>(nmax+1);
 
     for (i=0; i<=nmax; i++){
         list[i] = 0;
@@ -269,9 +269,9 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     int *howmany,*nobest/*, *nobestSilhouette, *nobestLogSS ,*nobestCH, *nobestBH, *nobestW */, *nnitr;        //howmany(kmax),,nobest(kmax), nnitr(kmax);
-    howmany = new int [kmax+1];
-    nobest = new int [kmax+1];
-    nnitr = new int [kmax+1];
+    howmany = safe_malloc<int>(kmax+1);
+    nobest = safe_malloc<int>(kmax+1);
+    nnitr = safe_malloc<int>(kmax+1);
 
     for (i=0; i<=kmax; i++){
         howmany[i] = 0;
@@ -280,7 +280,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     int *ishort;            //ishort(pmax);
-    ishort = new int [pmax+1];
+    ishort = safe_malloc<int>(pmax+1);
 
     for (i=0; i<=pmax; i++){
         ishort[i] = 0;
@@ -289,7 +289,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
 //  Modification Centroids: add ",nameb" to next line
     char *nameb;
-    nameb = new char [MAX_FILENAME_LENGTH];
+    nameb = safe_malloc<char>(MAX_FILENAME_LENGTH);
 
 
 //***********************  Read data file  **********************************
@@ -391,7 +391,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         nnitr[i] = 0;
     }
 
-    int *nk = new int [kmax+1];
+    int *nk = safe_malloc<int>(kmax+1);
 
     //initialisation des variables
     for(int k=1;k<=kmax; k++){
@@ -756,10 +756,7 @@ void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat,int* ishort,double
     }
 
     strcpy(nameb,"../output/stat.csv");
-    if((Output4 = fopen(nameb,"a"))==NULL){
-        printf("\n%s: result file open failed...",nameb);
-        exit(1);
-    }
+    Output4 = safe_fopen(nameb, "a");
 
 }
 
@@ -802,7 +799,7 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
         scanf ("%s",namea);        //read(*,*) namea
 
         FILE *Input3;
-        if ((Input3 = fopen(namea,"r"))==0) { printf("\n %s :Open Failed....",namea); exit(1); }
+        Input3 = safe_fopen(namea, "r");
         printf ("File of group assignments: %s\n",namea);
 
         for (k=1;k<=k1;k++){
