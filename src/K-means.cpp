@@ -129,7 +129,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     tbegin2 = time(NULL);                // get the current calendar time
 
     int treeAmount = int (monTableau.size()); //quantity of initial tree
-    int namelessVariable=treeAmount, p=treeAmount;
+    int p=treeAmount;
     int iseed=0, niter=0, kk=0, nit=0;
     int nnit=0, i1ref=0, i2ref=0;
     bool debug=false;
@@ -164,8 +164,8 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     double **sx,**sx2,**xbar,**var;    //sx(kmax,pmax),sx2(kmax,pmax),xbar(kmax,pmax),var(kmax,pmax)
-    double **tree_cluster_leaves = new double *[namelessVariable];
-    for(int i=0;i<namelessVariable;i++){
+    double **tree_cluster_leaves = new double *[treeAmount];
+    for(int i=0;i<treeAmount;i++){
         tree_cluster_leaves[i]=new double [DISTANCE_ARRAY_SIZE];
     }
 
@@ -338,12 +338,12 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     //--Read the data from files
-    ReadData1(namelessVariable,nmax,p,pmax,mat,ishort,weight,nameb,treeAmount);
+    ReadData1(treeAmount,nmax,p,pmax,mat,ishort,weight,nameb,treeAmount);
 
-    CompSST(namelessVariable,p,mat,weight,ishort,SST);
+    CompSST(treeAmount,p,mat,weight,ishort,SST);
 
-    for(int i1=0; i1<namelessVariable; i1++){
-        for(int i2=0; i2<namelessVariable; i2++){
+    for(int i1=0; i1<treeAmount; i1++){
+        for(int i2=0; i2<treeAmount; i2++){
             mat[i1][i2] = arrondir(mat[i1][i2],ROUNDING_PRECISION);
         }
     }
@@ -353,14 +353,14 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         mean[j]=0;
     }
 
-    for (int i=1;i<=namelessVariable;i++){
+    for (int i=1;i<=treeAmount;i++){
         for (int j=1;j<=p;j++){
             mean[j]=mean[j]+mat[i-1][ishort[j]-1];
         }
     }
 
     for (int j=1;j<=p;j++){
-        mean[j]=mean[j]/(namelessVariable*1.0);//18 mean(j)=mean(j)/dfloat(n)
+        mean[j]=mean[j]/(treeAmount*1.0);//18 mean(j)=mean(j)/dfloat(n)
     }
 
     iseed=0;
@@ -405,7 +405,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
 
         if(iassign!=4){
-            Assign(iran,namelessVariable,nmax,k1,list,howmany,no,iassign,iseed, random_number);
+            Assign(iran,treeAmount,nmax,k1,list,howmany,no,iassign,iseed, random_number);
         }
         // Big loop on number of groups, downwards from k1 to k2 (k1>=k2) - - - - - -
         niter=MAX_ITERATIONS; //changed VM
@@ -422,7 +422,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                 if(debug){
                     printf ("Iteration = %d",nit);
                     printf ("SSEref = %lf",SSEref);
-                    for (int i=1;i<=namelessVariable;i++){
+                    for (int i=1;i<=treeAmount;i++){
                         printf ("%d",list[i]);
                     }
                 }
@@ -430,15 +430,15 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
                 // Compute distances to group centroids and assign objects to nearest one
                 if(!isBH){
-                    FO_new = FO_super_tree(namelessVariable,kmax,mat,list,howmany,SSE,kk);
+                    FO_new = FO_super_tree(treeAmount,kmax,mat,list,howmany,SSE,kk);
                 }else if(isBH){
-                    FO_new = FO_W(namelessVariable,kmax,mat,list,howmany,SSE,kk);
+                    FO_new = FO_W(treeAmount,kmax,mat,list,howmany,SSE,kk);
                 }
 
                 number_cluster = 0;
 
                 if(!isBH){
-                    CH_new = DistanceCH(namelessVariable,kmax,mat,list,FO_new);
+                    CH_new = DistanceCH(treeAmount,kmax,mat,list,FO_new);
                     if(CH_new>CHr[kk]){
                         SSEr[kk]=SSE;
                         nobest[kk]=iran;
@@ -446,7 +446,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                         nnitr[kk]=nnit;
                         CH=CH_new;
                         CHr[kk]=CH;
-                        for (int i=1;i<=namelessVariable;i++)            //do 65 i=1,n
+                        for (int i=1;i<=treeAmount;i++)            //do 65 i=1,n
                         {
                             listr[kk][i]=list[i];
                         }    //65    listr(kk,i)=list(i)
@@ -455,7 +455,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                           {howmanyr[kk][i]=howmany[i];}    //67    howmanyr(kk,i)=howmany(i)
                     }
                 }else if(isBH){
-                    W_new = DistanceW(namelessVariable,kmax,list,FO_new);
+                    W_new = DistanceW(treeAmount,kmax,list,FO_new);
 
                     if(W_new<Wr[kk]){
                         SSEr[kk]=SSE;
@@ -465,7 +465,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                         W=W_new;
                         Wr[kk]=W;
 
-                        for (int i=1;i<=namelessVariable;i++){
+                        for (int i=1;i<=treeAmount;i++){
                             listr[kk][i]=list[i];
                         }
 
@@ -496,7 +496,7 @@ m60:
             i2ref=kk;        //i2ref=igr2
 
             //Group "i2ref" disappears
-            for (int i=1;i<=namelessVariable;i++){
+            for (int i=1;i<=treeAmount;i++){
                 if(list[i]==i2ref){
                     list[i]=i1ref;
                 }
@@ -538,7 +538,7 @@ m60:
 
                     for(int i=1; i<=k; i++){
                         unique=0;
-                        for(int j=1; j<=namelessVariable; j++){
+                        for(int j=1; j<=treeAmount; j++){
                             if(listr[CHr_group][j]==i && unique==0){
                                 CHk++;
                                 CH_conversion[i] = CHk;
@@ -568,7 +568,7 @@ m60:
 
                     for(int i=1; i<=k; i++){
                         unique=0;
-                        for(int j=1; j<=namelessVariable; j++){
+                        for(int j=1; j<=treeAmount; j++){
                             if(listr[W_group][j]==i && unique==0){
                                 wk++;
                                 W_conversion[i] = wk;
@@ -610,7 +610,7 @@ m60:
     fprintf (Output4,"%.3f;\n",texec2);
 
     // cleanup resources
-    kmeans_cleanup(Output4, kmax, namelessVariable,
+    kmeans_cleanup(Output4, kmax, treeAmount,
                    sx, sx2, xbar, var,
                    listr, howmanyr,
                    Dvec, CHr, Wr, Wr_ln,
