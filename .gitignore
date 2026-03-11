@@ -10,3 +10,5 @@ output/
 
 #trees files
 treeFiles/
+
+.venv/
