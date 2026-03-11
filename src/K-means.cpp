@@ -812,22 +812,20 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
 // =============================================================================================================
 
 void CompSST(int &treeAmount,int &numVariables,double** mat,double* weight,int* ishort,double &SST){
-    double    sx=0,sx2=0,var=0,temp=0,dfln=0;     //Real*8 mat(nmax,pmax),weight(pmax),sx,sx2,var,temp,dfln,SST
-    int j=0, i=0;
-    dfln=treeAmount;        //dfln=dfloat(n)
+    double    sx=0,sx2=0,var=0,temp=0;     //Real*8 mat(nmax,pmax),weight(pmax),sx,sx2,var,temp,SST
     SST=0.0;                //SST=0.0
 
-    for (j=1;j<=numVariables;j++)        // do 22 j=1,p
+    for (int j=1;j<=numVariables;j++)        // do 22 j=1,p
     {
         sx=0.0;
         sx2=0.0;
-        for (i=1;i<=numVariables;i++)        // do 20 i=1,n
+        for (int i=1;i<=numVariables;i++)        // do 20 i=1,n
         {
             temp=mat[i-1][j-1];
             sx=sx+temp;
             sx2=sx2+temp*temp;        //20 sx2=sx2+temp*temp
         }
-        var=sx2-(sx*sx/(1.0*dfln));            //var=sx2-(sx*sx/dfln)
+        var=sx2-(sx*sx/(treeAmount));            //var=sx2-(sx*sx/treeAmount)
         SST=SST+var*weight[ishort[j]];        //22 SST=SST+var*weight(ishort(j))
     }
     return;
