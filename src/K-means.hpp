@@ -39,13 +39,13 @@ void kmeans_cleanup(FILE *Output4,
                     double **tree_cluster_leaves);
 
 //--Read the data
-void ReadData1(int &treeAmount1,int &nmax,int &p,int &pmax,double** mat,int* ishort,double* weight,char* nameb,int treeAmount2);
+void ReadData1(int &treeAmount1,int &nmax,int &numVariables,int &pmax,double** mat,int* ishort,double* weight,char* nameb,int treeAmount2);
 
 //--Calculate the kmeans
 void Assign(int &iran,int &treeAmount,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign,int &iseed, int random_number);
 
 //--Squared distances to group centroids. Assign objects to nearest one
-void CompSST(int &treeAmount,int &p,double** mat,double* weight,int* ishort,double &SST);
+void CompSST(int &treeAmount,int &numVariables,double** mat,double* weight,int* ishort,double &SST);
 void Permute(int &iseed,int &treeAmount,int &nmax,int *iordre);
 double f_RI(int Strouve[],int Sref[],int N);
 double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N);
