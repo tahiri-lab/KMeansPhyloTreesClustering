@@ -694,7 +694,6 @@ void ReadData1(int &treeAmount1,int &nmax,int &numVariables,int &pmax,double** m
     int p1=0,p2=0;
 
     int j=0;
-    int   nmat=2; // (orientation of data))
 
     //Read matrix parameters
     treeAmount1 = treeAmount2;
@@ -712,38 +711,6 @@ void ReadData1(int &treeAmount1,int &nmax,int &numVariables,int &pmax,double** m
         printf ("Too many variables. Use a sample of objects or recompile program to increase pmax.");                //     +'Too many objects. Use a sample of objects or recompile program.'
         exit(1);
     }
-
-
-   switch (nmat)   //goto (10,14,18) nmat
-   {
-       case 1:
-       {
-            break;//goto 22;
-       }
-       case 2:
-       {
-            break;//goto 22;
-       }
-
-    // To read the file of QTC variables:
-       case 3:
-       {
-            printf ("How many position (p1) and QTC variables (p2)?\n");
-            printf ("E.g., p1 = 0 or 1 or 2; p2 = 166.  Answer with 2 numbers:");
-            scanf("%d %d",&p1, &p2);
-
-            if(p2>pmax){
-                printf ("Too many variables. Recompile the program to increase pmax.");
-                exit(1);
-            }
-
-            numVariables=p2;
-            printf ("\n");
-
-            break;
-        }
-    }
-
 
    //fclose(Input1);
 
