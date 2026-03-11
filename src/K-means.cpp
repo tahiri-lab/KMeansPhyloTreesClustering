@@ -114,7 +114,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     time_t tbegin2,tend2;
     double texec2 = 0.;
 
-    double W = 0.0;
+    double WVariable = 0.0;
     double CH = MIN_CH_VALUE;
 
     double CHr_max = INITIAL_MAX_CH;
@@ -413,7 +413,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         //initialisation de Strouve de la liste realiser aleatoirement
         for (kk=k1;kk>=k2;kk--){
             SSEref=INITIAL_SSE_REF;
-            W = MAX_W_VALUE;
+            WVariable = MAX_W_VALUE;
             CH = MIN_CH_VALUE;
             FO_new = MAX_FO_VALUE;
             W_new = MAX_FO_VALUE;
@@ -462,8 +462,8 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                         nobest[kk]=iran;
                         nnitr[kk]=nnit;
 
-                        W=W_new;
-                        Wr[kk]=W;
+                        WVariable=W_new;
+                        Wr[kk]=WVariable;
 
                         for (int i=1;i<=treeAmount;i++){
                             listr[kk][i]=list[i];
