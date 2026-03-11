@@ -691,10 +691,6 @@ void kmeans_cleanup(FILE *Output4,
 //******************************************************************************
 
 void ReadData1(int &treeAmount1,int &nmax,int &numVariables,int &pmax,double** mat,int* ishort,double* weight, char* nameb, int treeAmount2){
-    int p1=0,p2=0;
-
-    int j=0;
-
     //Read matrix parameters
     treeAmount1 = treeAmount2;
     numVariables = treeAmount2;
@@ -714,7 +710,7 @@ void ReadData1(int &treeAmount1,int &nmax,int &numVariables,int &pmax,double** m
 
    //fclose(Input1);
 
-    for (j=1;j<=numVariables;j++){
+    for (int j=1;j<=numVariables;j++){
         ishort[j]=j;
         weight[j]=1.0;
     }
