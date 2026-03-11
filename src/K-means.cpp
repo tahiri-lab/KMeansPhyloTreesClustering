@@ -129,7 +129,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     tbegin2 = time(NULL);                // get the current calendar time
 
     int treeAmount = int (monTableau.size()); //quantity of initial tree
-    int p=treeAmount;
+    int pVariable=treeAmount;
     int iseed=0, niter=0, kk=0, nit=0;
     int nnit=0, i1ref=0, i2ref=0;
     bool debug=false;
@@ -338,9 +338,9 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     //--Read the data from files
-    ReadData1(treeAmount,nmax,p,pmax,mat,ishort,weight,nameb,treeAmount);
+    ReadData1(treeAmount,nmax,pVariable,pmax,mat,ishort,weight,nameb,treeAmount);
 
-    CompSST(treeAmount,p,mat,weight,ishort,SST);
+    CompSST(treeAmount,pVariable,mat,weight,ishort,SST);
 
     for(int i1=0; i1<treeAmount; i1++){
         for(int i2=0; i2<treeAmount; i2++){
@@ -349,17 +349,17 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     // Compute vector 'mean' of overall means
-    for (int j=1;j<=p;j++){
+    for (int j=1;j<=pVariable;j++){
         mean[j]=0;
     }
 
     for (int i=1;i<=treeAmount;i++){
-        for (int j=1;j<=p;j++){
+        for (int j=1;j<=pVariable;j++){
             mean[j]=mean[j]+mat[i-1][ishort[j]-1];
         }
     }
 
-    for (int j=1;j<=p;j++){
+    for (int j=1;j<=pVariable;j++){
         mean[j]=mean[j]/(treeAmount*1.0);//18 mean(j)=mean(j)/dfloat(n)
     }
 
@@ -690,7 +690,7 @@ void kmeans_cleanup(FILE *Output4,
 //**********************************FUNCTIONS***********************************
 //******************************************************************************
 
-void ReadData1(int &treeAmount1,int &nmax,int &p,int &pmax,double** mat,int* ishort,double* weight, char* nameb, int treeAmount2){
+void ReadData1(int &treeAmount1,int &nmax,int &pVariable,int &pmax,double** mat,int* ishort,double* weight, char* nameb, int treeAmount2){
     int p1=0,p2=0;
 
     int j=0;
@@ -698,7 +698,7 @@ void ReadData1(int &treeAmount1,int &nmax,int &p,int &pmax,double** mat,int* ish
 
     //Read matrix parameters
     treeAmount1 = treeAmount2;
-    p = treeAmount2;
+    pVariable = treeAmount2;
     //printf("\nData:\nn:%d p:%d\n", n,p);
 
     if(treeAmount1>nmax)
@@ -707,7 +707,7 @@ void ReadData1(int &treeAmount1,int &nmax,int &p,int &pmax,double** mat,int* ish
         exit(1);
     }
 
-    if(p>pmax)
+    if(pVariable>pmax)
     {
         printf ("Too many variables. Use a sample of objects or recompile program to increase pmax.");                //     +'Too many objects. Use a sample of objects or recompile program.'
         exit(1);
@@ -737,7 +737,7 @@ void ReadData1(int &treeAmount1,int &nmax,int &p,int &pmax,double** mat,int* ish
                 exit(1);
             }
 
-            p=p2;
+            pVariable=p2;
             printf ("\n");
 
             break;
@@ -747,7 +747,7 @@ void ReadData1(int &treeAmount1,int &nmax,int &p,int &pmax,double** mat,int* ish
 
    //fclose(Input1);
 
-    for (j=1;j<=p;j++){
+    for (j=1;j<=pVariable;j++){
         ishort[j]=j;
         weight[j]=1.0;
     }
@@ -848,17 +848,17 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
 // =============================================================================================================
 // =============================================================================================================
 
-void CompSST(int &treeAmount,int &p,double** mat,double* weight,int* ishort,double &SST){
+void CompSST(int &treeAmount,int &pVariable,double** mat,double* weight,int* ishort,double &SST){
     double    sx=0,sx2=0,var=0,temp=0,dfln=0;     //Real*8 mat(nmax,pmax),weight(pmax),sx,sx2,var,temp,dfln,SST
     int j=0, i=0;
     dfln=treeAmount;        //dfln=dfloat(n)
     SST=0.0;                //SST=0.0
 
-    for (j=1;j<=p;j++)        // do 22 j=1,p
+    for (j=1;j<=pVariable;j++)        // do 22 j=1,p
     {
         sx=0.0;
         sx2=0.0;
-        for (i=1;i<=p;i++)        // do 20 i=1,n
+        for (i=1;i<=pVariable;i++)        // do 20 i=1,n
         {
             temp=mat[i-1][j-1];
             sx=sx+temp;
