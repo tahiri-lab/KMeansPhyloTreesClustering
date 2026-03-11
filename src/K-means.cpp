@@ -625,7 +625,7 @@ m60:
 }
 
 void kmeans_cleanup(FILE *Output4,
-                    int kmax, int n,
+                    int kmax, int treeAmount,
                     double **sx, double **sx2, double **xbar,
                     double **var, int **listr, int **howmanyr,
                     double *Dvec, double *CHr, double *Wr,
@@ -678,7 +678,7 @@ void kmeans_cleanup(FILE *Output4,
     delete [] nk;
     delete [] distances_RF_norm;
 
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < treeAmount; ++i)
         delete [] tree_cluster_leaves[i];
     delete [] tree_cluster_leaves;
 }
@@ -690,18 +690,18 @@ void kmeans_cleanup(FILE *Output4,
 //**********************************FUNCTIONS***********************************
 //******************************************************************************
 
-void ReadData1(int &n,int &nmax,int &p,int &pmax,double** mat,int* ishort,double* weight, char* nameb, int N){
+void ReadData1(int &treeAmount1,int &nmax,int &p,int &pmax,double** mat,int* ishort,double* weight, char* nameb, int treeAmount2){
     int p1=0,p2=0;
 
     int j=0;
     int   nmat=2; // (orientation of data))
 
     //Read matrix parameters
-    n = N;
-    p = N;
+    treeAmount1 = treeAmount2;
+    p = treeAmount2;
     //printf("\nData:\nn:%d p:%d\n", n,p);
 
-    if(n>nmax)
+    if(treeAmount1>nmax)
     {
         printf ("Too many objects. Use a sample of objects or recompile program to increase nmax.");                //     +'Too many objects. Use a sample of objects or recompile program.'
         exit(1);
@@ -848,10 +848,10 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
 // =============================================================================================================
 // =============================================================================================================
 
-void CompSST(int &n,int &p,double** mat,double* weight,int* ishort,double &SST){
+void CompSST(int &treeAmount,int &p,double** mat,double* weight,int* ishort,double &SST){
     double    sx=0,sx2=0,var=0,temp=0,dfln=0;     //Real*8 mat(nmax,pmax),weight(pmax),sx,sx2,var,temp,dfln,SST
     int j=0, i=0;
-    dfln=n;        //dfln=dfloat(n)
+    dfln=treeAmount;        //dfln=dfloat(n)
     SST=0.0;                //SST=0.0
 
     for (j=1;j<=p;j++)        // do 22 j=1,p
@@ -1117,7 +1117,7 @@ void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char 
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_super_tree(int &n, int &kmax, double** mat,
+double FO_super_tree(int &treeAmount, int &kmax, double** mat,
                      int* list, int* howmany, double &SSE, int &kk)
 {
     // clusterK_same[k] stocke la somme des distances RF internes (ou vers un représentant)
@@ -1136,7 +1136,7 @@ double FO_super_tree(int &n, int &kmax, double** mat,
     }
 
     // Compte le nombre d'arbres dans chaque cluster à partir des affectations list[1..n].
-    for (int i = 1; i <= n; ++i) {
+    for (int i = 1; i <= treeAmount; ++i) {
     int g = list[i];
     if (g >= 1 && g <= kmax) {
         nk_CH[g]++;
@@ -1171,13 +1171,13 @@ double FO_super_tree(int &n, int &kmax, double** mat,
             double bestSum = 1e100;
 
             // On teste chaque arbre i du cluster comme représentant candidat.
-            for (int i = 1; i <= n; ++i) {
+            for (int i = 1; i <= treeAmount; ++i) {
                 if (list[i] != k) continue;
 
                 double sumDist = 0.0;
 
                 // Somme des distances RF entre i et tous les autres arbres j du même cluster.
-                for (int j = 1; j <= n; ++j) {
+                for (int j = 1; j <= treeAmount; ++j) {
                     if (i == j) continue;
                     if (list[j] != k) continue;
 
@@ -1194,9 +1194,9 @@ double FO_super_tree(int &n, int &kmax, double** mat,
     } else {
 
         // Somme des distances RF sur toutes les paires (i,j) dans le même cluster.
-        for (int i = 1; i < n; ++i) {
+        for (int i = 1; i < treeAmount; ++i) {
             int cluster_i = list[i];
-            for (int j = i + 1; j <= n; ++j) {
+            for (int j = i + 1; j <= treeAmount; ++j) {
                 if (list[j] == cluster_i) {
                     clusterK_same[cluster_i] += mat[i - 1][j - 1];
                 }
@@ -1229,7 +1229,7 @@ double FO_super_tree(int &n, int &kmax, double** mat,
 // =============================================================================================================
 // =============================================================================================================
 
-double DistanceCH(int &n,int &kmax,double** mat,int* list,double FO_new){
+double DistanceCH(int &treeAmount,int &kmax,double** mat,int* list,double FO_new){
     double SSB = 0.0;
     double SSW = 0.0;
     double dist_all = 0.0;
@@ -1243,7 +1243,7 @@ double DistanceCH(int &n,int &kmax,double** mat,int* list,double FO_new){
     }
 
     // On parcourt tous les arbres (1..n) pour compter combien appartiennent à chaque cluster.
-    for (int i = 1; i <= n; ++i) {
+    for (int i = 1; i <= treeAmount; ++i) {
         int g = list[i];            // g = numéro de cluster attribué à l'objet i
         if (g >= 1 && g <= kmax) {  // on vérifie que g est dans les bornes du tableau nk_W
             nk_CH[g]++;             // on incrémente le compteur du cluster g
@@ -1257,14 +1257,14 @@ double DistanceCH(int &n,int &kmax,double** mat,int* list,double FO_new){
     }
 
     //compute dist_all
-    for (int i=1;i<n;i++){
-        for (int j=i+1;j<=n;j++){
+    for (int i=1;i<treeAmount;i++){
+        for (int j=i+1;j<=treeAmount;j++){
             RF = mat[i-1][j-1];
             dist_all += RF;
         }
     }
 
-    dist_all = dist_all/(1.0*n);
+    dist_all = dist_all/(1.0*treeAmount);
 
     //compute SSW
     SSW = FO_new;
@@ -1273,11 +1273,11 @@ double DistanceCH(int &n,int &kmax,double** mat,int* list,double FO_new){
     SSB = dist_all - SSW;
 
      if((fabs(SSW)>0.000001) && (k_cluster>1)){
-        distance_total=(SSB/(1.0*SSW))*((1.0*n-k_cluster)/((1.0*k_cluster)-1.0));
+        distance_total=(SSB/(1.0*SSW))*((1.0*treeAmount-k_cluster)/((1.0*k_cluster)-1.0));
     }
 
     if(fabs(SSW)<=0.000001  && (k_cluster>1)){
-        distance_total=10000000.0*SSB*((n-k_cluster)/((1.0*k_cluster)-1.0));
+        distance_total=10000000.0*SSB*((treeAmount-k_cluster)/((1.0*k_cluster)-1.0));
     }
 
     delete [] nk_CH;
@@ -1290,7 +1290,7 @@ double DistanceCH(int &n,int &kmax,double** mat,int* list,double FO_new){
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int &kk){
+double FO_W(int &treeAmount,int &kmax,double** mat,int* list,int* howmany,double &SSE,int &kk){
     double *clusterK_same = new double [kmax+1];
     int *nk_W = new int [kmax+1];
     int cluster_k = 0;
@@ -1318,7 +1318,7 @@ double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int
 
     // On parcourt tous les arbres (1..n) pour compter combien appartiennent à chaque cluster.
     // Comptage sécurisé : évite nk_W[list[i]] hors bornes si list[i] est invalide.
-    for (int i = 1; i <= n; ++i) {
+    for (int i = 1; i <= treeAmount; ++i) {
         int g = list[i];            // g = numéro de cluster attribué à l'objet i
         if (g >= 1 && g <= kmax) {  // on vérifie que g est dans les bornes du tableau nk_W
             nk_W[g]++;              // on incrémente le compteur du cluster g
@@ -1327,9 +1327,9 @@ double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int
 
     //compute for each cluster initially, SSW value (intra groupe distance)
     //compute SSW
-    for (int i=1;i<n;i++){
+    for (int i=1;i<treeAmount;i++){
         cluster_k=list[i];
-        for (int j=i+1;j<=n;j++){
+        for (int j=i+1;j<=treeAmount;j++){
             if (list[j]==cluster_k){
                 RF = mat[i-1][j-1];
                 clusterK_same[cluster_k]+=RF;
@@ -1346,7 +1346,7 @@ double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int
     if(kk==1){
         Dref=FO_old;
     }else{
-        for (int i=1;i<=n; i++){
+        for (int i=1;i<=treeAmount; i++){
             if(nk_W[list[i]]>1){
                 for (int k=1;k<=kk;k++){
                     //Calcul de la distance RF de chaque point i
@@ -1365,7 +1365,7 @@ double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int
                         if (nb_cluster_source==1){
                             tmp_calc_source = 0.0;
                         }else{
-                            for(int j=1;j<=n; j++){
+                            for(int j=1;j<=treeAmount; j++){
                                 if(list[j]==k_source && i!=j){
                                     tmp_calc_source -= mat[i-1][j-1];
                                 }
@@ -1388,7 +1388,7 @@ double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int
                             FO_new = FO_old;
                         }
                         tmp_calc_dest = clusterK_same[k];
-                        for(int j=1;j<=n; j++){
+                        for(int j=1;j<=treeAmount; j++){
                             if(list[j]==k){
                                 tmp_calc_dest += mat[i-1][j-1];
                             }
@@ -1449,7 +1449,7 @@ double FO_W(int &n,int &kmax,double** mat,int* list,int* howmany,double &SSE,int
 // =============================================================================================================
 // =============================================================================================================
 
-double DistanceW(int &n, int &kmax, int* list, double FO_new){
+double DistanceW(int &treeAmount, int &kmax, int* list, double FO_new){
     double distance_total = 100000000.0;
     double *clusterK_same = new double [kmax+1];
     int *nk_W = new int [kmax+1];
@@ -1461,7 +1461,7 @@ double DistanceW(int &n, int &kmax, int* list, double FO_new){
     }
 
     // Comptage sécurisé : évite nk_W[list[i]] hors bornes si list[i] est invalide.
-    for (int i = 1; i <= n; ++i) {
+    for (int i = 1; i <= treeAmount; ++i) {
         int g = list[i];            // g = numéro de cluster attribué à l'objet i
         if (g >= 1 && g <= kmax) {  // on vérifie que g est dans les bornes du tableau nk_W
             nk_W[g]++;              // on incrémente le compteur du cluster g
@@ -1474,7 +1474,7 @@ double DistanceW(int &n, int &kmax, int* list, double FO_new){
         }
     }
 
-     if(k_cluster!=n){
+     if(k_cluster!=treeAmount){
         // distance_total=(FO_new/(1.0*(n-k_cluster)));
         distance_total=(FO_new/k_cluster);
     }
