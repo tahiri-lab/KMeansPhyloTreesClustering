@@ -109,8 +109,6 @@ FILE *Output4;
 int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<int> tabIndices, bool isBH, int k_min, int k_max){
     //*****************Define variables******************************************//
     // Variables
-    map<int,string> mapIndicesTreesFinal;
-    vector <string> indicesTrees;
     time_t tbegin2,tend2;
     double texec2 = 0.;
 
@@ -181,11 +179,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         var[i] = new double[pmax+1];
     }
 
-    //variables centroids (trees and indices)
-    vector <string> centroid_k;
-    vector <int> centroid_k_pos;
-    string centroid_C_min = "";
-
     double *distances_RF_norm = new double[DISTANCE_ARRAY_SIZE];
 
     for(int linej=0;linej<DISTANCE_ARRAY_SIZE;linej++){
@@ -201,7 +194,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         }
     }
 
-
+    //Dvec, SSEr, diff_W, V_W et Wr_ln ne sont peut-être pas utilisés
     // double *Dvec,*CHr, *BHr,*SSEr, *Silr, *LogSSr, *Wr, *diff_W, *V_W, *Wr_ln, *Gapr;
     double *Dvec,*SSEr,*diff_W, *V_W, *Wr_ln, *CHr, *Wr;
     Dvec = new double [kmax+1];
@@ -219,6 +212,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         SSEr[i] = 0.0;
     }
 
+    //vect et mean ne sont peut-être pas utilisés
     double *vect,*mean,*weight;        //vect(pmax),mean(pmax),weight(pmax),
     vect = new double [pmax+1];
     mean = new double [pmax+1];
@@ -229,7 +223,8 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         weight[i] = 0.0;
     }
 
-    double D1=0,Dref=0,SSE=0,SSEref=0,SST=0;
+    //SSE et SSEref ne sont peut-être pas nécéssaire.
+    double SSE=0,SSEref=0,SST=0;
 
     int **listr;                    //listr(kmax,nmax),
     listr = new int*[kmax+1];
@@ -243,6 +238,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         }
     }
 
+    //Est-ce que howmanyr est utilisé ?
     int **howmanyr;        //howmanyr(kmax,kmax)
     howmanyr = new int*[kmax+1];
     for (int i=0;i<=kmax;i++){
@@ -340,6 +336,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     //--Read the data from files
     ReadData1(treeAmount,nmax,numVariables,pmax,mat,ishort,weight,nameb,treeAmount);
 
+    //Est-ce que SST est utilisé ? Si non, on peut supprimer la variable et la fonction CompSST
     CompSST(treeAmount,numVariables,mat,weight,ishort,SST);
 
     for(int i1=0; i1<treeAmount; i1++){
@@ -490,8 +487,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
             /* printf ("Convergence not reached in %d iterations.",niter);// write(*,*) 'Convergence not reached in ',niter,' iterations.' */
 m60:
             // Concatenate the two closest groups before going to the next value of kk
-            Dref=MIN_DISTANCE;
-            D1=0.0;
             i1ref=1;        //i1ref=igr1
             i2ref=kk;        //i2ref=igr2
 
