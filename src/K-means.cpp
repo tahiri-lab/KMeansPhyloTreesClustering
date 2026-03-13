@@ -443,13 +443,13 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                         nnitr[kk]=nnit;
                         CH=CH_new;
                         CHr[kk]=CH;
-                        for (int i=1;i<=treeAmount;i++)            //do 65 i=1,n
-                        {
+                        for (int i=1;i<=treeAmount;i++) {            //do 65 i=1,n
                             listr[kk][i]=list[i];
                         }    //65    listr(kk,i)=list(i)
 
-                        for (int i=1;i<=kk;i++)                //do 67 i=1,kk
-                          {howmanyr[kk][i]=howmany[i];}    //67    howmanyr(kk,i)=howmany(i)
+                        for (int i=1;i<=kk;i++) {               //do 67 i=1,kk
+                            howmanyr[kk][i]=howmany[i];    //67    howmanyr(kk,i)=howmany(i)
+                        }
                     }
                 }else if(isBH){
                     W_new = DistanceW(treeAmount,kmax,list,FO_new);
@@ -474,13 +474,11 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
                 // Compute sum of squared error statistic (SSE) = within-group sum of squares
 
-                if(fabs(SSEref-SSE)>(SSE/CONVERGENCE_THRESHOLD_DIVISOR))            //if(dabs(SSEref-SSE).gt.SSE/1000.0) then
-                {
+                if(fabs(SSEref-SSE)>(SSE/CONVERGENCE_THRESHOLD_DIVISOR)) {           //if(dabs(SSEref-SSE).gt.SSE/1000.0) then
                     SSEref=SSE;
                 }else{
                     goto m60;
                 }
-
             }
 
             // Compute the Calinski-Harabasz (1974) index 'CH' and
@@ -579,11 +577,8 @@ m60:
                     }
                     W_group=realk;
                 }
-
             }
         }
-
-
     }  //fin random start
 
     // Print results
@@ -691,14 +686,12 @@ void ReadData1(int &treeAmount1,int &nmax,int &numVariables,int &pmax,double** m
     numVariables = treeAmount2;
     //printf("\nData:\nn:%d p:%d\n", n,p);
 
-    if(treeAmount1>nmax)
-    {
+    if(treeAmount1>nmax) {
         printf ("Too many objects. Use a sample of objects or recompile program to increase nmax.");                //     +'Too many objects. Use a sample of objects or recompile program.'
         exit(1);
     }
 
-    if(numVariables>pmax)
-    {
+    if(numVariables>pmax) {
         printf ("Too many variables. Use a sample of objects or recompile program to increase pmax.");                //     +'Too many objects. Use a sample of objects or recompile program.'
         exit(1);
     }
@@ -810,12 +803,10 @@ void CompSST(int &treeAmount,int &numVariables,double** mat,double* weight,int* 
     double    sx=0,sx2=0,var=0,temp=0;     //Real*8 mat(nmax,pmax),weight(pmax),sx,sx2,var,temp,SST
     SST=0.0;                //SST=0.0
 
-    for (int j=1;j<=numVariables;j++)        // do 22 j=1,p
-    {
+    for (int j=1;j<=numVariables;j++) {       // do 22 j=1,p
         sx=0.0;
         sx2=0.0;
-        for (int i=1;i<=numVariables;i++)        // do 20 i=1,n
-        {
+        for (int i=1;i<=numVariables;i++) {       // do 20 i=1,n
             temp=mat[i-1][j-1];
             sx=sx+temp;
             sx2=sx2+temp*temp;        //20 sx2=sx2+temp*temp
@@ -862,8 +853,7 @@ void Permute(int &iseed,int &n,int &nmax,int *iordre){
 double f_RI(int Strouve[],int Sref[],int N){
     double comb = 1.0;
 
-    for (int i=N; i>=(N-2+1); i--)
-    {
+    for (int i=N; i>=(N-2+1); i--) {
         comb*=i;
     }
 
@@ -943,8 +933,7 @@ double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N){
 
     double comb = 1.0;
 
-    for (int i=N; i>=(N-2+1); i--)
-    {
+    for (int i=N; i>=(N-2+1); i--) {
         comb*=i;
     }
 
@@ -1073,9 +1062,7 @@ void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char 
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_super_tree(int &treeAmount, int &kmax, double** mat,
-                     int* list, int* howmany, double &SSE, int &kk)
-{
+double FO_super_tree(int &treeAmount, int &kmax, double** mat, int* list, int* howmany, double &SSE, int &kk){
     // clusterK_same[k] stocke la somme des distances RF internes (ou vers un représentant)
     // utilisée pour calculer la contribution du cluster k à la fonction objectif.
     double *clusterK_same = new double[kmax + 1];
@@ -1093,11 +1080,11 @@ double FO_super_tree(int &treeAmount, int &kmax, double** mat,
 
     // Compte le nombre d'arbres dans chaque cluster à partir des affectations list[1..n].
     for (int i = 1; i <= treeAmount; ++i) {
-    int g = list[i];
-    if (g >= 1 && g <= kmax) {
-        nk_CH[g]++;
+        int g = list[i];
+        if (g >= 1 && g <= kmax) {
+            nk_CH[g]++;
+        }
     }
-}
 
     // Met à jour howmany[k] avec les effectifs des clusters (1..kk).
     for (int k = 1; k <= kk; ++k) {
@@ -1115,9 +1102,7 @@ double FO_super_tree(int &treeAmount, int &kmax, double** mat,
     // d'arbres du cluster (intra-cluster).
     // ------------------------------------------------------------
     if (withConsensus) {
-
         for (int k = 1; k <= kk; ++k) {
-
             // Si le cluster contient 0 ou 1 arbre, sa contribution est nulle.
             if (nk_CH[k] <= 1) {
                 clusterK_same[k] = 0.0;
@@ -1143,12 +1128,9 @@ double FO_super_tree(int &treeAmount, int &kmax, double** mat,
                 // On conserve le candidat qui minimise la somme des distances.
                 if (sumDist < bestSum) bestSum = sumDist;
             }
-
             clusterK_same[k] = bestSum;
         }
-
     } else {
-
         // Somme des distances RF sur toutes les paires (i,j) dans le même cluster.
         for (int i = 1; i < treeAmount; ++i) {
             int cluster_i = list[i];
@@ -1228,10 +1210,9 @@ double DistanceCH(int &treeAmount,int &kmax,double** mat,int* list,double FO_new
     //compute SSB
     SSB = dist_all - SSW;
 
-     if((fabs(SSW)>0.000001) && (k_cluster>1)){
+    if((fabs(SSW)>0.000001) && (k_cluster>1)){
         distance_total=(SSB/(1.0*SSW))*((1.0*treeAmount-k_cluster)/((1.0*k_cluster)-1.0));
     }
-
     if(fabs(SSW)<=0.000001  && (k_cluster>1)){
         distance_total=10000000.0*SSB*((treeAmount-k_cluster)/((1.0*k_cluster)-1.0));
     }
@@ -1239,7 +1220,6 @@ double DistanceCH(int &treeAmount,int &kmax,double** mat,int* list,double FO_new
     delete [] nk_CH;
 
     return distance_total;
-
 }
 
 // =============================================================================================================
@@ -1430,7 +1410,7 @@ double DistanceW(int &treeAmount, int &kmax, int* list, double FO_new){
         }
     }
 
-     if(k_cluster!=treeAmount){
+    if(k_cluster!=treeAmount){
         // distance_total=(FO_new/(1.0*(n-k_cluster)));
         distance_total=(FO_new/k_cluster);
     }
