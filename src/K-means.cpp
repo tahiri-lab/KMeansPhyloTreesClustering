@@ -161,37 +161,15 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         Strouve[linej]= 0;
     }
 
-    double **sx,**sx2,**xbar,**var;    //sx(kmax,pmax),sx2(kmax,pmax),xbar(kmax,pmax),var(kmax,pmax)
     double **tree_cluster_leaves = new double *[treeAmount];
     for(int i=0;i<treeAmount;i++){
         tree_cluster_leaves[i]=new double [DISTANCE_ARRAY_SIZE];
-    }
-
-    sx = new double*[kmax+1];
-    sx2 = new double*[kmax+1];
-    xbar = new double*[kmax+1];
-    var = new double*[kmax+1];
-
-    for (int i=0;i<=kmax;i++){
-        sx[i] = new double[pmax+1];
-        sx2[i] = new double[pmax+1];
-        xbar[i] = new double[pmax+1];
-        var[i] = new double[pmax+1];
     }
 
     double *distances_RF_norm = new double[DISTANCE_ARRAY_SIZE];
 
     for(int linej=0;linej<DISTANCE_ARRAY_SIZE;linej++){
         distances_RF_norm[linej]= 0.0;
-    }
-
-    for (int i=0; i<=kmax; i++){
-        for (int j=0; j<=pmax; j++){
-            sx[i][j] = 0.0;
-            sx2[i][j] = 0.0;
-            xbar[i][j] = 0.0;
-            var[i][j] = 0.0;
-        }
     }
 
     //SSEr n'est peut-être pas utilisé
@@ -571,7 +549,6 @@ m60:
 
     // cleanup resources
     kmeans_cleanup(Output4, kmax, treeAmount,
-                   sx, sx2, xbar, var,
                    listr, howmanyr,
                    CHr, Wr,
                    SSEr,
@@ -586,8 +563,7 @@ m60:
 
 void kmeans_cleanup(FILE *Output4,
                     int kmax, int treeAmount,
-                    double **sx, double **sx2, double **xbar,
-                    double **var, int **listr, int **howmanyr,
+                    int **listr, int **howmanyr,
                     double *CHr, double *Wr,
                     double *SSEr, double *mean,
                     double *weight, int *list, int *no,
@@ -602,17 +578,9 @@ void kmeans_cleanup(FILE *Output4,
 
     //Remove matrix
     for (int i = 0; i <= kmax; ++i) {
-        delete [] sx[i];
-        delete [] sx2[i];
-        delete [] xbar[i];
-        delete [] var[i];
         delete [] listr[i];
         delete [] howmanyr[i];
     }
-    delete [] sx;
-    delete [] sx2;
-    delete [] xbar;
-    delete [] var;
     delete [] listr;
     delete [] howmanyr;
 

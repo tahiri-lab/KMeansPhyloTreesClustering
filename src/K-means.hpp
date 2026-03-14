@@ -26,8 +26,7 @@ int main_kmeans(char **, vector <string>, double **, vector<int>, bool, int, int
 //Cleans up kmeans variables and memory allocations
 void kmeans_cleanup(FILE *Output4,
                     int kmax, int treeAmount,
-                    double **sx, double **sx2, double **xbar,
-                    double **var, int **listr, int **howmanyr,
+                    int **listr, int **howmanyr,
                     double *CHr, double *Wr,
                     double *SSEr, double *mean,
                     double *weight, int *list, int *no,
