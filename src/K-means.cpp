@@ -195,7 +195,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     //SSEr, diff_W, V_W et Wr_ln ne sont peut-être pas utilisés
-    // double *CHr, *BHr,*SSEr, *Silr, *LogSSr, *Wr, *diff_W, *V_W, *Wr_ln, *Gapr;
     double *SSEr,*diff_W, *V_W, *Wr_ln, *CHr, *Wr;
     SSEr = new double [kmax+1];
 
@@ -257,7 +256,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         no[i] = 0;
     }
 
-    int *howmany/*, *nobestSilhouette, *nobestLogSS ,*nobestCH, *nobestBH, *nobestW */;        //howmany(kmax),,nobest(kmax), nnitr(kmax);
+    int *howmany;        //howmany(kmax),
     howmany = new int [kmax+1];
 
     for (int i=0; i<=kmax; i++){
