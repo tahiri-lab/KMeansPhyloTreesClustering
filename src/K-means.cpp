@@ -51,7 +51,7 @@ FILE *Output4;
 //  k    = number of groups (centroids)
 //  kmax = maximum number of groups
 //  kk   = ???
-//  niter = maximum iteration for convergeance of centroid (fixed=100)
+//  MAX_ITERATIONS = maximum iteration for convergeance of centroid (fixed=100)
 //  Parameter (nmax=100000,pmax=10,kmax=10)
 //  critera = (0,1,2)
 //            0: C-H
@@ -128,7 +128,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     int treeAmount = int (monTableau.size()); //quantity of initial tree
     int numVariables=treeAmount;
-    int iseed=0, niter=0, kk=0;
+    int kk=0;
     bool debug=false;
     int k1=0, k2=0;
     int hard_max_k=0; //--Setting the max k1
@@ -319,7 +319,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         mean[j]=mean[j]/(treeAmount*1.0);//18 mean(j)=mean(j)/dfloat(n)
     }
 
-    iseed=0;
     double CH_new = MIN_CH_VALUE;
     double W_new = MAX_W_VALUE;
 
@@ -353,7 +352,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
 
         if(iassign!=4){
-            Assign(iran,treeAmount,nmax,k1,list,howmany,no,iassign,iseed, random_number);
+            Assign(iran,treeAmount,nmax,k1,list,howmany,no,iassign,random_number);
         }
         // Big loop on number of groups, downwards from k1 to k2 (k1>=k2) - - - - - -
         niter=MAX_ITERATIONS; //changed VM
@@ -366,7 +365,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
             FO_new = MAX_FO_VALUE;
             W_new = MAX_FO_VALUE;
 
-            for (int nit=1;nit<=niter;nit++){
+            for (int nit=1;nit<=MAX_ITERATIONS;nit++){
                 if(debug){
                     printf ("Iteration = %d",nit);
                     printf ("SSEref = %lf",SSEref);
@@ -641,7 +640,7 @@ void ReadData1(int &treeAmount1,int &nmax,int &numVariables,int &pmax,double** m
 // =============================================================================================================
 // =============================================================================================================
 
-void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign,int &iseed, int random_number){
+void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign, int random_number){
     int ii=0, how=0, isum=0;
     char namea[MAX_PATH_LENGTH];
     double turn=0;
@@ -665,7 +664,7 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
         if(iran==1){
             for (int i=1;i<=(random_number+100);i++)  turn=rand()/(1.0*(rand() % RAND_MAX_VALUE));
         }                            //end if
-        Permute(iseed,n,nmax,list);
+        Permute(n,nmax,list);
         return;
     }else if (iassign==3){
         // Read file of group assignments.
@@ -753,11 +752,10 @@ void CompSST(int &treeAmount,int &numVariables,double** mat,double* weight,int* 
 // in an equiprobable way. This property has been checked through intensive
 // simulations.
 
-void Permute(int &iseed,int &n,int &nmax,int *iordre){
+void Permute(int &n,int &nmax,int *iordre){
     // On parcourt le tableau de la dernière position vers la deuxième.
     // À chaque étape, un élément est échangé avec un élément choisi aléatoirement parmi les positions restantes.
 
-    (void)iseed;   // Ce paramètre n'a pas ete utilise ici
     (void)nmax;    // Ce paramètre n'a pas ete utilise ici
 
     for (int m = n; m >= 2; --m) {
