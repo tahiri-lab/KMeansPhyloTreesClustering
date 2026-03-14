@@ -194,16 +194,12 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         }
     }
 
-    //SSEr, diff_W, V_W et Wr_ln ne sont peut-être pas utilisés
-    double *SSEr,*diff_W, *V_W, *Wr_ln, *CHr, *Wr;
+    //SSEr n'est peut-être pas utilisé
+    double *SSEr, *CHr, *Wr;
     SSEr = new double [kmax+1];
 
     CHr = new double [kmax+1];
     Wr = new double [kmax+1];
-    Wr_ln = new double [kmax+1];
-    diff_W = new double [kmax+1];
-    V_W = new double [kmax+1];
-
 
     for (int i=0; i<=kmax; i++){
         SSEr[i] = 0.0;
@@ -300,9 +296,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }else if(isBH){
         for (int i=0; i<=kmax; i++){
             Wr[i] = MAX_W_VALUE;
-            Wr_ln[i] = MIN_CH_VALUE;
-            diff_W[i] = 0.0;
-            V_W[i] = 0.0;
         }
         if (k_min<1){
             k2=1;
@@ -580,8 +573,8 @@ m60:
     kmeans_cleanup(Output4, kmax, treeAmount,
                    sx, sx2, xbar, var,
                    listr, howmanyr,
-                   CHr, Wr, Wr_ln,
-                   diff_W, V_W, SSEr,
+                   CHr, Wr,
+                   SSEr,
                    mean, weight,
                    list, no, howmany,
                    ishort,
@@ -596,7 +589,6 @@ void kmeans_cleanup(FILE *Output4,
                     double **sx, double **sx2, double **xbar,
                     double **var, int **listr, int **howmanyr,
                     double *CHr, double *Wr,
-                    double *Wr_ln, double *diff_W, double *V_W,
                     double *SSEr, double *mean,
                     double *weight, int *list, int *no,
                     int *howmany,
@@ -626,9 +618,6 @@ void kmeans_cleanup(FILE *Output4,
 
     delete [] CHr;
     delete [] Wr;
-    delete [] Wr_ln;
-    delete [] diff_W;
-    delete [] V_W;
     delete [] SSEr;
     delete [] mean;
     delete [] weight;
