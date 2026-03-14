@@ -1049,6 +1049,7 @@ double FO_super_tree(int &treeAmount, int &kmax, double** mat, int* list, int* h
         howmany[k] = 0;
     }
 
+    //boucle sur les arbres
     // Compte le nombre d'arbres dans chaque cluster à partir des affectations list[1..n].
     for (int i = 1; i <= treeAmount; ++i) {
         int g = list[i];
@@ -1102,6 +1103,7 @@ double FO_super_tree(int &treeAmount, int &kmax, double** mat, int* list, int* h
             clusterK_same[k] = bestSum;
         }
     } else {
+        //boucle sur les arbres
         // Somme des distances RF sur toutes les paires (i,j) dans le même cluster.
         for (int i = 1; i < treeAmount; ++i) {
             int cluster_i = list[i];
@@ -1230,6 +1232,7 @@ double FO_W(int &treeAmount,int &kmax,double** mat,int* list,int* howmany,double
         }
     }
 
+    //calcul distance
     //compute for each cluster initially, SSW value (intra groupe distance)
     //compute SSW
     for (int i=1;i<treeAmount;i++){
@@ -1251,6 +1254,7 @@ double FO_W(int &treeAmount,int &kmax,double** mat,int* list,int* howmany,double
     if(kk==1){
         Dref=FO_old;
     }else{
+        //boucle sur les arbres
         for (int i=1;i<=treeAmount; i++){
             if(nk_W[list[i]]>1){
                 for (int k=1;k<=kk;k++){
@@ -1323,11 +1327,13 @@ double FO_W(int &treeAmount,int &kmax,double** mat,int* list,int* howmany,double
                             howmany[k] = nb_cluster_dest;
                             howmany[list[i]] = nb_cluster_source;
 
+                            //calcul SSE
                             SSE=SSE+Dref;         //SSE=SSE+Dref
 
                             //mise à jour de la fonction objective FO_old
                             FO_old = FO_new;
 
+                            //déplacement de l'arbre
                             //mise à jour la liste de distribution des elements
                             list[i] = k;
                         }else{
