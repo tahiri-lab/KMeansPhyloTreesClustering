@@ -194,10 +194,9 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         }
     }
 
-    //Dvec, SSEr, diff_W, V_W et Wr_ln ne sont peut-être pas utilisés
-    // double *Dvec,*CHr, *BHr,*SSEr, *Silr, *LogSSr, *Wr, *diff_W, *V_W, *Wr_ln, *Gapr;
-    double *Dvec,*SSEr,*diff_W, *V_W, *Wr_ln, *CHr, *Wr;
-    Dvec = new double [kmax+1];
+    //SSEr, diff_W, V_W et Wr_ln ne sont peut-être pas utilisés
+    // double *CHr, *BHr,*SSEr, *Silr, *LogSSr, *Wr, *diff_W, *V_W, *Wr_ln, *Gapr;
+    double *SSEr,*diff_W, *V_W, *Wr_ln, *CHr, *Wr;
     SSEr = new double [kmax+1];
 
     CHr = new double [kmax+1];
@@ -208,17 +207,15 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
 
     for (int i=0; i<=kmax; i++){
-        Dvec[i] = 0.0;
         SSEr[i] = 0.0;
     }
 
-    //vect et mean ne sont peut-être pas utilisés
-    double *vect,*mean,*weight;        //vect(pmax),mean(pmax),weight(pmax),
-    vect = new double [pmax+1];
+    //mean n'est peut-être pas utilisés
+    //weight est utilisé dans la fonction CompSST, mais il est initialisé à 1.0 pour toutes les variables, donc il n'affecte pas le résultat. On peut envisager de supprimer ce tableau et de modifier CompSST en conséquence.
+    double *mean,*weight;        //mean(pmax),weight(pmax),
     mean = new double [pmax+1];
     weight = new double [pmax+1];
     for (int i=0; i<=pmax; i++){
-        vect[i] = 0.0;
         mean[i] = 0.0;
         weight[i] = 0.0;
     }
@@ -251,27 +248,20 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         }
     }
 
-
-    int *list,*no, *iordre;        //list(nmax),no(nmax), iordre(nmax)
+    int *list,*no;        //list(nmax),no(nmax)
     list = new int [nmax+1];
     no = new int [nmax+1];
-    iordre = new int [nmax+1];
 
     for (int i=0; i<=nmax; i++){
         list[i] = 0;
         no[i] = 0;
-        iordre[i] = 0;
     }
 
-    int *howmany,*nobest/*, *nobestSilhouette, *nobestLogSS ,*nobestCH, *nobestBH, *nobestW */, *nnitr;        //howmany(kmax),,nobest(kmax), nnitr(kmax);
+    int *howmany/*, *nobestSilhouette, *nobestLogSS ,*nobestCH, *nobestBH, *nobestW */;        //howmany(kmax),,nobest(kmax), nnitr(kmax);
     howmany = new int [kmax+1];
-    nobest = new int [kmax+1];
-    nnitr = new int [kmax+1];
 
     for (int i=0; i<=kmax; i++){
         howmany[i] = 0;
-        nobest[i] = 0;
-        nnitr[i] = 0;
     }
 
     int *ishort;            //ishort(pmax);
@@ -382,14 +372,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     int wk = 0;
     for (int i=0; i<=kmax; i++){
         howmany[i] = 0;
-        nobest[i] = 0;
-        nnitr[i] = 0;
-    }
-
-    int *nk = new int [kmax+1];
-
-    for(int k=1;k<=kmax; k++){
-        nk[k]=0;
     }
 
     for (iran=1;iran<=nran; iran++) {
@@ -438,9 +420,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                     CH_new = DistanceCH(treeAmount,kmax,mat,list,FO_new);
                     if(CH_new>CHr[kk]){
                         SSEr[kk]=SSE;
-                        nobest[kk]=iran;
 
-                        nnitr[kk]=nnit;
                         CH=CH_new;
                         CHr[kk]=CH;
                         for (int i=1;i<=treeAmount;i++) {            //do 65 i=1,n
@@ -456,8 +436,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
                     if(W_new<Wr[kk]){
                         SSEr[kk]=SSE;
-                        nobest[kk]=iran;
-                        nnitr[kk]=nnit;
 
                         WVariable=W_new;
                         Wr[kk]=WVariable;
@@ -603,12 +581,12 @@ m60:
     kmeans_cleanup(Output4, kmax, treeAmount,
                    sx, sx2, xbar, var,
                    listr, howmanyr,
-                   Dvec, CHr, Wr, Wr_ln,
+                   CHr, Wr, Wr_ln,
                    diff_W, V_W, SSEr,
-                   vect, mean, weight,
-                   list, no, iordre, howmany,
-                   nobest, nnitr, ishort,
-                   nameb, nk, distances_RF_norm,
+                   mean, weight,
+                   list, no, howmany,
+                   ishort,
+                   nameb, distances_RF_norm,
                    tree_cluster_leaves);
 
     return 0;
@@ -618,13 +596,13 @@ void kmeans_cleanup(FILE *Output4,
                     int kmax, int treeAmount,
                     double **sx, double **sx2, double **xbar,
                     double **var, int **listr, int **howmanyr,
-                    double *Dvec, double *CHr, double *Wr,
+                    double *CHr, double *Wr,
                     double *Wr_ln, double *diff_W, double *V_W,
-                    double *SSEr, double *vect, double *mean,
+                    double *SSEr, double *mean,
                     double *weight, int *list, int *no,
-                    int *iordre, int *howmany,
-                    int *nobest, int *nnitr, int *ishort,
-                    char *nameb, int *nk,
+                    int *howmany,
+                    int *ishort,
+                    char *nameb,
                     double *distances_RF_norm,
                     double **tree_cluster_leaves)
 {
@@ -647,25 +625,19 @@ void kmeans_cleanup(FILE *Output4,
     delete [] listr;
     delete [] howmanyr;
 
-    delete [] Dvec;
     delete [] CHr;
     delete [] Wr;
     delete [] Wr_ln;
     delete [] diff_W;
     delete [] V_W;
     delete [] SSEr;
-    delete [] vect;
     delete [] mean;
     delete [] weight;
     delete [] list;
     delete [] no;
-    delete [] iordre;
     delete [] howmany;
-    delete [] nobest;
-    delete [] nnitr;
     delete [] ishort;
     delete [] nameb;
-    delete [] nk;
     delete [] distances_RF_norm;
 
     for (int i = 0; i < treeAmount; ++i)
@@ -1231,15 +1203,13 @@ double FO_W(int &treeAmount,int &kmax,double** mat,int* list,int* howmany,double
     int *nk_W = new int [kmax+1];
     int cluster_k = 0;
     double RF = 0.0;
-    double Dref = 0;       //Real*8 Dref,D1,SSE,Dvec(kmax),weight(pmax)
+    double Dref = 0;       //Real*8 Dref,D1,SSE,weight(pmax)
     int    kref = 0;        //Integer list(nmax),howmany(kmax),kref
     //Integer ishort(pmax)
     // Compute squared distances to group centroids. Assign objects to nearest one
     SSE=0;
 
     int k_source = 0;
-    int new_k = 0;
-    int old_k = 0;
     int nb_cluster_dest = 0;
     int nb_cluster_source = 0;
     double FO_old = 0.0;
@@ -1361,10 +1331,6 @@ double FO_W(int &treeAmount,int &kmax,double** mat,int* list,int* howmany,double
 
                             //mise à jour la liste de distribution des elements
                             list[i] = k;
-
-                            //A VOIR SI UTILE
-                            new_k = k;
-                            old_k = list[i];
                         }else{
                             Dref=FO_old;
                         }
