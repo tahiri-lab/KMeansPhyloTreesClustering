@@ -314,12 +314,12 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     if (k1>kmax) {
-      printf("*** Warning, limiting groups to %d \n",kmax);
-      k1=max_k1-1;
+        printf("*** Warning, limiting groups to %d \n",kmax);
+        k1=max_k1-1;
     }
 
     if (hard_max_k!=0) {
-      k1=max_k1;
+        k1=max_k1;
     }
 
     //--Read the data from files
