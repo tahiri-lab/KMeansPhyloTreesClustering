@@ -135,7 +135,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     int random_number=100; //--Fixed random number
     int iassign=2;  // 1 equal, 2 random
-    int iran=100;   //--Number of random position
     int nran=100;  //--Number of Random start VM
 
     int nmax=treeAmount;    //--Maximum number of object -Parameter (nmax=10000,pmax=250,kmax=100)
@@ -342,7 +341,8 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         howmany[i] = 0;
     }
 
-    for (iran=1;iran<=nran; iran++) {
+    //iran is the number of random position
+    for (int iran=1;iran<=nran; iran++) {
         CH_new = MIN_CH_VALUE;
         CHk = 0;
         wk = 0;
