@@ -318,7 +318,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     //--Read the data from files
     ReadData1(treeAmount,nmax,numVariables,pmax,mat,ishort,weight,nameb,treeAmount);
 
-    //Est-ce que SST est utilisé ? Si non, on peut supprimer la variable et la fonction CompSST
+    //Est-ce que SST est utilisé ? Si non, on peut supprimer la variable, la fonction CompSST et weight.
     CompSST(treeAmount,numVariables,mat,weight,ishort,SST);
 
     for(int i1=0; i1<treeAmount; i1++){
