@@ -128,8 +128,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     int treeAmount = int (monTableau.size()); //quantity of initial tree
     int numVariables=treeAmount;
-    int iseed=0, niter=0, kk=0, nit=0;
-    int nnit=0, i1ref=0, i2ref=0;
+    int iseed=0, niter=0, kk=0;
     bool debug=false;
     int k1=0, k2=0;
     int hard_max_k=0; //--Setting the max k1
@@ -367,7 +366,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
             FO_new = MAX_FO_VALUE;
             W_new = MAX_FO_VALUE;
 
-            for (nit=1;nit<=niter;nit++){
+            for (int nit=1;nit<=niter;nit++){
                 if(debug){
                     printf ("Iteration = %d",nit);
                     printf ("SSEref = %lf",SSEref);
@@ -375,7 +374,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                         printf ("%d",list[i]);
                     }
                 }
-                nnit=nit;
 
                 // Compute distances to group centroids and assign objects to nearest one
                 if(!isBH){
@@ -433,8 +431,8 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
             /* printf ("Convergence not reached in %d iterations.",niter);// write(*,*) 'Convergence not reached in ',niter,' iterations.' */
 m60:
             // Concatenate the two closest groups before going to the next value of kk
-            i1ref=1;        //i1ref=igr1
-            i2ref=kk;        //i2ref=igr2
+            int i1ref=1;        //i1ref=igr1
+            int i2ref=kk;        //i2ref=igr2
 
             //Group "i2ref" disappears
             for (int i=1;i<=treeAmount;i++){
