@@ -1,35 +1,33 @@
-//
-//  utils_tree.cpp
-//  k means phylogenetic trees clustering
-//
-//  Created by Benjamin ALBERTELLI on 13/06/2022.
-//
 
 #include "utils_tree.hpp"
 
-//==============================================
-//=
-//==============================================
+// Utilitaires pour le traitement d'arbres phylogénétiques
 
+
+/**
+ * Calcule la distance entre deux ensembles de bipartitions B et B1 pour
+ * un arbre de `n` feuilles. Le résultat est la moyenne des discordances
+ * minimales des deux sens.
+ */
 double BipartitionDistance (int **B, int ** B1,int n)
 {
-    int i,j,k,k1,cpt1,cpt2,cpt3,cpt4,t1,t2;
+    int i,j,k,k1,cpt1,cpt2,cpt3,cpt4;
     double c1,c2,min1 = 0.0,min2 = 0.0,cptB=0.0,cptB1=0.0;
     int *flag,*flag1,**Bi,**Bi1;
-    Bi=(int **) malloc((2*n-2)*sizeof(int*));
-    Bi1=(int **) malloc((2*n-2)*sizeof(int*));
+    Bi = safe_malloc<int*>(2*n-2);
+    Bi1 = safe_malloc<int*>(2*n-2);
     for (i=0;i<2*n-2;i++)
     {
-        Bi[i]=(int *) malloc((2*n)*sizeof(int));
-        Bi1[i]=(int *) malloc((2*n)*sizeof(int));
+        Bi[i] = safe_malloc<int>(2*n);
+        Bi1[i] = safe_malloc<int>(2*n);
         if ((Bi1[i]==NULL)||(Bi[i]==NULL))
         {
             printf(" Data matrix is too large\n ");
             exit(2);
         }
     }
-    flag = (int*) malloc(2*n*(sizeof(int)));
-    flag1 = (int*) malloc(2*n*(sizeof(int)));
+    flag = safe_malloc<int>(2*n);
+    flag1 = safe_malloc<int>(2*n);
     for(i=1;i<=2*n-3;i++){
         flag[i] = flag1[i] = 0;
         for(j=1;j<=n;j++){
@@ -61,7 +59,6 @@ double BipartitionDistance (int **B, int ** B1,int n)
     }
     
     for(i=1;i<=n-3;i++){
-        t1=t2=0;
         for(j=1;j<=n-3;j++){
             cpt1=cpt2=cpt3=cpt4=n;
             for(k=1;k<=n;k++){
@@ -98,32 +95,44 @@ double BipartitionDistance (int **B, int ** B1,int n)
 }
 
 
-//===========================================================
-//== Floyd
-//===========================================================
 
+/**
+ * Exécute l'algorithme de Floyd–Warshall sur la matrice d'adjacence
+ * pour calculer toutes les plus courtes distances. Le résultat est écrit
+ * dans DIST. `kt` représente le nombre de sommets terminaux.
+ */
 void Floyd(double ** Adjacence , double ** DIST,int n,int kt)
 {
     int i,j,k;
 
-    for(i=1;i<=2*n-2-kt;i++)
-        for(j=1;j<=2*n-2-kt;j++)
-        {
-            if(i==j)
+    for(i=1;i<=2*n-2-kt;i++) {
+        for(j=1;j<=2*n-2-kt;j++) {
+            if(i==j) {
                 DIST[i][j] = 0;
-            else
+            } else {
                 DIST[i][j] = Adjacence[i][j];
+            }
         }
+    }
 
-        for(i=1;i<=2*n-2-kt;i++)
-            for(j=1;j<=2*n-2-kt;j++)
-                for(k=1;k<=2*n-2-kt;k++)
-                {
-                    if((DIST[j][i] + DIST[i][k]) < DIST[j][k])
-                        DIST[j][k] = DIST[j][i] + DIST[i][k];
+    for(i=1;i<=2*n-2-kt;i++) {
+        for(j=1;j<=2*n-2-kt;j++) {
+            for(k=1;k<=2*n-2-kt;k++) {
+                if((DIST[j][i] + DIST[i][k]) < DIST[j][k]) {
+                    DIST[j][k] = DIST[j][i] + DIST[i][k];
                 }
+            }
+        }
+    }
 }
 
+/**
+ * Variante de l'algorithme de Floyd-Warshall qui remplit deux matrices DIST et
+ * DIST2 à partir de la même matrice d'adjacence. Cela permet de calculer deux
+ * jeux de distances identiques sans écraser la copie initiale. Le paramètre
+ * `kt` représente le nombre de branches terminales ignorées (voir Floyd ci-
+ * dessus).
+ */
 void Floyd(double ** Adjacence , double ** DIST,double **DIST2,int n,int kt)
 {
     int i,j,k1;
@@ -137,21 +146,25 @@ void Floyd(double ** Adjacence , double ** DIST,double **DIST2,int n,int kt)
                 DIST[i][j] = DIST2[i][j] = Adjacence[i][j];
         }
 
-        for(i=1;i<=2*n-2-kt;i++)
-            for(j=1;j<=2*n-2-kt;j++)
-                for(k1=1;k1<=2*n-2-kt;k1++)
-                {
-                    if((DIST[j][i] + DIST[i][k1]) < DIST[j][k1])
-                        DIST[j][k1] = DIST2[j][k1] = DIST[j][i] + DIST[i][k1];
+    for(i=1;i<=2*n-2-kt;i++) {
+        for(j=1;j<=2*n-2-kt;j++) {
+            for(k1=1;k1<=2*n-2-kt;k1++) {
+                if((DIST[j][i] + DIST[i][k1]) < DIST[j][k1]) {
+                    DIST[j][k1] = DIST2[j][k1] = DIST[j][i] + DIST[i][k1];
                 }
+            }
+        }
+    }
 }
 
 
-//===========================================================
-//==
-//===========================================================
 
 
+/**
+ * Reconstruit la matrice d'adjacence à partir des listes d'arêtes et de
+ * longueurs. `size` correspond au nombre d'espèces et `kt` au nombre de
+ * branches terminales ignorées.
+ */
 void loadAdjacenceMatrix( double **Adjacence, long int *ARETE, double *LONGUEUR,int size,int kt){
     
     int i,j;
@@ -166,16 +179,17 @@ void loadAdjacenceMatrix( double **Adjacence, long int *ARETE, double *LONGUEUR,
     }
 }
 
-//=====================================================
-//==
-//=====================================================
 
+/**
+ * Calcul d'un ordre circulaire approximatif (outward permutation) sur
+ * la matrice de distances `D`. Les extrémités (i1,j1) sont fixées.
+ */
 void odp1(double **D, int *X, int *i1, int *j1, int n)
 {
     double S1,S;
     int i,j,k = 0,a,*Y1;
 
-    Y1=(int *) malloc((n+1)*sizeof(int));
+    Y1 = safe_malloc<int>(n+1);
 
     for(i=1;i<=n;i++)
         Y1[i]=1;
@@ -212,12 +226,16 @@ void odp1(double **D, int *X, int *i1, int *j1, int n)
 }
 
 
-//=====================================================
-//==
-//=====================================================
 
+/**
+ * Détermine les arêtes d'un arbre à partir de la matrice de distances
+ * `DI`. Les arêtes sont stockées dans ARETE et leurs longueurs dans
+ * LONGUEUR. Le paramètre `binaire` indique si l'arbre doit rester binaire.
+ * Retourne le nombre de sommets internes créés (kt).
+ */
 int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binaire)
 {
+
     struct EDGE { unsigned int U; unsigned int V; double LN;};
     struct EDGE *Path,*Tree;
     int i,j,k,p,P,*X;
@@ -226,10 +244,10 @@ int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binair
     int kt=0;
     long SomToDel,OtherSom;
 
-    X=(int *)malloc((n+1)*sizeof(int));
-    L=(double *)malloc((n+1)*sizeof(double));
-    Tree=(struct EDGE *)malloc((2*n-2)*sizeof(struct EDGE));
-    Path=(struct EDGE *)malloc((n+2)*sizeof(struct EDGE));
+    X = safe_malloc<int>(n+1);
+    L = safe_malloc<double>(n+1);
+    Tree = safe_malloc<struct EDGE>(2*n-2);
+    Path = safe_malloc<struct EDGE>(n+2);
 
 
     D=(double **) malloc((n+1)*sizeof(double*));
@@ -253,7 +271,7 @@ int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binair
             D[i][j]=DI[i][j];
     }
 
-    /* Verification de l'equivalence des topologies */
+    /* vérification de l'équivalence des topologies */
     L[1]=D[X[1]][X[2]];
     Path[1].U=X[1];
     Path[1].V=X[2];
@@ -318,7 +336,7 @@ int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binair
         LONGUEUR[i-1]=Tree[i].LN;
         if (LONGUEUR[i-1]<2*epsilon_ba) LONGUEUR[i-1] = 2*epsilon_ba;
     }
-    /*/== rajoute le 22 avril 2005*/
+    /* Ce bloc contracte les branches internes trop courtes (ajout 22 avril 2005) */
     while((pasfini==1)&&(binaire==0)){
         pasfini = 0;
         for (i=1;i<=2*n-3-kt;i++){
@@ -333,7 +351,6 @@ int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binair
                 }
                 pasfini=1;
 
-                //== trouver les branches connexes*/
                 for (j=1;j<=2*n-3-kt;j++){
 
                     if(j!=i){
@@ -377,9 +394,6 @@ int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binair
 }
 
 
-//==============================================================
-//
-//==============================================================
 
 
 int Bipartition_Table (double **D, int **B, int *PLACE, int n)
@@ -422,7 +436,12 @@ int Bipartition_Table (double **D, int **B, int *PLACE, int n)
         
         if ((DIS<=-EPS1)||(DIS1<=-EPS1)) { printf("\n This is not an additive distance \n");
         free(MaxCol);free(X);free(LengthPath);free(Path);exit(1);return 0; }
-        if (DIS<=EPS) DIS=0.0; if (DIS1<=EPS) DIS1=0.0;
+        if (DIS<=EPS) {
+            DIS=0.0;
+        }
+        if (DIS1<=EPS) {
+            DIS1=0.0;
+        }
 
         S=0.0; i=EdgeNumberPath; if (LengthPath[i]==0.0) i--;
         while (S<=DIS-EPS)
@@ -520,9 +539,6 @@ int Bipartition_Table (double **D, int **B, int *PLACE, int n)
     return m;
 }
 
-//==============================================================
-//
-//==============================================================
 
 
 int Table_Comparaison (int **B, int ** B1, int *PLACE, int *PLACE1, int m, int m1,int n)
@@ -547,10 +563,13 @@ int Table_Comparaison (int **B, int ** B1, int *PLACE, int *PLACE1, int m, int m
 }
 
 
-//=======================================
-//
-//=======================================
 
+/**
+ * Cherche et renvoie le premier fils accessible du sommet `sommet` dans la
+ * matrice d'adjacence `Adjacence`. Lorsqu'une arête est utilisée, elle est
+ * marquée comme visitée en la mettant à la valeur INFINI pour éviter de la
+ * revisiter. Si aucun fils n'est trouvé, la fonction renvoie -1.
+ */
 int findFils(double ** Adjacence,int sommet,int n){
 
     int i;
@@ -564,10 +583,14 @@ int findFils(double ** Adjacence,int sommet,int n){
     return -1;
 }
 
-//=======================================
-//
-//=======================================
  
+/**
+ * Construis récursivement un sous‑arbre enraciné en `sommet` à partir de la
+ * matrice d'adjacence `Adjacence` et du tableau d'arêtes `ARETE`. Le
+ * paramètre `indice` est un compteur de noeuds utilisé par l'appelant. La
+ * fonction renvoie un pointeur vers la structure allouée représentant le
+ * sous‑arbre. Les appels ultérieurs doivent libérer la mémoire avec `viderArbre`.
+ */
 struct TNoeud * CreerSousArbre(long int *ARETE,int *indice, double ** Adjacence,int sommet,int n){
 
     int i=0;
@@ -579,12 +602,12 @@ struct TNoeud * CreerSousArbre(long int *ARETE,int *indice, double ** Adjacence,
     if(sommet==-1)
         return NULL;
 
-    tableau = (int*)malloc(100*sizeof(int));
+    tableau = safe_malloc<int>(100);
 
-    node = (struct TNoeud*)malloc(sizeof(struct TNoeud));
+    node = safe_malloc<struct TNoeud>(1);
     node->NoNoeud = sommet;
     node->nbfils = 0;
-    node->fils = (struct TNoeud**)malloc(100*sizeof(struct TNoeud*));
+    node->fils = safe_malloc<struct TNoeud*>(100);
     for(i=0;i<100;i++)
         node->fils[i] = NULL;
 
@@ -607,10 +630,11 @@ struct TNoeud * CreerSousArbre(long int *ARETE,int *indice, double ** Adjacence,
 }
 
 
-//=============================================
-//= tri bulle d'un tableau d'entiers
-//=============================================
 
+/**
+ * Trie par ordre croissant les éléments du tableau `tab` entre les indices
+ * `debut` et `fin` inclus en utilisant un algorithme d'échange simple.
+ */
 void sortIntTab(int * tab, int debut, int fin){
     
     int i,j,tmp;
@@ -627,11 +651,14 @@ void sortIntTab(int * tab, int debut, int fin){
 }
 
 
-//============================================================
-//
-//============================================================
 
 
+/**
+ * Parcourt l'arborescence `unNoeud` pour remplir les informations de la table
+ * `SousMatriceTree`. Pour chaque noeud interne, la fonction rassemble les
+ * sommets de ses sous-arbres et construit un tableau trié de ces sommets. Les
+ * feuilles reçoivent simplement leur propre numéro de sommet.
+ */
 void ParcoursArbre(struct TNoeud * unNoeud, struct DescTree * SousMatriceTree){
 
     int j,k;
@@ -652,7 +679,7 @@ void ParcoursArbre(struct TNoeud * unNoeud, struct DescTree * SousMatriceTree){
                 somme = somme + SousMatriceTree[unNoeud->fils[j]->NoNoeud].nbSommet;
             }
             SousMatriceTree[unNoeud->NoNoeud].nbSommet = somme; /*SousMatriceTree[unNoeud->droit->NoNoeud].nbSommet + SousMatriceTree[unNoeud->gauche->NoNoeud].nbSommet;*/
-            SousMatriceTree[unNoeud->NoNoeud].Tableau = (int*)malloc((somme+1)*sizeof(int));
+            SousMatriceTree[unNoeud->NoNoeud].Tableau = safe_malloc<int>(somme+1);
             
             for(j=0;j<nbfils;j++){
                 for(k=1;k<=SousMatriceTree[unNoeud->fils[j]->NoNoeud].nbSommet;k++) {
@@ -666,7 +693,7 @@ void ParcoursArbre(struct TNoeud * unNoeud, struct DescTree * SousMatriceTree){
         }
         else{
 
-            SousMatriceTree[unNoeud->NoNoeud].Tableau = (int*)malloc((2)*sizeof(int));
+            SousMatriceTree[unNoeud->NoNoeud].Tableau = safe_malloc<int>(2);
 
             SousMatriceTree[unNoeud->NoNoeud].Tableau[1] = unNoeud->NoNoeud;
             SousMatriceTree[unNoeud->NoNoeud].nbSommet = 1;
@@ -675,11 +702,13 @@ void ParcoursArbre(struct TNoeud * unNoeud, struct DescTree * SousMatriceTree){
 }
 
 
-//=======================================
-//
-//=======================================
 
 
+/**
+ * Libère récursivement la mémoire allouée pour l'arbre pointé par `A`.
+ * Chaque noeud voit ses enfants détruits avant de libérer son propre tableau
+ * de pointeurs et l'objet lui‑même.
+ */
 void viderArbre(struct TNoeud * A){
     int i;
     
@@ -698,11 +727,14 @@ void viderArbre(struct TNoeud * A){
 }
 
 
-//=======================================
-//
-//=======================================
 
 
+/**
+ * Affiche l'arbre enraciné en `A` sur la sortie standard. La profondeur
+ * `prof` contrôle le niveau d'indentation pour une représentation en console.
+ * Les sous-arbres gauche et droite (ou première et seconde moitié) sont
+ * imprimés avant et après le noeud courant pour obtenir une vue triangulaire.
+ */
 void AfficherArbre(struct TNoeud * A,int prof){
     
     int i, taille;
@@ -728,11 +760,14 @@ void AfficherArbre(struct TNoeud * A,int prof){
 }
 
 
-//=======================================
-//
-//=======================================
 
 
+/**
+ * Conversion interne : transforme un entier non signé `val` en chaîne
+ * selon la base `radix`. Si `is_neg` est vrai, un signe '-' est ajouté. Le
+ * résultat est placé dans `buf` fournie par l'appelant. Cette fonction est
+ * utilisée par `itoa_` ci-dessous.
+ */
 static void xtoa (unsigned long val,char *buf,unsigned radix,int is_neg){
     char *p;                /* pointer to traverse string */
     char *firstdig;         /* pointer to first digit */
@@ -778,6 +813,12 @@ static void xtoa (unsigned long val,char *buf,unsigned radix,int is_neg){
 /* Actual functions just call conversion helper with neg flag set correctly,
 and return pointer to buffer. */
 
+/**
+ * Convertit l'entier `val` en chaîne selon la base `radix`. Le résultat est
+ * écrit dans `buf`, qui doit être suffisamment grand pour contenir le texte.
+ * Cette fonction est un simple wrapper autour de `xtoa` gérant le signe pour
+ * la base 10.
+ */
 char * itoa_(int val,char *buf,int radix){
     if (radix == 10 && val < 0)
         xtoa((unsigned long)val, buf, radix, 1);
@@ -788,9 +829,6 @@ char * itoa_(int val,char *buf,int radix){
 
 
 
-//=======================================
-//
-//=======================================
 
 
 void filtrerMatrice(double **dissSpecies, double **dissGene, char **nomsSpecies, char **nomsGene,int nbSpecies, int nbGene, char * fichier){
@@ -826,7 +864,6 @@ void filtrerMatrice(double **dissSpecies, double **dissGene, char **nomsSpecies,
 }
 
 
-//== write the matrix in the output file
 
 int ecrireMatrice(double **mat,const char *outfile,int taille,char **noms){
     int i,j,finalTaille;
@@ -839,60 +876,55 @@ int ecrireMatrice(double **mat,const char *outfile,int taille,char **noms){
     if(finalTaille < 3){
         return -1;
     }
-    if((out=fopen(outfile,"w+"))==NULL){
-        printf("cannot create output file !!");
-        printf("==1==>%s<===",outfile);
-        exit(-1);
-    }
-    else{
-        fprintf(out,"%d",finalTaille);
-        for(i=1;i<=taille;i++){
-            if(strcmp(noms[i],"") != 0){//if(strlen(noms[i]) > 1){
-                fprintf(out,"\n%s",noms[i]);
-                for(j=1;j<=taille;j++)
-                    if(mat[i][j] != -1){
-                        fprintf(out," %lf",mat[i][j]);
-                    }
-            }
+    out = safe_fopen(outfile, "w+");
+    fprintf(out, "%d", finalTaille);
+    for (i = 1; i <= taille; i++) {
+        if (strcmp(noms[i], "") != 0) { // name not empty
+            fprintf(out, "\n%s", noms[i]);
+            for (j = 1; j <= taille; j++)
+                if (mat[i][j] != -1) {
+                    fprintf(out, " %lf", mat[i][j]);
+                }
         }
-        fclose(out);
     }
+    fclose(out);
     return finalTaille;
 }
 
 
-//== add the gene matrix to the input file
 
-void ajouterMatriceGene(double **mat,const char *outfile,int taille,char **noms) {
-    int i,j;
-    FILE *out;
-    if((out=fopen(outfile,"a"))==NULL){
-        printf("cannot create output file !!");
-        printf("==2==>%s<===",outfile);
-        exit(-1);
-    }
-    else{
-        fprintf(out,"\n");
-        for(i=1;i<=taille;i++){
-            if(strcmp(noms[i],"") != 0){  //if(strlen(noms[i]) > 1){
-                fprintf(out,"\n%s",noms[i]);
-                for(j=1;j<=taille;j++)
-                    if(mat[i][j] != -1)
-                        fprintf(out," %lf",mat[i][j]);
-            }
+/**
+ * Ajoute au fichier `outfile` les données de la matrice `mat` pour les noms
+ * d'espèces non vides. La fonction ouvre le fichier en mode « append » et écrit
+ * une ligne vide avant de copier les valeurs.
+ */
+void ajouterMatriceGene(double **mat, const char *outfile, int taille, char **noms) {
+    int i, j;
+    FILE *out = safe_fopen(outfile, "a");
+    fprintf(out, "\n");
+    for (i = 1; i <= taille; i++) {
+        if (strcmp(noms[i], "") != 0) {  //if(strlen(noms[i]) > 1){
+            fprintf(out, "\n%s", noms[i]);
+            for (j = 1; j <= taille; j++)
+                if (mat[i][j] != -1)
+                    fprintf(out, " %lf", mat[i][j]);
         }
-        fclose(out);
     }
+    fclose(out);
 }
 
 
-/*
-* This procedure sorts the 2nd matrix read according to
-* of the name of the species of the first matrix
-* DISS: matrix of the gene
-* NomsDISS: array of species names of gene matrix
-* NomsADD: table containing the species names of the species matrix
-*/
+/**
+ * Trie la seconde matrice `DISS` en réarrangeant ses lignes et colonnes selon
+ * l'ordre des noms présents dans `NomsADD`. Les en-têtes `NomsDISS` sont
+ * également permutés pour rester en concordance. Cette fonction est utilisée
+ * pour aligner deux matrices de distances génétiques et taxonomiques.
+ *
+ * @param DISS matrice de distances génétiques (modifiable)
+ * @param NomsDISS table de noms associée à DISS (modifiable)
+ * @param NomsADD table de noms de la matrice principale
+ * @param n nombre d'espèces
+ */
 
 void TrierMatrices(double **DISS,char **NomsDISS,char **NomsADD,int n)
 {
@@ -908,8 +940,13 @@ void TrierMatrices(double **DISS,char **NomsDISS,char **NomsADD,int n)
 
     for (i=0;i<=n;i++)
     {
-        DISS_[i]=(double*)malloc((n+1)*sizeof(double));
-        NomsDISS_[i] = (char*) malloc((n+1)*sizeof(15));
+        DISS_[i] = (double*)malloc((n+1)*sizeof(double));
+        // allocate space for a single species name (use fixed max length)
+        NomsDISS_[i] = (char*) malloc(SPECIES_NAME_LENGTH);
+        if (NomsDISS_[i] == NULL || DISS_[i] == NULL) {
+            fprintf(stderr, "memory allocation failed in TrierMatrices\n");
+            exit(1);
+        }
     }
 
     for(ligne = 1;ligne<=n;ligne++)
@@ -951,12 +988,20 @@ void TrierMatrices(double **DISS,char **NomsDISS,char **NomsADD,int n)
 }
 
 
-//===========================================================================
 //const char * newick
-//===========================================================================
-//===========================================================================
 
 
+/**
+ * Analyse une chaîne Newick `newick` et extrait les arêtes (ARETE), leurs
+ * longueurs (LONGUEUR) et les noms des feuilles (`lesNoms`). Le paramètre
+ * `kt` reçoit le nombre de branches terminales calculées. Le format attendu
+ * est strict : noms de feuilles suivis de ':' puis longueur, et arborescence
+ * encadrée par parenthèses et terminée par ';'.
+ *
+ * Retourne le nombre de feuilles (n) ou -1 en cas de format incorrect. Les
+ * noms sont placés dans `lesNoms` (indice 0..n-1) et les tableaux ARETE/
+ * LONGUEUR sont dupliqués en base 1.
+ */
 int lectureNewick(string newick, long int * ARETE, double * LONGUEUR, char ** lesNoms, int *kt)
 {
     int n;
@@ -1104,7 +1149,6 @@ int lectureNewick(string newick, long int * ARETE, double * LONGUEUR, char ** le
     }while(symbol !='\0');
 
     int boot_value;
-    int temoin3 = 0;
     k=0; VertexNumber=n;
     //a1 = 0;
     //a2 = 0;
@@ -1148,7 +1192,7 @@ int lectureNewick(string newick, long int * ARETE, double * LONGUEUR, char ** le
                             break;
                         string1[xx++] = string[jj];
                     }
-                    temoin3=1;
+                    // temoin3 was used for debugging; removed as it's unused
                     string1[xx++] = '\0';
                     numero = atoi(string1);
 
@@ -1265,7 +1309,6 @@ int lectureNewick(string newick, long int * ARETE, double * LONGUEUR, char ** le
         LONGUEUR[i-1] = LONGUEUR[i];
     }
 
-    //== recherche des branches connexes a celle de la racine;
     if( root_existance > 0){
         long noeud_interne = -1.0;
         for(i=1;i<=na;i++){
@@ -1288,7 +1331,6 @@ int lectureNewick(string newick, long int * ARETE, double * LONGUEUR, char ** le
     }
 
 
-    //=== on teste si il y a un noeud de degre 2 et un noeud de degre 1
 
     int * tableau = (int*)malloc((2*n)*sizeof(int));
     int deg2=-1,deg1=-1;
@@ -1321,13 +1363,11 @@ int lectureNewick(string newick, long int * ARETE, double * LONGUEUR, char ** le
             else if((ARETE[2*i-1] == deg2 || ARETE[2*i-2] == deg2) && pos1 != -1){ pos2=i;}
         }
 
-        //== modification de la branche pos1
         if(ARETE[2*pos1-1] == deg2)
             ARETE[2*pos1-1] = (ARETE[2*pos2-1] == deg2)?ARETE[2*pos2-2]:ARETE[2*pos2-1];
         else
             ARETE[2*pos1-2] = (ARETE[2*pos2-1] == deg2)?ARETE[2*pos2-2]:ARETE[2*pos2-1];
 
-        //== suppression de la branche pos2
         for(i=pos2;i<=na;i++){
             LONGUEUR[i-1] = LONGUEUR[i];
             ARETE[2*i-1] = ARETE[2*(i+1)-1];

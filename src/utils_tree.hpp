@@ -49,5 +49,26 @@ int lectureNewick(string, long int *, double *, char **, int *);
 void writeInputTreeToFile(const std::string& filename, InputTree& tree);
 void writeCriteriaToFile(const std::string& filename, CRITERIA& criteria);
 
+// utility wrappers for error checking
+inline FILE* safe_fopen(const char* path, const char* mode) {
+    FILE* f = fopen(path, mode);
+    if (!f) {
+        perror(path);
+        exit(EXIT_FAILURE);
+    }
+    return f;
+}
+
+template<typename T>
+inline T* safe_malloc(size_t n) {
+    // allocate space for n elements of type T
+    T* p = static_cast<T*>(malloc(n * sizeof(T)));
+    if (!p) {
+        fprintf(stderr, "memory allocation failed for %zu bytes\n", n * sizeof(T));
+        exit(EXIT_FAILURE);
+    }
+    return p;
+}
+
 
 #endif /* utils_tree_hpp */
