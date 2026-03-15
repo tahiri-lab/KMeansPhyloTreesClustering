@@ -28,7 +28,6 @@ const double MIN_CH_VALUE = -1e10;              // Minimum Calinski-Harabasz ind
 const double MAX_W_VALUE = 1e9;                 // Maximum W clustering validity index value
 const double MAX_FO_VALUE = 1e10;               // Maximum objective function value
 const double INITIAL_SSE_REF = 1.0e20;          // Initial sum of squared errors reference value
-const double INITIAL_MIN_W = 1e9;               // Initial minimum W value for optimization
 const double INITIAL_MAX_CH = -1e10;            // Initial maximum CH value
 const int MAX_ITERATIONS = 100;                 // Maximum K-means iterations per cluster size
 const int RAND_MAX_VALUE = 32767;               // Maximum random number from rand()
@@ -37,7 +36,6 @@ const int MAX_PATH_LENGTH = 255;                // Maximum length for file paths
 const int DISTANCE_ARRAY_SIZE = 4;              // Size of Robinson-Foulds distance array
 const int ROUNDING_PRECISION = 3;               // Decimal places for rounding distance values
 const int CONVERGENCE_THRESHOLD_DIVISOR = 1000; // Divisor for convergence threshold check
-const double MIN_DISTANCE = 1000000.0;          // Minimum distance value for clustering
 // =============================================================================================================
 
 FILE *Output4;
