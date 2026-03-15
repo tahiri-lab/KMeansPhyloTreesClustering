@@ -179,18 +179,8 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         SSEr[i] = 0.0;
     }
 
-    //mean n'est peut-être pas utilisés
-    //weight est utilisé dans la fonction CompSST, mais il est initialisé à 1.0 pour toutes les variables, donc il n'affecte pas le résultat. On peut envisager de supprimer ce tableau et de modifier CompSST en conséquence.
-    double *mean,*weight;        //mean(pmax),weight(pmax),
-    mean = new double [pmax+1];
-    weight = new double [pmax+1];
-    for (int i=0; i<=pmax; i++){
-        mean[i] = 0.0;
-        weight[i] = 0.0;
-    }
-
     //SSE et SSEref ne sont peut-être pas nécéssaire.
-    double SSE=0,SSEref=0,SST=0;
+    double SSE=0,SSEref=0;
 
     int **listr;                    //listr(kmax,nmax),
     listr = new int*[kmax+1];
@@ -290,30 +280,12 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     //--Read the data from files
-    ReadData1(treeAmount,nmax,numVariables,pmax,mat,ishort,weight,nameb,treeAmount);
-
-    //Est-ce que SST est utilisé ? Si non, on peut supprimer la variable, la fonction CompSST et weight.
-    CompSST(treeAmount,numVariables,mat,weight,ishort,SST);
+    ReadData1(treeAmount,nmax,numVariables,pmax,mat,ishort,nameb,treeAmount);
 
     for(int i1=0; i1<treeAmount; i1++){
         for(int i2=0; i2<treeAmount; i2++){
             mat[i1][i2] = arrondir(mat[i1][i2],ROUNDING_PRECISION);
         }
-    }
-
-    // Compute vector 'mean' of overall means
-    for (int j=1;j<=numVariables;j++){
-        mean[j]=0;
-    }
-
-    for (int i=1;i<=treeAmount;i++){
-        for (int j=1;j<=numVariables;j++){
-            mean[j]=mean[j]+mat[i-1][ishort[j]-1];
-        }
-    }
-
-    for (int j=1;j<=numVariables;j++){
-        mean[j]=mean[j]/(treeAmount*1.0);//18 mean(j)=mean(j)/dfloat(n)
     }
 
     double CH_new = MIN_CH_VALUE;
@@ -531,14 +503,14 @@ m60:
     fprintf (Output4,"%.3f;\n",texec2);
 
     // cleanup resources
-    kmeans_cleanup(Output4, kmax, treeAmount, listr, howmanyr, CHr, Wr, SSEr, mean,
-        weight, list, no, howmany, ishort, nameb, distances_RF_norm, tree_cluster_leaves);
+    kmeans_cleanup(Output4, kmax, treeAmount, listr, howmanyr, CHr, Wr, SSEr,
+        list, no, howmany, ishort, nameb, distances_RF_norm, tree_cluster_leaves);
 
     return 0;
 }
 
 void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr, int **howmanyr,
-                    double *CHr, double *Wr, double *SSEr, double *mean, double *weight,
+                    double *CHr, double *Wr, double *SSEr,
                     int *list, int *no, int *howmany, int *ishort,
                     char *nameb, double *distances_RF_norm, double **tree_cluster_leaves) {
     //Close output files
@@ -555,8 +527,6 @@ void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr, int **
     delete [] CHr;
     delete [] Wr;
     delete [] SSEr;
-    delete [] mean;
-    delete [] weight;
     delete [] list;
     delete [] no;
     delete [] howmany;
@@ -576,7 +546,7 @@ void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr, int **
 //**********************************FUNCTIONS***********************************
 //******************************************************************************
 
-void ReadData1(int &treeAmount1,int &nmax,int &numVariables,int &pmax,double** mat,int* ishort,double* weight, char* nameb, int treeAmount2){
+void ReadData1(int &treeAmount1,int &nmax,int &numVariables,int &pmax,double** mat,int* ishort, char* nameb, int treeAmount2){
     //Read matrix parameters
     treeAmount1 = treeAmount2;
     numVariables = treeAmount2;
@@ -596,7 +566,6 @@ void ReadData1(int &treeAmount1,int &nmax,int &numVariables,int &pmax,double** m
 
     for (int j=1;j<=numVariables;j++){
         ishort[j]=j;
-        weight[j]=1.0;
     }
 
     strcpy(nameb,"../output/stat.csv");
@@ -689,28 +658,6 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
         exit(1);
     }
 
-}
-
-// =============================================================================================================
-// =============================================================================================================
-// =============================================================================================================
-
-void CompSST(int &treeAmount,int &numVariables,double** mat,double* weight,int* ishort,double &SST){
-    double    sx=0,sx2=0,var=0,temp=0;     //Real*8 mat(nmax,pmax),weight(pmax),sx,sx2,var,temp,SST
-    SST=0.0;                //SST=0.0
-
-    for (int j=1;j<=numVariables;j++) {       // do 22 j=1,p
-        sx=0.0;
-        sx2=0.0;
-        for (int i=1;i<=numVariables;i++) {       // do 20 i=1,n
-            temp=mat[i-1][j-1];
-            sx=sx+temp;
-            sx2=sx2+temp*temp;        //20 sx2=sx2+temp*temp
-        }
-        var=sx2-(sx*sx/(treeAmount));            //var=sx2-(sx*sx/treeAmount)
-        SST=SST+var*weight[ishort[j]];        //22 SST=SST+var*weight(ishort(j))
-    }
-    return;
 }
 
 // =============================================================================================================
