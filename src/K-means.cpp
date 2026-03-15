@@ -329,6 +329,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
             FO_new = MAX_FO_VALUE;
             W_new = MAX_FO_VALUE;
 
+            //Je ne comprends pas pourquoi on fait une boucle ici, il n'est peut-être pas nécéssaire de faire ceci 100 fois.
             for (int nit=1;nit<=MAX_ITERATIONS;nit++){
                 if(debug){
                     printf ("Iteration = %d",nit);
@@ -384,6 +385,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                 if(fabs(SSEref-SSE)>(SSE/CONVERGENCE_THRESHOLD_DIVISOR)) {           //if(dabs(SSEref-SSE).gt.SSE/1000.0) then
                     SSEref=SSE;
                 }else{
+                    //TODO: Utiliser une fonction ici plutôt qu'un goto afin d'améliorer la visibilité
                     goto m60;
                 }
             }
