@@ -51,7 +51,7 @@ FILE *Output4;
 //  k    = number of groups (centroids)
 //  kmax = maximum number of groups
 //  kk   = ???
-//  niter = maximum iteration for convergeance of centroid (fixed=100)
+//  MAX_ITERATIONS = maximum iteration for convergeance of centroid (fixed=100)
 //  Parameter (nmax=100000,pmax=10,kmax=10)
 //  critera = (0,1,2)
 //            0: C-H
@@ -112,7 +112,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     time_t tbegin2,tend2;
     double texec2 = 0.;
 
-    double WVariable = 0.0;
+    double WVariable = 0.0; //Est-ce vraiment une variable utilisée?
     double CH = MIN_CH_VALUE;
 
     double CHr_max = INITIAL_MAX_CH;
@@ -128,15 +128,13 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     int treeAmount = int (monTableau.size()); //quantity of initial tree
     int numVariables=treeAmount;
-    int iseed=0, niter=0, kk=0, nit=0;
-    int nnit=0, i1ref=0, i2ref=0;
+    int kk=0;
     bool debug=false;
     int k1=0, k2=0;
     int hard_max_k=0; //--Setting the max k1
 
     int random_number=100; //--Fixed random number
     int iassign=2;  // 1 equal, 2 random
-    int iran=100;   //--Number of random position
     int nran=100;  //--Number of Random start VM
 
     int nmax=treeAmount;    //--Maximum number of object -Parameter (nmax=10000,pmax=250,kmax=100)
@@ -161,22 +159,9 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         Strouve[linej]= 0;
     }
 
-    double **sx,**sx2,**xbar,**var;    //sx(kmax,pmax),sx2(kmax,pmax),xbar(kmax,pmax),var(kmax,pmax)
     double **tree_cluster_leaves = new double *[treeAmount];
     for(int i=0;i<treeAmount;i++){
         tree_cluster_leaves[i]=new double [DISTANCE_ARRAY_SIZE];
-    }
-
-    sx = new double*[kmax+1];
-    sx2 = new double*[kmax+1];
-    xbar = new double*[kmax+1];
-    var = new double*[kmax+1];
-
-    for (int i=0;i<=kmax;i++){
-        sx[i] = new double[pmax+1];
-        sx2[i] = new double[pmax+1];
-        xbar[i] = new double[pmax+1];
-        var[i] = new double[pmax+1];
     }
 
     double *distances_RF_norm = new double[DISTANCE_ARRAY_SIZE];
@@ -185,25 +170,12 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         distances_RF_norm[linej]= 0.0;
     }
 
-    for (int i=0; i<=kmax; i++){
-        for (int j=0; j<=pmax; j++){
-            sx[i][j] = 0.0;
-            sx2[i][j] = 0.0;
-            xbar[i][j] = 0.0;
-            var[i][j] = 0.0;
-        }
-    }
-
-    //SSEr, diff_W, V_W et Wr_ln ne sont peut-être pas utilisés
-    double *SSEr,*diff_W, *V_W, *Wr_ln, *CHr, *Wr;
+    //SSEr n'est peut-être pas utilisé
+    double *SSEr, *CHr, *Wr;
     SSEr = new double [kmax+1];
 
     CHr = new double [kmax+1];
     Wr = new double [kmax+1];
-    Wr_ln = new double [kmax+1];
-    diff_W = new double [kmax+1];
-    V_W = new double [kmax+1];
-
 
     for (int i=0; i<=kmax; i++){
         SSEr[i] = 0.0;
@@ -300,9 +272,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }else if(isBH){
         for (int i=0; i<=kmax; i++){
             Wr[i] = MAX_W_VALUE;
-            Wr_ln[i] = MIN_CH_VALUE;
-            diff_W[i] = 0.0;
-            V_W[i] = 0.0;
         }
         if (k_min<1){
             k2=1;
@@ -325,7 +294,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     //--Read the data from files
     ReadData1(treeAmount,nmax,numVariables,pmax,mat,ishort,weight,nameb,treeAmount);
 
-    //Est-ce que SST est utilisé ? Si non, on peut supprimer la variable et la fonction CompSST
+    //Est-ce que SST est utilisé ? Si non, on peut supprimer la variable, la fonction CompSST et weight.
     CompSST(treeAmount,numVariables,mat,weight,ishort,SST);
 
     for(int i1=0; i1<treeAmount; i1++){
@@ -349,7 +318,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         mean[j]=mean[j]/(treeAmount*1.0);//18 mean(j)=mean(j)/dfloat(n)
     }
 
-    iseed=0;
     double CH_new = MIN_CH_VALUE;
     double W_new = MAX_W_VALUE;
 
@@ -358,35 +326,30 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         Sref[j]=0;
     }
 
-    int number_cluster = 0;
-
     int nbInit =0;
     int nbFin =0;
     map <int, int> CH_conversion;
     map <int, int> W_conversion;
 
+    //Est-ce que on as vraiment besoin que ça soit 3 variables séparées?
     int realk = 0;
-    int unique = 0;
-    int CHk = 0;
-    int wk = 0;
+    int CHk = 0, wk = 0;
+
     for (int i=0; i<=kmax; i++){
         howmany[i] = 0;
     }
 
-    for (iran=1;iran<=nran; iran++) {
+    //iran is the number of random position
+    for (int iran=1;iran<=nran; iran++) {
         CH_new = MIN_CH_VALUE;
         CHk = 0;
         wk = 0;
         realk = 0;
-        unique = 0;
-        number_cluster = 0;
-
 
         if(iassign!=4){
-            Assign(iran,treeAmount,nmax,k1,list,howmany,no,iassign,iseed, random_number);
+            Assign(iran,treeAmount,nmax,k1,list,howmany,no,iassign,random_number);
         }
         // Big loop on number of groups, downwards from k1 to k2 (k1>=k2) - - - - - -
-        niter=MAX_ITERATIONS; //changed VM
 
         //initialisation de Strouve de la liste realiser aleatoirement
         for (kk=k1;kk>=k2;kk--){
@@ -396,7 +359,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
             FO_new = MAX_FO_VALUE;
             W_new = MAX_FO_VALUE;
 
-            for (nit=1;nit<=niter;nit++){
+            for (int nit=1;nit<=MAX_ITERATIONS;nit++){
                 if(debug){
                     printf ("Iteration = %d",nit);
                     printf ("SSEref = %lf",SSEref);
@@ -404,7 +367,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                         printf ("%d",list[i]);
                     }
                 }
-                nnit=nit;
 
                 // Compute distances to group centroids and assign objects to nearest one
                 if(!isBH){
@@ -412,8 +374,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                 }else if(isBH){
                     FO_new = FO_W(treeAmount,kmax,mat,list,howmany,SSE,kk);
                 }
-
-                number_cluster = 0;
 
                 if(!isBH){
                     CH_new = DistanceCH(treeAmount,kmax,mat,list,FO_new);
@@ -462,8 +422,8 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
             /* printf ("Convergence not reached in %d iterations.",niter);// write(*,*) 'Convergence not reached in ',niter,' iterations.' */
 m60:
             // Concatenate the two closest groups before going to the next value of kk
-            i1ref=1;        //i1ref=igr1
-            i2ref=kk;        //i2ref=igr2
+            int i1ref=1;        //i1ref=igr1
+            int i2ref=kk;        //i2ref=igr2
 
             //Group "i2ref" disappears
             for (int i=1;i<=treeAmount;i++){
@@ -503,17 +463,15 @@ m60:
 
                     //Pour évider les clusters vides
                     realk=0;
-                    unique=0;
                     CHk = 0;
 
                     for(int i=1; i<=k; i++){
-                        unique=0;
                         for(int j=1; j<=treeAmount; j++){
-                            if(listr[CHr_group][j]==i && unique==0){
+                            if(listr[CHr_group][j]==i){
                                 CHk++;
                                 CH_conversion[i] = CHk;
-                                unique=1;
                                 realk++;
+                                j = treeAmount + 1;
                             }
                         }
                     }
@@ -533,17 +491,15 @@ m60:
                     W_min=Wr[k];
 
                     realk=0;
-                    unique=0;
                     wk = 0;
 
                     for(int i=1; i<=k; i++){
-                        unique=0;
                         for(int j=1; j<=treeAmount; j++){
-                            if(listr[W_group][j]==i && unique==0){
+                            if(listr[W_group][j]==i){
                                 wk++;
                                 W_conversion[i] = wk;
-                                unique=1;
                                 realk++;
+                                j = treeAmount + 1;
                             }
                         }
                     }
@@ -577,58 +533,29 @@ m60:
     fprintf (Output4,"%.3f;\n",texec2);
 
     // cleanup resources
-    kmeans_cleanup(Output4, kmax, treeAmount,
-                   sx, sx2, xbar, var,
-                   listr, howmanyr,
-                   CHr, Wr, Wr_ln,
-                   diff_W, V_W, SSEr,
-                   mean, weight,
-                   list, no, howmany,
-                   ishort,
-                   nameb, distances_RF_norm,
-                   tree_cluster_leaves);
+    kmeans_cleanup(Output4, kmax, treeAmount, listr, howmanyr, CHr, Wr, SSEr, mean,
+        weight, list, no, howmany, ishort, nameb, distances_RF_norm, tree_cluster_leaves);
 
     return 0;
 }
 
-void kmeans_cleanup(FILE *Output4,
-                    int kmax, int treeAmount,
-                    double **sx, double **sx2, double **xbar,
-                    double **var, int **listr, int **howmanyr,
-                    double *CHr, double *Wr,
-                    double *Wr_ln, double *diff_W, double *V_W,
-                    double *SSEr, double *mean,
-                    double *weight, int *list, int *no,
-                    int *howmany,
-                    int *ishort,
-                    char *nameb,
-                    double *distances_RF_norm,
-                    double **tree_cluster_leaves)
-{
+void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr, int **howmanyr,
+                    double *CHr, double *Wr, double *SSEr, double *mean, double *weight,
+                    int *list, int *no, int *howmany, int *ishort,
+                    char *nameb, double *distances_RF_norm, double **tree_cluster_leaves) {
     //Close output files
     if (Output4) fclose(Output4);
 
     //Remove matrix
     for (int i = 0; i <= kmax; ++i) {
-        delete [] sx[i];
-        delete [] sx2[i];
-        delete [] xbar[i];
-        delete [] var[i];
         delete [] listr[i];
         delete [] howmanyr[i];
     }
-    delete [] sx;
-    delete [] sx2;
-    delete [] xbar;
-    delete [] var;
     delete [] listr;
     delete [] howmanyr;
 
     delete [] CHr;
     delete [] Wr;
-    delete [] Wr_ln;
-    delete [] diff_W;
-    delete [] V_W;
     delete [] SSEr;
     delete [] mean;
     delete [] weight;
@@ -686,7 +613,7 @@ void ReadData1(int &treeAmount1,int &nmax,int &numVariables,int &pmax,double** m
 // =============================================================================================================
 // =============================================================================================================
 
-void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign,int &iseed, int random_number){
+void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign, int random_number){
     int ii=0, how=0, isum=0;
     char namea[MAX_PATH_LENGTH];
     double turn=0;
@@ -710,7 +637,7 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
         if(iran==1){
             for (int i=1;i<=(random_number+100);i++)  turn=rand()/(1.0*(rand() % RAND_MAX_VALUE));
         }                            //end if
-        Permute(iseed,n,nmax,list);
+        Permute(n,nmax,list);
         return;
     }else if (iassign==3){
         // Read file of group assignments.
@@ -798,11 +725,10 @@ void CompSST(int &treeAmount,int &numVariables,double** mat,double* weight,int* 
 // in an equiprobable way. This property has been checked through intensive
 // simulations.
 
-void Permute(int &iseed,int &n,int &nmax,int *iordre){
+void Permute(int &n,int &nmax,int *iordre){
     // On parcourt le tableau de la dernière position vers la deuxième.
     // À chaque étape, un élément est échangé avec un élément choisi aléatoirement parmi les positions restantes.
 
-    (void)iseed;   // Ce paramètre n'a pas ete utilise ici
     (void)nmax;    // Ce paramètre n'a pas ete utilise ici
 
     for (int m = n; m >= 2; --m) {
