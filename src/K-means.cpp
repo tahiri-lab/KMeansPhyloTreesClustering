@@ -333,9 +333,10 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     map <int, int> CH_conversion;
     map <int, int> W_conversion;
 
+    //Est-ce que on as vraiment besoin que ça soit 3 variables séparées?
     int realk = 0;
-    int CHk = 0;
-    int wk = 0;
+    int CHk = 0, wk = 0;
+
     for (int i=0; i<=kmax; i++){
         howmany[i] = 0;
     }
