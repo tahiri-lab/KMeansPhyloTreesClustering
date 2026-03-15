@@ -19,11 +19,9 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
 
     //Varriables
     double **Matrice_RF;
-    double **Ww;
-    double **n_identique;
     
     double *distances = new double[6];
-    int *n_leaves = new int[mesTrees.size()+1];
+    int *n_leaves = new int[mesTrees.size()+1]; //possiblement inutile
     string tree;
     string tree1;
     string tree2;
@@ -37,13 +35,9 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
     
     //Création de la matrice carrée et symétrique (mesTrees.size()*mesTrees.size()) : Matrice_RF
     Matrice_RF= new double*[mesTrees.size()];
-    Ww= new double*[mesTrees.size()];
-    n_identique= new double*[mesTrees.size()];
     
     for(int lineDist=0;lineDist<mesTrees.size();lineDist++){
         Matrice_RF[lineDist]= new double[mesTrees.size()];
-        Ww[lineDist]= new double[mesTrees.size()];
-        n_identique[lineDist]= new double[mesTrees.size()];
     }
     
     
@@ -68,12 +62,6 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
             // Appel des algorithmes des calcules des distances : RF
             main_hgt(tree1,tree2,distances);
             Matrice_RF[line][column]=distances[0];
-
-            //Recuperer le nombre d'espèces communes
-            n_identique[line][column]=distances[3];
-            
-            //Et la symétrie
-            n_identique[column][line]=distances[3];
             
             // pour remplir la symétrique de la matrice RF sans réaliser de calcul (car matrice carrée symétrique)
             Matrice_RF[column][line]=Matrice_RF[line][column];
@@ -102,13 +90,6 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
             }
         }
     }
-
-    //creation de la matrice de distances RF : mat
-    for (int i=0; i<mesTrees.size(); i++){
-        for (int j=0; j<mesTrees.size(); j++){
-            Ww[i][j]=1.0;
-        }
-    }
  
     //appel de l'algorithme de K-means:
     if(mesTrees.size()>3){
@@ -118,13 +99,9 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
     //Liberation of memory
     for (int i=0;i<mesTrees.size();i++){
         delete [] Matrice_RF[i];
-        delete [] Ww[i];
-        delete [] n_identique[i];
     }
     delete [] n_leaves;
     delete [] Matrice_RF;
-    delete [] Ww;
-    delete [] n_identique;
     delete [] distances;
     // End timer
     tend=time(NULL);                // get the current calendar time
