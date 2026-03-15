@@ -326,8 +326,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         Sref[j]=0;
     }
 
-    int number_cluster = 0;
-
     int nbInit =0;
     int nbFin =0;
     map <int, int> CH_conversion;
@@ -347,7 +345,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         CHk = 0;
         wk = 0;
         realk = 0;
-        number_cluster = 0;
 
         if(iassign!=4){
             Assign(iran,treeAmount,nmax,k1,list,howmany,no,iassign,random_number);
@@ -377,8 +374,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                 }else if(isBH){
                     FO_new = FO_W(treeAmount,kmax,mat,list,howmany,SSE,kk);
                 }
-
-                number_cluster = 0;
 
                 if(!isBH){
                     CH_new = DistanceCH(treeAmount,kmax,mat,list,FO_new);
