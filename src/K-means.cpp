@@ -112,7 +112,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     time_t tbegin2,tend2;
     double texec2 = 0.;
 
-    double WVariable = 0.0;
+    double WVariable = 0.0; //Est-ce vraiment une variable utilisée?
     double CH = MIN_CH_VALUE;
 
     double CHr_max = INITIAL_MAX_CH;
