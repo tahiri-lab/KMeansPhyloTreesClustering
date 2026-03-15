@@ -533,31 +533,16 @@ m60:
     fprintf (Output4,"%.3f;\n",texec2);
 
     // cleanup resources
-    kmeans_cleanup(Output4, kmax, treeAmount,
-                   listr, howmanyr,
-                   CHr, Wr,
-                   SSEr,
-                   mean, weight,
-                   list, no, howmany,
-                   ishort,
-                   nameb, distances_RF_norm,
-                   tree_cluster_leaves);
+    kmeans_cleanup(Output4, kmax, treeAmount, listr, howmanyr, CHr, Wr, SSEr, mean,
+        weight, list, no, howmany, ishort, nameb, distances_RF_norm, tree_cluster_leaves);
 
     return 0;
 }
 
-void kmeans_cleanup(FILE *Output4,
-                    int kmax, int treeAmount,
-                    int **listr, int **howmanyr,
-                    double *CHr, double *Wr,
-                    double *SSEr, double *mean,
-                    double *weight, int *list, int *no,
-                    int *howmany,
-                    int *ishort,
-                    char *nameb,
-                    double *distances_RF_norm,
-                    double **tree_cluster_leaves)
-{
+void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr, int **howmanyr,
+                    double *CHr, double *Wr, double *SSEr, double *mean, double *weight,
+                    int *list, int *no, int *howmany, int *ishort,
+                    char *nameb, double *distances_RF_norm, double **tree_cluster_leaves) {
     //Close output files
     if (Output4) fclose(Output4);
 

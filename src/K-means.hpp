@@ -24,17 +24,10 @@ extern bool withConsensus;
 int main_kmeans(char **, vector <string>, double **, vector<int>, bool, int, int);
 
 //Cleans up kmeans variables and memory allocations
-void kmeans_cleanup(FILE *Output4,
-                    int kmax, int treeAmount,
-                    int **listr, int **howmanyr,
-                    double *CHr, double *Wr,
-                    double *SSEr, double *mean,
-                    double *weight, int *list, int *no,
-                    int *howmany,
-                    int *ishort,
-                    char *nameb,
-                    double *distances_RF_norm,
-                    double **tree_cluster_leaves);
+void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr, int **howmanyr,
+                    double *CHr, double *Wr, double *SSEr, double *mean, double *weight,
+                    int *list, int *no, int *howmany, int *ishort,
+                    char *nameb, double *distances_RF_norm, double **tree_cluster_leaves);
 
 //--Read the data
 void ReadData1(int &treeAmount1,int &nmax,int &numVariables,int &pmax,double** mat,int* ishort,double* weight,char* nameb,int treeAmount2);
