@@ -334,7 +334,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     map <int, int> W_conversion;
 
     int realk = 0;
-    int unique = 0;
     int CHk = 0;
     int wk = 0;
     for (int i=0; i<=kmax; i++){
@@ -347,15 +346,12 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         CHk = 0;
         wk = 0;
         realk = 0;
-        unique = 0;
         number_cluster = 0;
-
 
         if(iassign!=4){
             Assign(iran,treeAmount,nmax,k1,list,howmany,no,iassign,random_number);
         }
         // Big loop on number of groups, downwards from k1 to k2 (k1>=k2) - - - - - -
-        niter=MAX_ITERATIONS; //changed VM
 
         //initialisation de Strouve de la liste realiser aleatoirement
         for (kk=k1;kk>=k2;kk--){
@@ -471,17 +467,15 @@ m60:
 
                     //Pour évider les clusters vides
                     realk=0;
-                    unique=0;
                     CHk = 0;
 
                     for(int i=1; i<=k; i++){
-                        unique=0;
                         for(int j=1; j<=treeAmount; j++){
-                            if(listr[CHr_group][j]==i && unique==0){
+                            if(listr[CHr_group][j]==i){
                                 CHk++;
                                 CH_conversion[i] = CHk;
-                                unique=1;
                                 realk++;
+                                j = treeAmount + 1;
                             }
                         }
                     }
@@ -501,17 +495,15 @@ m60:
                     W_min=Wr[k];
 
                     realk=0;
-                    unique=0;
                     wk = 0;
 
                     for(int i=1; i<=k; i++){
-                        unique=0;
                         for(int j=1; j<=treeAmount; j++){
-                            if(listr[W_group][j]==i && unique==0){
+                            if(listr[W_group][j]==i){
                                 wk++;
                                 W_conversion[i] = wk;
-                                unique=1;
                                 realk++;
+                                j = treeAmount + 1;
                             }
                         }
                     }
