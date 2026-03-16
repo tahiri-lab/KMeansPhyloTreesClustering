@@ -337,6 +337,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                     for (int i=1;i<=treeAmount;i++){
                         printf ("%d",list[i]);
                     }
+                    printf("\n");
                 }
 
                 // Compute distances to group centroids and assign objects to nearest one
@@ -385,14 +386,13 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                 if(fabs(SSEref-SSE)>(SSE/CONVERGENCE_THRESHOLD_DIVISOR)) {           //if(dabs(SSEref-SSE).gt.SSE/1000.0) then
                     SSEref=SSE;
                 }else{
-                    //TODO: Utiliser une fonction ici plutôt qu'un goto afin d'améliorer la visibilité
-                    goto m60;
+                    nit = MAX_ITERATIONS + 1;   //Juste pour sortir d'un for loop
                 }
             }
 
             // Compute the Calinski-Harabasz (1974) index 'CH' and
             /* printf ("Convergence not reached in %d iterations.",niter);// write(*,*) 'Convergence not reached in ',niter,' iterations.' */
-m60:
+
             // Concatenate the two closest groups before going to the next value of kk
             int i1ref=1;        //i1ref=igr1
             int i2ref=kk;        //i2ref=igr2
