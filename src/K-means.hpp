@@ -25,7 +25,7 @@ int main_kmeans(char **, vector <string>, double **, vector<int>, bool, int, int
 
 //Cleans up kmeans variables and memory allocations
 void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr, int **howmanyr,
-                    double *CHr, double *Wr, double *SSEr,
+                    double *CHr, double *Wr,
                     int *list, int *no, int *howmany, int *ishort,
                     char *nameb, double *distances_RF_norm, double **tree_cluster_leaves);
 

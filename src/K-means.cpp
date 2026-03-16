@@ -168,18 +168,11 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         distances_RF_norm[linej]= 0.0;
     }
 
-    //SSEr n'est peut-être pas utilisé
-    double *SSEr, *CHr, *Wr;
-    SSEr = new double [kmax+1];
-
+    double *CHr, *Wr;
     CHr = new double [kmax+1];
     Wr = new double [kmax+1];
 
-    for (int i=0; i<=kmax; i++){
-        SSEr[i] = 0.0;
-    }
-
-    //SSE et SSEref ne sont peut-être pas nécéssaire.
+    //Ces variables sont utilisées pour déterminer combien de fois une boucle sera parcouru.
     double SSE=0,SSEref=0;
 
     int **listr;                    //listr(kmax,nmax),
@@ -350,8 +343,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                 if(!isBH){
                     CH_new = DistanceCH(treeAmount,kmax,mat,list,FO_new);
                     if(CH_new>CHr[kk]){
-                        SSEr[kk]=SSE;
-
                         CH=CH_new;
                         CHr[kk]=CH;
                         for (int i=1;i<=treeAmount;i++) {            //do 65 i=1,n
@@ -366,8 +357,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                     W_new = DistanceW(treeAmount,kmax,list,FO_new);
 
                     if(W_new<Wr[kk]){
-                        SSEr[kk]=SSE;
-
                         WVariable=W_new;
                         Wr[kk]=WVariable;
 
@@ -505,14 +494,14 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     fprintf (Output4,"%.3f;\n",texec2);
 
     // cleanup resources
-    kmeans_cleanup(Output4, kmax, treeAmount, listr, howmanyr, CHr, Wr, SSEr,
+    kmeans_cleanup(Output4, kmax, treeAmount, listr, howmanyr, CHr, Wr,
         list, no, howmany, ishort, nameb, distances_RF_norm, tree_cluster_leaves);
 
     return 0;
 }
 
 void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr, int **howmanyr,
-                    double *CHr, double *Wr, double *SSEr,
+                    double *CHr, double *Wr,
                     int *list, int *no, int *howmany, int *ishort,
                     char *nameb, double *distances_RF_norm, double **tree_cluster_leaves) {
     //Close output files
@@ -528,7 +517,6 @@ void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr, int **
 
     delete [] CHr;
     delete [] Wr;
-    delete [] SSEr;
     delete [] list;
     delete [] no;
     delete [] howmany;
