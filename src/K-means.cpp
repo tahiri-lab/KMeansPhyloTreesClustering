@@ -374,13 +374,15 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
                 if(fabs(SSEref-SSE)>(SSE/CONVERGENCE_THRESHOLD_DIVISOR)) {           //if(dabs(SSEref-SSE).gt.SSE/1000.0) then
                     SSEref=SSE;
+                    if(nit==MAX_ITERATIONS) {
+                        printf ("Convergence not reached in %d iterations.\n",MAX_ITERATIONS);
+                    }
                 }else{
                     nit = MAX_ITERATIONS + 1;   //Juste pour sortir d'un for loop
                 }
             }
 
             // Compute the Calinski-Harabasz (1974) index 'CH' and
-            /* printf ("Convergence not reached in %d iterations.",niter);// write(*,*) 'Convergence not reached in ',niter,' iterations.' */
 
             // Concatenate the two closest groups before going to the next value of kk
             int i1ref=1;        //i1ref=igr1
