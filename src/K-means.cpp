@@ -61,7 +61,6 @@ FILE *Output4;
 //   xbar      =  vector [k][i] = mean distance of i to centroid k
 //   list      =  vector[i]=k contains group assignments for the objects.
 //   howmany[k]=  contains the number of objects in each group centroid (k).
-//   ishort[p] = vector containing the position(p) of valide variables (containing non zero value for weight -- see ReadData).
 //   nobest
 //   var       = double [kmax+1]
 //   vect      = double [pmax+1]
@@ -201,14 +200,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         howmany[i] = 0;
     }
 
-    int *ishort;            //ishort(pmax);
-    ishort = new int [pmax+1];
-
-    for (int i=0; i<=pmax; i++){
-        ishort[i] = 0;
-    }
-
-
 //***********************  Read data file  **********************************
 
     int max_k1 = k_max;
@@ -253,7 +244,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     //--Read the data from files
-    ReadData1(treeAmount,nmax,pmax,ishort);
+    ReadData1(treeAmount,nmax,pmax);
 
     for(int i1=0; i1<treeAmount; i1++){
         for(int i2=0; i2<treeAmount; i2++){
@@ -469,14 +460,14 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     // cleanup resources
     kmeans_cleanup(Output4, kmax, treeAmount, listr, CHr, Wr,
-        list, no, howmany, ishort, distances_RF_norm, tree_cluster_leaves);
+        list, no, howmany, distances_RF_norm, tree_cluster_leaves);
 
     return 0;
 }
 
 void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
                     double *CHr, double *Wr,
-                    int *list, int *no, int *howmany, int *ishort,
+                    int *list, int *no, int *howmany,
                     double *distances_RF_norm, double **tree_cluster_leaves) {
     //Close output files
     if (Output4) fclose(Output4);
@@ -492,7 +483,6 @@ void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
     delete [] list;
     delete [] no;
     delete [] howmany;
-    delete [] ishort;
     delete [] distances_RF_norm;
 
     for (int i = 0; i < treeAmount; ++i)
@@ -507,7 +497,7 @@ void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
 //**********************************FUNCTIONS***********************************
 //******************************************************************************
 
-void ReadData1(int treeAmount,int &nmax,int &pmax,int* ishort){
+void ReadData1(int treeAmount,int &nmax,int &pmax){
     char *nameb;
     nameb = new char [MAX_FILENAME_LENGTH];
 
@@ -522,10 +512,6 @@ void ReadData1(int treeAmount,int &nmax,int &pmax,int* ishort){
     }
 
    //fclose(Input1);
-
-    for (int j=1;j<=treeAmount;j++){
-        ishort[j]=j;
-    }
 
     strcpy(nameb,"../output/stat.csv");
     if((Output4 = fopen(nameb,"a"))==NULL){
@@ -1034,7 +1020,6 @@ double FO_W(int &treeAmount,int &kmax,double** mat,int* list,int* howmany,double
     double RF = 0.0;
     double Dref = 0;       //Real*8 Dref,D1,SSE,weight(pmax)
     int    kref = 0;        //Integer list(nmax),howmany(kmax),kref
-    //Integer ishort(pmax)
     // Compute squared distances to group centroids. Assign objects to nearest one
     SSE=0;
 

@@ -26,11 +26,11 @@ int main_kmeans(char **, vector <string>, double **, vector<int>, bool, int, int
 //Cleans up kmeans variables and memory allocations
 void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
                     double *CHr, double *Wr,
-                    int *list, int *no, int *howmany, int *ishort,
+                    int *list, int *no, int *howmany,
                     double *distances_RF_norm, double **tree_cluster_leaves);
 
 //--Read the data
-void ReadData1(int treeAmount,int &nmax,int &pmax,int* ishort);
+void ReadData1(int treeAmount,int &nmax,int &pmax);
 
 //--Calculate the kmeans
 void Assign(int &iran,int &treeAmount,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign,int random_number);
