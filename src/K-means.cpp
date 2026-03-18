@@ -74,7 +74,6 @@ FILE *Output4;
 //   Wr        = vector[k] of the best W this k
 //   SSEr      = double [kmax+1]  sum of squared error statistic (SSE) = within-group sum of squares
 //   listr     = int[kmax+1][nmax+1];
-//   howmanyr  = int[kmax+1][nmax+1];
 // sx = new double*[kmax+1];
 //  sx2 = new double*[kmax+1];
 
@@ -184,19 +183,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     for (int i=0; i<=kmax; i++){
         for (int j=0; j<=nmax; j++){
             listr[i][j] = 1;
-        }
-    }
-
-    //Est-ce que howmanyr est utilisé ?
-    int **howmanyr;        //howmanyr(kmax,kmax)
-    howmanyr = new int*[kmax+1];
-    for (int i=0;i<=kmax;i++){
-        howmanyr[i] = new int [kmax+1];
-    }
-
-    for (int i=0; i<=kmax; i++){
-        for (int j=0; j<=kmax; j++){
-            howmanyr[i][j] = 0;
         }
     }
 
@@ -348,10 +334,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                         for (int i=1;i<=treeAmount;i++) {            //do 65 i=1,n
                             listr[currentK][i]=list[i];
                         }    //65    listr(currentK,i)=list(i)
-
-                        for (int i=1;i<=currentK;i++) {               //do 67 i=1,currentK
-                            howmanyr[currentK][i]=howmany[i];    //67    howmanyr(currentK,i)=howmany(i)
-                        }
                     }
                 }else if(isBH){
                     W_new = DistanceW(treeAmount,kmax,list,FO_new);
@@ -362,10 +344,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
                         for (int i=1;i<=treeAmount;i++){
                             listr[currentK][i]=list[i];
-                        }
-
-                        for (int i=1;i<=currentK;i++){
-                            howmanyr[currentK][i]=howmany[i];
                         }
                     }
                 }
@@ -496,13 +474,13 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     fprintf (Output4,"%.3f;\n",texec2);
 
     // cleanup resources
-    kmeans_cleanup(Output4, kmax, treeAmount, listr, howmanyr, CHr, Wr,
+    kmeans_cleanup(Output4, kmax, treeAmount, listr, CHr, Wr,
         list, no, howmany, ishort, nameb, distances_RF_norm, tree_cluster_leaves);
 
     return 0;
 }
 
-void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr, int **howmanyr,
+void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
                     double *CHr, double *Wr,
                     int *list, int *no, int *howmany, int *ishort,
                     char *nameb, double *distances_RF_norm, double **tree_cluster_leaves) {
@@ -512,10 +490,8 @@ void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr, int **
     //Remove matrix
     for (int i = 0; i <= kmax; ++i) {
         delete [] listr[i];
-        delete [] howmanyr[i];
     }
     delete [] listr;
-    delete [] howmanyr;
 
     delete [] CHr;
     delete [] Wr;
