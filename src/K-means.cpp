@@ -209,11 +209,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
 
-//  Modification Centroids: add ",nameb" to next line
-    char *nameb;
-    nameb = new char [MAX_FILENAME_LENGTH];
-
-
 //***********************  Read data file  **********************************
 
     int max_k1 = k_max;
@@ -258,7 +253,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     //--Read the data from files
-    ReadData1(treeAmount,nmax,pmax,ishort,nameb);
+    ReadData1(treeAmount,nmax,pmax,ishort);
 
     for(int i1=0; i1<treeAmount; i1++){
         for(int i2=0; i2<treeAmount; i2++){
@@ -474,7 +469,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     // cleanup resources
     kmeans_cleanup(Output4, kmax, treeAmount, listr, CHr, Wr,
-        list, no, howmany, ishort, nameb, distances_RF_norm, tree_cluster_leaves);
+        list, no, howmany, ishort, distances_RF_norm, tree_cluster_leaves);
 
     return 0;
 }
@@ -482,7 +477,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
                     double *CHr, double *Wr,
                     int *list, int *no, int *howmany, int *ishort,
-                    char *nameb, double *distances_RF_norm, double **tree_cluster_leaves) {
+                    double *distances_RF_norm, double **tree_cluster_leaves) {
     //Close output files
     if (Output4) fclose(Output4);
 
@@ -498,7 +493,6 @@ void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
     delete [] no;
     delete [] howmany;
     delete [] ishort;
-    delete [] nameb;
     delete [] distances_RF_norm;
 
     for (int i = 0; i < treeAmount; ++i)
@@ -513,7 +507,9 @@ void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
 //**********************************FUNCTIONS***********************************
 //******************************************************************************
 
-void ReadData1(int treeAmount,int &nmax,int &pmax,int* ishort, char* nameb){
+void ReadData1(int treeAmount,int &nmax,int &pmax,int* ishort){
+    char *nameb;
+    nameb = new char [MAX_FILENAME_LENGTH];
 
     if(treeAmount>nmax) {
         printf ("Too many objects. Use a sample of objects or recompile program to increase nmax.");                //     +'Too many objects. Use a sample of objects or recompile program.'
@@ -536,7 +532,8 @@ void ReadData1(int treeAmount,int &nmax,int &pmax,int* ishort, char* nameb){
         printf("\n%s: result file open failed...",nameb);
         exit(1);
     }
-
+    
+    delete [] nameb;
 }
 
 // =============================================================================================================
