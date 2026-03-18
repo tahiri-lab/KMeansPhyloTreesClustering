@@ -33,7 +33,6 @@ const int MAX_ITERATIONS = 100;                 // Maximum K-means iterations pe
 const int RAND_MAX_VALUE = 32767;               // Maximum random number from rand()
 const int MAX_FILENAME_LENGTH = 300;            // Maximum length for filename strings
 const int MAX_PATH_LENGTH = 255;                // Maximum length for file paths
-const int DISTANCE_ARRAY_SIZE = 4;              // Size of Robinson-Foulds distance array
 const int ROUNDING_PRECISION = 3;               // Decimal places for rounding distance values
 const int CONVERGENCE_THRESHOLD_DIVISOR = 1000; // Divisor for convergence threshold check
 // =============================================================================================================
@@ -152,12 +151,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     for(int linej=0;linej<treeAmount;linej++){
         Strouve[linej]= 0;
-    }
-
-    double *distances_RF_norm = new double[DISTANCE_ARRAY_SIZE];
-
-    for(int linej=0;linej<DISTANCE_ARRAY_SIZE;linej++){
-        distances_RF_norm[linej]= 0.0;
     }
 
     double *CHr, *Wr;
@@ -455,15 +448,14 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     // cleanup resources
     kmeans_cleanup(Output4, kmax, treeAmount, listr, CHr, Wr,
-        list, no, howmany, distances_RF_norm);
+        list, no, howmany);
 
     return 0;
 }
 
 void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
                     double *CHr, double *Wr,
-                    int *list, int *no, int *howmany,
-                    double *distances_RF_norm) {
+                    int *list, int *no, int *howmany) {
     //Close output files
     if (Output4) fclose(Output4);
 
@@ -478,7 +470,6 @@ void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
     delete [] list;
     delete [] no;
     delete [] howmany;
-    delete [] distances_RF_norm;
 }
 
 //      end

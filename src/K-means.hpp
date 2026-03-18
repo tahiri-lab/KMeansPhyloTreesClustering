@@ -26,8 +26,7 @@ int main_kmeans(char **, vector <string>, double **, vector<int>, bool, int, int
 //Cleans up kmeans variables and memory allocations
 void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
                     double *CHr, double *Wr,
-                    int *list, int *no, int *howmany,
-                    double *distances_RF_norm);
+                    int *list, int *no, int *howmany);
 
 //--Read the data
 void ReadData1(int treeAmount,int &nmax,int &pmax);
