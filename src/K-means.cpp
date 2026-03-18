@@ -258,7 +258,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     //--Read the data from files
-    ReadData1(treeAmount,nmax,pmax,mat,ishort,nameb,treeAmount);
+    ReadData1(treeAmount,nmax,pmax,ishort,nameb);
 
     for(int i1=0; i1<treeAmount; i1++){
         for(int i2=0; i2<treeAmount; i2++){
@@ -513,24 +513,21 @@ void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
 //**********************************FUNCTIONS***********************************
 //******************************************************************************
 
-void ReadData1(int &treeAmount1,int &nmax,int &pmax,double** mat,int* ishort, char* nameb, int treeAmount2){
-    //Read matrix parameters
-    treeAmount1 = treeAmount2;
-    //printf("\nData:\nn:%d p:%d\n", n,p);
+void ReadData1(int treeAmount,int &nmax,int &pmax,int* ishort, char* nameb){
 
-    if(treeAmount1>nmax) {
+    if(treeAmount>nmax) {
         printf ("Too many objects. Use a sample of objects or recompile program to increase nmax.");                //     +'Too many objects. Use a sample of objects or recompile program.'
         exit(1);
     }
 
-    if(treeAmount2>pmax) {
+    if(treeAmount>pmax) {
         printf ("Too many variables. Use a sample of objects or recompile program to increase pmax.");                //     +'Too many objects. Use a sample of objects or recompile program.'
         exit(1);
     }
 
    //fclose(Input1);
 
-    for (int j=1;j<=treeAmount2;j++){
+    for (int j=1;j<=treeAmount;j++){
         ishort[j]=j;
     }
 
