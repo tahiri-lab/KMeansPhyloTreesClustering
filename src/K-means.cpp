@@ -125,7 +125,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     int currentK=0; //nombre courant de clusters (groupes) en cours d’évaluation
     bool debug=false;
     int k1=0, k2=0;
-    int hard_max_k=0; //--Setting the max k1
 
     int random_number=100; //--Fixed random number
     int iassign=2;  // 1 equal, 2 random
@@ -190,46 +189,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
 //***********************  Read data file  **********************************
 
-    int max_k1 = k_max;
-
-    if (treeAmount<=k_min) max_k1=treeAmount-1;
-
-    k1=max_k1;
-    double facteur = 1.0;
-    k2=k_min;
-    if(!isBH){
-        for (int i=0; i<=k_capacity; i++){
-            CHr[i] = MIN_CH_VALUE;
-        }
-
-        if (k1<=2) {
-            printf("*** Warning, not enough trees (k1:%d) k1 set to %d\n",k1,max_k1);
-            k1=max_k1;
-        }
-        if (k_min<2){
-            k2=2;
-        }
-    }else if(isBH){
-        for (int i=0; i<=k_capacity; i++){
-            Wr[i] = MAX_W_VALUE;
-        }
-        if (k_min<1){
-            k2=1;
-        }
-        if (k1<=1) {
-            printf("*** Warning, not enough trees (k1:%d) k1 set to %d\n",k1,max_k1);
-            k1=max_k1;
-        }
-    }
-
-    if (k1>k_capacity) {
-        printf("*** Warning, limiting groups to %d \n",k_capacity);
-        k1=max_k1-1;
-    }
-
-    if (hard_max_k!=0) {
-        k1=max_k1;
-    }
+    setup_k_bounds(k_max, k_capacity, k_min, k1, k2, treeAmount, isBH, CHr, Wr);
 
     //--Read the data from files
     ReadData1(treeAmount,nmax,pmax);
@@ -451,6 +411,50 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         list, no, howmany);
 
     return 0;
+}
+
+int setup_k_bounds(int k_max, int k_capacity, int k_min, int &k1, int &k2, int treeAmount, bool isBH, double *&CHr, double *&Wr) {
+    int warningCount = 0;
+    int max_k1 = k_max;
+
+    if (treeAmount<=k_min) max_k1=treeAmount-1;
+
+    k1=max_k1;
+    double facteur = 1.0;
+    k2=k_min;
+    if(!isBH){
+        for (int i=0; i<=k_capacity; i++){
+            CHr[i] = MIN_CH_VALUE;
+        }
+        if (k1<=2) {
+            printf("*** Warning, not enough trees (k1:%d) k1 set to %d\n",k1,max_k1);
+            k1=max_k1;
+            warningCount++;
+        }
+        if (k_min<2){
+            k2=2;
+        }
+    }else if(isBH){
+        for (int i=0; i<=k_capacity; i++){
+            Wr[i] = MAX_W_VALUE;
+        }
+        if (k_min<1){
+            k2=1;
+        }
+        if (k1<=1) {
+            printf("*** Warning, not enough trees (k1:%d) k1 set to %d\n",k1,max_k1);
+            k1=max_k1;
+            warningCount++;
+        }
+    }
+
+    if (k1>k_capacity) {
+        printf("*** Warning, limiting groups to %d \n",k_capacity);
+        k1=max_k1-1;
+        warningCount++;
+    }
+
+    return warningCount;
 }
 
 void kmeans_cleanup(FILE *Output4, int k_capacity, int treeAmount, int **listr,
