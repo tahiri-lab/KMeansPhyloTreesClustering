@@ -1210,8 +1210,9 @@ void conv2sameRef(int *Strouve,int *Sref, int n){
 
     std::cout<<"Number of trees in the input file: "<<n<< std::endl;
     std::cout<<"Partition found: "<< std::endl;
-    for(int i=0; i<n; i++){
-        std::cout<<Strouve[i]<<" <> ";
+    std::cout<<Strouve[0];
+    for(int i=1; i<n; i++){
+        std::cout<<" <> "<<Strouve[i];
     }
     std::cout<<std::endl;
 
