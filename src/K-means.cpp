@@ -154,11 +154,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         Strouve[linej]= 0;
     }
 
-    double **tree_cluster_leaves = new double *[treeAmount];
-    for(int i=0;i<treeAmount;i++){
-        tree_cluster_leaves[i]=new double [DISTANCE_ARRAY_SIZE];
-    }
-
     double *distances_RF_norm = new double[DISTANCE_ARRAY_SIZE];
 
     for(int linej=0;linej<DISTANCE_ARRAY_SIZE;linej++){
@@ -460,7 +455,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     // cleanup resources
     kmeans_cleanup(Output4, kmax, treeAmount, listr, CHr, Wr,
-        list, no, howmany, distances_RF_norm, tree_cluster_leaves);
+        list, no, howmany, distances_RF_norm);
 
     return 0;
 }
@@ -468,7 +463,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
                     double *CHr, double *Wr,
                     int *list, int *no, int *howmany,
-                    double *distances_RF_norm, double **tree_cluster_leaves) {
+                    double *distances_RF_norm) {
     //Close output files
     if (Output4) fclose(Output4);
 
@@ -484,10 +479,6 @@ void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
     delete [] no;
     delete [] howmany;
     delete [] distances_RF_norm;
-
-    for (int i = 0; i < treeAmount; ++i)
-        delete [] tree_cluster_leaves[i];
-    delete [] tree_cluster_leaves;
 }
 
 //      end

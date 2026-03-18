@@ -27,7 +27,7 @@ int main_kmeans(char **, vector <string>, double **, vector<int>, bool, int, int
 void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
                     double *CHr, double *Wr,
                     int *list, int *no, int *howmany,
-                    double *distances_RF_norm, double **tree_cluster_leaves);
+                    double *distances_RF_norm);
 
 //--Read the data
 void ReadData1(int treeAmount,int &nmax,int &pmax);
