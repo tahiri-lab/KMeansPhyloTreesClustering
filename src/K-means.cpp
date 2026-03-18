@@ -124,7 +124,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     tbegin2 = time(NULL);                // get the current calendar time
 
     int treeAmount = int (monTableau.size()); //quantity of initial tree
-    int numVariables=treeAmount;
     int currentK=0; //nombre courant de clusters (groupes) en cours d’évaluation
     bool debug=false;
     int k1=0, k2=0;
@@ -259,7 +258,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     //--Read the data from files
-    ReadData1(treeAmount,nmax,numVariables,pmax,mat,ishort,nameb,treeAmount);
+    ReadData1(treeAmount,nmax,pmax,mat,ishort,nameb,treeAmount);
 
     for(int i1=0; i1<treeAmount; i1++){
         for(int i2=0; i2<treeAmount; i2++){
@@ -514,10 +513,9 @@ void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
 //**********************************FUNCTIONS***********************************
 //******************************************************************************
 
-void ReadData1(int &treeAmount1,int &nmax,int &numVariables,int &pmax,double** mat,int* ishort, char* nameb, int treeAmount2){
+void ReadData1(int &treeAmount1,int &nmax,int &pmax,double** mat,int* ishort, char* nameb, int treeAmount2){
     //Read matrix parameters
     treeAmount1 = treeAmount2;
-    numVariables = treeAmount2;
     //printf("\nData:\nn:%d p:%d\n", n,p);
 
     if(treeAmount1>nmax) {
@@ -525,14 +523,14 @@ void ReadData1(int &treeAmount1,int &nmax,int &numVariables,int &pmax,double** m
         exit(1);
     }
 
-    if(numVariables>pmax) {
+    if(treeAmount2>pmax) {
         printf ("Too many variables. Use a sample of objects or recompile program to increase pmax.");                //     +'Too many objects. Use a sample of objects or recompile program.'
         exit(1);
     }
 
    //fclose(Input1);
 
-    for (int j=1;j<=numVariables;j++){
+    for (int j=1;j<=treeAmount2;j++){
         ishort[j]=j;
     }
 
