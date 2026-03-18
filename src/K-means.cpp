@@ -763,7 +763,6 @@ double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N){
     double a=0.0;
     double b=0.0;
     double c=0.0;
-    double d=0.0;
 
     double comb = 1.0;
 
@@ -776,9 +775,7 @@ double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N){
     for (int i=0; i<N-1; i++){
         for (int j=i+1; j<N; j++){
             if(Sref[i]!=Sref[j]){
-                if(Strouve[i]!=Strouve[j]){
-                    d++;
-                }else{
+                if(Strouve[i]==Strouve[j]){
                     c++;
                 }
             }else{
