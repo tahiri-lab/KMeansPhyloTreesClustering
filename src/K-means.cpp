@@ -48,7 +48,7 @@ FILE *Output4;
 //  pmax = maximum number of variables  (default: 10000)
 //  k    = number of groups (centroids)
 //  kmax = maximum number of groups
-//  kk   = ???
+//  currentK   = nombre courant de clusters (groupes) en cours d’évaluation
 //  MAX_ITERATIONS = maximum iteration for convergeance of centroid (fixed=100)
 //  Parameter (nmax=100000,pmax=10,kmax=10)
 //  critera = (0,1,2)
@@ -126,7 +126,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     int treeAmount = int (monTableau.size()); //quantity of initial tree
     int numVariables=treeAmount;
-    int kk=0;
+    int currentK=0; //nombre courant de clusters (groupes) en cours d’évaluation
     bool debug=false;
     int k1=0, k2=0;
     int hard_max_k=0; //--Setting the max k1
@@ -315,7 +315,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         // Big loop on number of groups, downwards from k1 to k2 (k1>=k2) - - - - - -
 
         //initialisation de Strouve de la liste realiser aleatoirement
-        for (kk=k1;kk>=k2;kk--){
+        for (currentK=k1;currentK>=k2;currentK--){
             SSEref=INITIAL_SSE_REF;
             WVariable = MAX_W_VALUE;
             CH = MIN_CH_VALUE;
@@ -335,37 +335,37 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
                 // Compute distances to group centroids and assign objects to nearest one
                 if(!isBH){
-                    FO_new = FO_super_tree(treeAmount,kmax,mat,list,howmany,SSE,kk);
+                    FO_new = FO_super_tree(treeAmount,kmax,mat,list,howmany,SSE,currentK);
                 }else if(isBH){
-                    FO_new = FO_W(treeAmount,kmax,mat,list,howmany,SSE,kk);
+                    FO_new = FO_W(treeAmount,kmax,mat,list,howmany,SSE,currentK);
                 }
 
                 if(!isBH){
                     CH_new = DistanceCH(treeAmount,kmax,mat,list,FO_new);
-                    if(CH_new>CHr[kk]){
+                    if(CH_new>CHr[currentK]){
                         CH=CH_new;
-                        CHr[kk]=CH;
+                        CHr[currentK]=CH;
                         for (int i=1;i<=treeAmount;i++) {            //do 65 i=1,n
-                            listr[kk][i]=list[i];
-                        }    //65    listr(kk,i)=list(i)
+                            listr[currentK][i]=list[i];
+                        }    //65    listr(currentK,i)=list(i)
 
-                        for (int i=1;i<=kk;i++) {               //do 67 i=1,kk
-                            howmanyr[kk][i]=howmany[i];    //67    howmanyr(kk,i)=howmany(i)
+                        for (int i=1;i<=currentK;i++) {               //do 67 i=1,currentK
+                            howmanyr[currentK][i]=howmany[i];    //67    howmanyr(currentK,i)=howmany(i)
                         }
                     }
                 }else if(isBH){
                     W_new = DistanceW(treeAmount,kmax,list,FO_new);
 
-                    if(W_new<Wr[kk]){
+                    if(W_new<Wr[currentK]){
                         WVariable=W_new;
-                        Wr[kk]=WVariable;
+                        Wr[currentK]=WVariable;
 
                         for (int i=1;i<=treeAmount;i++){
-                            listr[kk][i]=list[i];
+                            listr[currentK][i]=list[i];
                         }
 
-                        for (int i=1;i<=kk;i++){
-                            howmanyr[kk][i]=howmany[i];
+                        for (int i=1;i<=currentK;i++){
+                            howmanyr[currentK][i]=howmany[i];
                         }
                     }
                 }
@@ -384,9 +384,9 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
             // Compute the Calinski-Harabasz (1974) index 'CH' and
 
-            // Concatenate the two closest groups before going to the next value of kk
+            // Concatenate the two closest groups before going to the next value of currentK
             int i1ref=1;        //i1ref=igr1
-            int i2ref=kk;        //i2ref=igr2
+            int i2ref=currentK;        //i2ref=igr2
 
             //Group "i2ref" disappears
             for (int i=1;i<=treeAmount;i++){
@@ -398,7 +398,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
             howmany[i1ref]=howmany[i1ref]+howmany[i2ref];
 
-            for (int k=(i2ref+1);k<=kk;k++){
+            for (int k=(i2ref+1);k<=currentK;k++){
                 howmany[k-1]=howmany[k];
             }
 
@@ -584,7 +584,7 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
         ii=0;
 
         for (int k=1;k<=k1;k++){
-            for (int kk=1;kk<=howmany[k];kk++){
+            for (int currentK=1;currentK<=howmany[k];currentK++){
                ii++;
                list[ii]=k;
             }
@@ -896,7 +896,7 @@ void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char 
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_super_tree(int &treeAmount, int &kmax, double** mat, int* list, int* howmany, double &SSE, int &kk){
+double FO_super_tree(int &treeAmount, int &kmax, double** mat, int* list, int* howmany, double &SSE, int &currentK){
     // clusterK_same[k] stocke la somme des distances RF internes (ou vers un représentant)
     // utilisée pour calculer la contribution du cluster k à la fonction objectif.
     double *clusterK_same = new double[kmax + 1];
@@ -921,8 +921,8 @@ double FO_super_tree(int &treeAmount, int &kmax, double** mat, int* list, int* h
         }
     }
 
-    // Met à jour howmany[k] avec les effectifs des clusters (1..kk).
-    for (int k = 1; k <= kk; ++k) {
+    // Met à jour howmany[k] avec les effectifs des clusters (1..currentK).
+    for (int k = 1; k <= currentK; ++k) {
         howmany[k] = nk_CH[k];
     }
 
@@ -937,7 +937,7 @@ double FO_super_tree(int &treeAmount, int &kmax, double** mat, int* list, int* h
     // d'arbres du cluster (intra-cluster).
     // ------------------------------------------------------------
     if (withConsensus) {
-        for (int k = 1; k <= kk; ++k) {
+        for (int k = 1; k <= currentK; ++k) {
             // Si le cluster contient 0 ou 1 arbre, sa contribution est nulle.
             if (nk_CH[k] <= 1) {
                 clusterK_same[k] = 0.0;
@@ -983,7 +983,7 @@ double FO_super_tree(int &treeAmount, int &kmax, double** mat, int* list, int* h
     // Pour chaque cluster k, on ajoute une contribution normalisée par le nombre d'arbres.
     // ------------------------------------------------------------
     double FO_old = 0.0;
-    for (int k = 1; k <= kk; ++k) {
+    for (int k = 1; k <= currentK; ++k) {
         if (nk_CH[k] > 1) {
             FO_old += (clusterK_same[k] / (1.0 * nk_CH[k]));
         }
@@ -1062,7 +1062,7 @@ double DistanceCH(int &treeAmount,int &kmax,double** mat,int* list,double FO_new
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_W(int &treeAmount,int &kmax,double** mat,int* list,int* howmany,double &SSE,int &kk){
+double FO_W(int &treeAmount,int &kmax,double** mat,int* list,int* howmany,double &SSE,int &currentK){
     double *clusterK_same = new double [kmax+1];
     int *nk_W = new int [kmax+1];
     int cluster_k = 0;
@@ -1108,19 +1108,19 @@ double FO_W(int &treeAmount,int &kmax,double** mat,int* list,int* howmany,double
         }
     }
 
-    for (int k=1;k<=kk;k++){
+    for (int k=1;k<=currentK;k++){
         if(nk_W[k]>1){
             FO_old += ((2.0*clusterK_same[k])/(1.0*nk_W[k]*(nk_W[k]-1)));
         }
     }
 
-    if(kk==1){
+    if(currentK==1){
         Dref=FO_old;
     }else{
         //boucle sur les arbres
         for (int i=1;i<=treeAmount; i++){
             if(nk_W[list[i]]>1){
-                for (int k=1;k<=kk;k++){
+                for (int k=1;k<=currentK;k++){
                     //Calcul de la distance RF de chaque point i
                     // et assignation du point i au bon cluster
                     // Compute a RF distance to the centroid k
