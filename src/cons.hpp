@@ -70,8 +70,6 @@ void   bigsubset(group_type *, long);
 void   recontraverse(node **, group_type *, long, long *);
 void   reconstruct(long);
 void   coordinates(node *, long *);
-void   drawline(long i);
-
 void   printree(void);
 void   rehash(void);
 void   enternodeset(node *r);
