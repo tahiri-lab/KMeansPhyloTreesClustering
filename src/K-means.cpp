@@ -396,7 +396,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }else if(isBH){
         strcpy(criteria, "BH");
         conv2sameRef(Strouve,Sref,treeAmount);
-        outStat(Strouve,Sref,criteria,treeAmount,N_especes,percent,K_real,W_group,W_max,/*listr,Wr,k1,k2,*/monTableau);
+        outStat(Strouve,Sref,criteria,treeAmount,N_especes,percent,K_real,W_group,W_min,/*listr,Wr,k1,k2,*/monTableau);
     }
 
     // End timer
@@ -1182,7 +1182,9 @@ double DistanceW(int &treeAmount, int &k_capacity, int* list, double FO_new){
 
     if(k_cluster!=treeAmount){
         // distance_total=(FO_new/(1.0*(n-k_cluster)));
-        distance_total=(FO_new/k_cluster);
+        if(k_cluster!=0) {
+            distance_total=(FO_new/k_cluster);
+        }
     }
 
     delete [] clusterK_same;
