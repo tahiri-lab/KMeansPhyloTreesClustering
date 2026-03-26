@@ -283,7 +283,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
                 // Compute sum of squared error statistic (SSE) = within-group sum of squares
 
-                if(fabs(SSEref-SSE)>(SSE/CONVERGENCE_THRESHOLD_DIVISOR)) {           //if(dabs(SSEref-SSE).gt.SSE/1000.0) then
+                if(fabs(SSEref-SSE)>(SSE/CONVERGENCE_THRESHOLD_DIVISOR)) {
                     SSEref=SSE;
                     if(nit==MAX_ITERATIONS) {
                         printf ("Convergence not reached in %d iterations.\n",MAX_ITERATIONS);
@@ -392,11 +392,11 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     if (!isBH){
         strcpy(criteria, "CH");
         conv2sameRef(Strouve,Sref,treeAmount);
-        outStat(Strouve,Sref,criteria,treeAmount,N_especes,percent,K_real,CHr_group,CHr_max,/*listr,CHr,k1,k2,*/monTableau);
+        outStat(Strouve,Sref,criteria,treeAmount,N_especes,percent,K_real,CHr_group,CHr_max,monTableau);
     }else if(isBH){
         strcpy(criteria, "BH");
         conv2sameRef(Strouve,Sref,treeAmount);
-        outStat(Strouve,Sref,criteria,treeAmount,N_especes,percent,K_real,W_group,W_min,/*listr,Wr,k1,k2,*/monTableau);
+        outStat(Strouve,Sref,criteria,treeAmount,N_especes,percent,K_real,W_group,W_min,monTableau);
     }
 
     // End timer
@@ -747,7 +747,7 @@ double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N){
 // Modification Centroids: this whole subroutine
 
 //stat output
-void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group,double score,/*int **listr,double *allScore,int k1, int k2,*/ vector <string> monTableau){
+void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group,double score, vector <string> monTableau){
     //Compute Rand index between Strouve and Sref
     double RI = f_RI(Strouve,Sref,N);
 
@@ -781,23 +781,13 @@ void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char 
     fprintf (Output4,"part(");
     for (int p=1; p<=N; p++){
         if(p==N){
-            //fprintf (Output4,"%i%s",listr[group][p]," ");
             fprintf (Output4,"%i%s",Strouve[p-1]," ");
         }else{
-            //fprintf (Output4,"%i%s",listr[group][p]," <> ");
             fprintf (Output4,"%i%s",Strouve[p-1]," <> ");
         }
 
     }
     fprintf (Output4,");");
-    
-    // for(int i=k2; i<=k1; i++){
-        // cout<<"K = "<<i<<" "<<criteria<<" = "<<allScore[i]<<" : ";
-        // for(int j=1; j<=N; j++){
-            // cout<<listr[i][j]<<" <> ";
-        // }
-        // cout<<endl;
-    // }
     
     //output.txt file
     //composition of each cluster and each element
@@ -1127,7 +1117,7 @@ double FO_W(int &treeAmount,int &k_capacity,double** mat,int* list,int* howmany,
                             howmany[list[i]] = nb_cluster_source;
 
                             //calcul SSE
-                            SSE=SSE+Dref;         //SSE=SSE+Dref
+                            SSE=SSE+Dref;
 
                             //mise à jour de la fonction objective FO_old
                             FO_old = FO_new;
@@ -1148,7 +1138,6 @@ double FO_W(int &treeAmount,int &k_capacity,double** mat,int* list,int* howmany,
     delete [] nk_W;
 
     return Dref;
-
 }
 
 // =============================================================================================================
@@ -1217,12 +1206,6 @@ void conv2sameRef(int *Strouve,int *Sref, int n){
         std::cout<<" <> "<<Strouve[i];
     }
     std::cout<<std::endl;
-
-    // cout<<"Sref"<<endl;
-    // for(int i=0; i<n; i++){
-        // cout<<Sref[i]<<" <> ";
-    // }
-    // cout<<endl;
 
     //To know the number of cluster
     for(int i=0; i<n; i++){
