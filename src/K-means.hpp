@@ -37,7 +37,7 @@ void ReadData1(int treeAmount,int &nmax,int &pmax);
 void Assign(int &iran,int &treeAmount,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign,int random_number);
 
 //--Squared distances to group centroids. Assign objects to nearest one
-void Permute(int &treeAmount,int &nmax,int *iordre);
+void Permute(int &treeAmount,int *iordre);
 double f_RI(int Strouve[],int Sref[],int N);
 double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N);
 void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group,double score, vector <string> monTableau);

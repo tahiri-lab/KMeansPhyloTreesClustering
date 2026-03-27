@@ -535,7 +535,7 @@ void Assign(int &iran,int &treeAmount,int &nmax,int &k1,int* list,int* howmany,i
         if(iran==1){
             for (int i=1;i<=(random_number+100);i++)  turn=rand()/(1.0*(rand() % RAND_MAX_VALUE));
         }                            //end if
-        Permute(treeAmount,nmax,list);
+        Permute(treeAmount,list);
     }else if (iassign==3){
         // Read file of group assignments.
         // First line: how many objects in each group?
@@ -599,11 +599,9 @@ void Assign(int &iran,int &treeAmount,int &nmax,int &k1,int* list,int* howmany,i
 // in an equiprobable way. This property has been checked through intensive
 // simulations.
 
-void Permute(int &n,int &nmax,int *iordre){
+void Permute(int &n,int *iordre){
     // On parcourt le tableau de la dernière position vers la deuxième.
     // À chaque étape, un élément est échangé avec un élément choisi aléatoirement parmi les positions restantes.
-
-    (void)nmax;    // Ce paramètre n'a pas ete utilise ici
 
     for (int m = n; m >= 2; --m) {
         // On genere un indice aleatoire j compris entre 1 et m inclus
