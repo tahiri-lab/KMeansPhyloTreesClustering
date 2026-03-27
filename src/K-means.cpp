@@ -229,7 +229,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         realk = 0;
 
         if(iassign!=4){
-            Assign(iran,treeAmount,nmax,k1,list,howmany,no,iassign,random_number);
+            Assign(iran,treeAmount,k1,list,howmany,no,iassign,random_number);
         }
         // Big loop on number of groups, downwards from k1 to k2 (k1>=k2) - - - - - -
 
@@ -512,7 +512,7 @@ void ReadData1(int treeAmount,int &nmax,int &pmax){
 // =============================================================================================================
 // =============================================================================================================
 
-void Assign(int &iran,int &treeAmount,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign, int random_number){
+void Assign(int iran,int treeAmount,int k1,int* list,int* howmany,int* no,int iassign, int random_number){
     int ii=0, how=0, isum=0;
     char namea[MAX_PATH_LENGTH];
     double turn=0;
@@ -599,7 +599,7 @@ void Assign(int &iran,int &treeAmount,int &nmax,int &k1,int* list,int* howmany,i
 // in an equiprobable way. This property has been checked through intensive
 // simulations.
 
-void Permute(int &n,int *iordre){
+void Permute(int n,int *iordre){
     // On parcourt le tableau de la dernière position vers la deuxième.
     // À chaque étape, un élément est échangé avec un élément choisi aléatoirement parmi les positions restantes.
 
@@ -818,7 +818,7 @@ void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char 
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_super_tree(int &treeAmount, int &k_capacity, double** mat, int* list, int* howmany, double &SSE, int &currentK){
+double FO_super_tree(int treeAmount, int k_capacity, double** mat, int* list, int* howmany, double &SSE, int currentK){
     // clusterK_same[k] stocke la somme des distances RF internes (ou vers un représentant)
     // utilisée pour calculer la contribution du cluster k à la fonction objectif.
     double *clusterK_same = new double[k_capacity + 1];
@@ -926,7 +926,7 @@ double FO_super_tree(int &treeAmount, int &k_capacity, double** mat, int* list, 
 // =============================================================================================================
 // =============================================================================================================
 
-double DistanceCH(int &treeAmount,int &k_capacity,double** mat,int* list,double FO_new){
+double DistanceCH(int treeAmount,int k_capacity,double** mat,int* list,double FO_new){
     double SSB = 0.0;
     double SSW = 0.0;
     double dist_all = 0.0;
@@ -985,7 +985,7 @@ double DistanceCH(int &treeAmount,int &k_capacity,double** mat,int* list,double 
 // =============================================================================================================
 // =============================================================================================================
 
-double FO_W(int &treeAmount,int &k_capacity,double** mat,int* list,int* howmany,double &SSE,int &currentK){
+double FO_W(int treeAmount,int k_capacity,double** mat,int* list,int* howmany,double &SSE,int currentK){
     double *clusterK_same = new double [k_capacity+1];
     int *nk_W = new int [k_capacity+1];
     int cluster_k = 0;
@@ -1140,7 +1140,7 @@ double FO_W(int &treeAmount,int &k_capacity,double** mat,int* list,int* howmany,
 // =============================================================================================================
 // =============================================================================================================
 
-double DistanceW(int &treeAmount, int &k_capacity, int* list, double FO_new){
+double DistanceW(int treeAmount, int k_capacity, int* list, double FO_new){
     double distance_total = 100000000.0;
     double *clusterK_same = new double [k_capacity+1];
     int *nk_W = new int [k_capacity+1];
@@ -1192,19 +1192,19 @@ double arrondir(double num,int digits){
 // =============================================================================================================
 
 //Convert the partition found by the same number cluster that the partition ref
-void conv2sameRef(int *Strouve,int *Sref, int n){
+void conv2sameRef(int *Strouve,int *Sref, int treeAmount){
     int k = 0;
 
-    std::cout<<"Number of trees in the input file: "<<n<< std::endl;
+    std::cout<<"Number of trees in the input file: "<<treeAmount<< std::endl;
     std::cout<<"Partition found: "<< std::endl;
     std::cout<<Strouve[0];
-    for(int i=1; i<n; i++){
+    for(int i=1; i<treeAmount; i++){
         std::cout<<" <> "<<Strouve[i];
     }
     std::cout<<std::endl;
 
     //To know the number of cluster
-    for(int i=0; i<n; i++){
+    for(int i=0; i<treeAmount; i++){
         if(Strouve[i]>k){
             k=Strouve[i];
         }
@@ -1222,8 +1222,8 @@ void conv2sameRef(int *Strouve,int *Sref, int n){
         nk_ref[c] = 0;
     }
 
-    // Pour chaque arbre (0..n-1), on incrémente le compteur du cluster auquel il appartient.
-    for (int i = 0; i < n; i++) {
+    // Pour chaque arbre (0..treeAmount-1), on incrémente le compteur du cluster auquel il appartient.
+    for (int i = 0; i < treeAmount; i++) {
         nk_trouve[Strouve[i]]++;
         nk_ref[Sref[i]]++;
     }

@@ -34,26 +34,26 @@ int setup_k_bounds(int k_max, int k_capacity, int k_min, int &k1, int &k2, int t
 void ReadData1(int treeAmount,int &nmax,int &pmax);
 
 //--Calculate the kmeans
-void Assign(int &iran,int &treeAmount,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign,int random_number);
+void Assign(int iran,int treeAmount,int k1,int* list,int* howmany,int* no,int iassign,int random_number);
 
 //--Squared distances to group centroids. Assign objects to nearest one
-void Permute(int &treeAmount,int *iordre);
+void Permute(int treeAmount,int *iordre);
 double f_RI(int Strouve[],int Sref[],int N);
 double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N);
 void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group,double score, vector <string> monTableau);
 
 //SUPERTREES
-double FO_super_tree(int &treeAmount,int &kmax,double** mat,int* list,int* howmany,double &SSE,int &currentK);
+double FO_super_tree(int treeAmount,int k_capacity,double** mat,int* list,int* howmany,double &SSE,int currentK);
 
 //fonctions sans passer par le centroid pour supertree
-double DistanceCH(int &treeAmount,int &kmax,double** mat,int* list,double FO_new);
+double DistanceCH(int treeAmount,int k_capacity,double** mat,int* list,double FO_new);
 
 // CRITERE W
-double FO_W(int &treeAmount,int &kmax,double** mat,int* list,int* howmany,double &SSE,int &currentK);
-double DistanceW(int &treeAmount, int &kmax, int* list, double FO_new);
+double FO_W(int treeAmount,int k_capacity,double** mat,int* list,int* howmany,double &SSE,int currentK);
+double DistanceW(int treeAmount, int k_capacity, int* list, double FO_new);
 
 double arrondir(double num,int digits);
-void conv2sameRef(int *Strouve,int *Sref, int N);
+void conv2sameRef(int *Strouve,int *Sref, int treeAmount);
 
 #endif /* K_means_hpp */
 
