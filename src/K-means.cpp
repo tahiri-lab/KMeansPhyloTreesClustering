@@ -869,28 +869,29 @@ double FO_super_tree(int &treeAmount, int &k_capacity, double** mat, int* list, 
             if (nk_CH[k] <= 1) {
                 clusterK_same[k] = 0.0;
                 continue;
-            }
-
+            } else {
             double bestSum = 1e100;
 
-            // On teste chaque arbre i du cluster comme représentant candidat.
-            for (int i = 1; i <= treeAmount; ++i) {
-                if (list[i] != k) continue;
+                // On teste chaque arbre i du cluster comme représentant candidat.
+                for (int i = 1; i <= treeAmount; ++i) {
+                    if (list[i] == k) {
+                        double sumDist = 0.0;
 
-                double sumDist = 0.0;
+                        // Somme des distances RF entre i et tous les autres arbres j du même cluster.
+                        for (int j = 1; j <= treeAmount; ++j) {
+                            if ((i != j)&&(list[j] == k)) {
+                                sumDist += mat[i - 1][j - 1];
+                            }
+                        }
 
-                // Somme des distances RF entre i et tous les autres arbres j du même cluster.
-                for (int j = 1; j <= treeAmount; ++j) {
-                    if (i == j) continue;
-                    if (list[j] != k) continue;
-
-                    sumDist += mat[i - 1][j - 1];
+                        // On conserve le candidat qui minimise la somme des distances.
+                        if (sumDist < bestSum) {
+                            bestSum = sumDist;
+                        }
+                    }
                 }
-
-                // On conserve le candidat qui minimise la somme des distances.
-                if (sumDist < bestSum) bestSum = sumDist;
+                clusterK_same[k] = bestSum;
             }
-            clusterK_same[k] = bestSum;
         }
     } else {
         //boucle sur les arbres
