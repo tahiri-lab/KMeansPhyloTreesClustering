@@ -528,7 +528,7 @@ void Assign(int iran,int treeAmount,int k1,int* list,int* howmany,int* no,int ia
             }
         }
 
-        if(iassign==1) {
+        if(iassign!=1) {
             // Assign objects at random to the groups
             if(iran==1){
                 for (int i=1;i<=(random_number+100);i++)  turn=rand()/(1.0*(rand() % RAND_MAX_VALUE));
