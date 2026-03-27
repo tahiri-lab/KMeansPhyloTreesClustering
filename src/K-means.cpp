@@ -512,15 +512,15 @@ void ReadData1(int treeAmount,int &nmax,int &pmax){
 // =============================================================================================================
 // =============================================================================================================
 
-void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign, int random_number){
+void Assign(int &iran,int &treeAmount,int &nmax,int &k1,int* list,int* howmany,int* no,int &iassign, int random_number){
     int ii=0, how=0, isum=0;
     char namea[MAX_PATH_LENGTH];
     double turn=0;
 
     if ((iassign==1) || (iassign==2)){
-        how=n/(k1*1.0);
+        how=treeAmount/(k1*1.0);
         for (int k=1;k<=(k1-1);k++) {howmany[k]=how;}
-        howmany[k1]=n-(k1-1)*how;
+        howmany[k1]=treeAmount-(k1-1)*how;
         ii=0;
 
         for (int k=1;k<=k1;k++){
@@ -536,7 +536,7 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
         if(iran==1){
             for (int i=1;i<=(random_number+100);i++)  turn=rand()/(1.0*(rand() % RAND_MAX_VALUE));
         }                            //end if
-        Permute(n,nmax,list);
+        Permute(treeAmount,nmax,list);
         return;
     }else if (iassign==3){
         // Read file of group assignments.
@@ -559,12 +559,12 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
             isum=isum+howmany[k];
         }
 
-        if(isum!=n){
+        if(isum!=treeAmount){
             printf("Objects assigned to groups do not sum to n.");
             exit(1);
         }
 
-        for (int i=1;i<=n;i++) {
+        for (int i=1;i<=treeAmount;i++) {
             list[i]=-1;
         }
 
@@ -577,7 +577,7 @@ void Assign(int &iran,int &n,int &nmax,int &k1,int* list,int* howmany,int* no,in
             }
         }
 
-        for (int i=1;i<=n;i++){
+        for (int i=1;i<=treeAmount;i++){
             if(list[i]==-1){
                 printf("Overlapping assignments to groups.");
                 exit(1);
