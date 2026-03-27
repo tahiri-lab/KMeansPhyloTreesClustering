@@ -43,7 +43,7 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
     double **n_identique;
 
     double *distances = new double[6];
-    int *n_leaves = new int[mesTrees.size()+1];
+    int *n_leaves = new int[mesTrees.size()+1]; //possiblement inutile
     string tree;
     string tree1;
     string tree2;
@@ -62,8 +62,6 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
 
     for(int lineDist=0;lineDist<mesTrees.size();lineDist++){
         Matrice_RF[lineDist]= new double[mesTrees.size()];
-        Ww[lineDist]= new double[mesTrees.size()];
-        n_identique[lineDist]= new double[mesTrees.size()];
     }
 
     /* Remplissage de la matrice RF : distance RF entre chaque paire d'arbres */
@@ -135,13 +133,9 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
     /* Libération de la mémoire */
     for (int i=0;i<mesTrees.size();i++){
         delete [] Matrice_RF[i];
-        delete [] Ww[i];
-        delete [] n_identique[i];
     }
     delete [] n_leaves;
     delete [] Matrice_RF;
-    delete [] Ww;
-    delete [] n_identique;
     delete [] distances;
 
     tend=time(NULL);
