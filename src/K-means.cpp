@@ -483,7 +483,7 @@ void kmeans_cleanup(FILE *Output4, int k_capacity, int treeAmount, int **listr,
 //**********************************FUNCTIONS***********************************
 //******************************************************************************
 
-void ReadData1(int treeAmount,int &nmax,int &pmax){
+void ReadData1(int treeAmount,int nmax,int pmax){
     char *nameb;
     nameb = new char [MAX_FILENAME_LENGTH];
 

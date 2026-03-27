@@ -31,7 +31,7 @@ void kmeans_cleanup(FILE *Output4, int kmax, int treeAmount, int **listr,
 int setup_k_bounds(int k_max, int k_capacity, int k_min, int &k1, int &k2, int treeAmount, bool isBH, double *&CHr, double *&Wr);
 
 //--Read the data
-void ReadData1(int treeAmount,int &nmax,int &pmax);
+void ReadData1(int treeAmount,int nmax,int pmax);
 
 //--Calculate the kmeans
 void Assign(int iran,int treeAmount,int k1,int* list,int* howmany,int* no,int iassign,int random_number);
