@@ -530,14 +530,12 @@ void Assign(int &iran,int &treeAmount,int &nmax,int &k1,int* list,int* howmany,i
             }
         }
 
-
         if(iassign==1) return;
         // Assign objects at random to the groups
         if(iran==1){
             for (int i=1;i<=(random_number+100);i++)  turn=rand()/(1.0*(rand() % RAND_MAX_VALUE));
         }                            //end if
         Permute(treeAmount,nmax,list);
-        return;
     }else if (iassign==3){
         // Read file of group assignments.
         // First line: how many objects in each group?
@@ -584,12 +582,11 @@ void Assign(int &iran,int &treeAmount,int &nmax,int &k1,int* list,int* howmany,i
             }
         }
         fclose(Input3);
-        return;
     }else{
         printf("Wrong perameter <iassign> in function <Assign>.");
         exit(1);
     }
-
+    return;
 }
 
 // =============================================================================================================
