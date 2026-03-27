@@ -9,68 +9,94 @@
 #include "hgt_int.hpp"
 #include "K-means.hpp"
 
+/**
+ * Construit la matrice de distances Robinson-Foulds entre tous les arbres
+ * du tableau mesTrees, puis lance l'algorithme K-means sur cette matrice.
+ *
+ * Étapes :
+ *   1. Calcul du nombre de feuilles de chaque arbre via main_hgt
+ *   2. Remplissage de la matrice symétrique Matrice_RF (distance RF par paire)
+ *   3. Remplacement des distances négatives par : moyenne_RF + |distance|
+ *      (pénalisation des paires avec peu d'espèces communes, pondérée par alpha)
+ *   4. Appel de main_kmeans si le nombre d'arbres est > 3
+ *   5. Libération de la mémoire et retour du temps d'exécution
+ *
+ * Paramètres :
+ *   argv       - arguments transmis à main_kmeans
+ *   tabIndices - indices de partition des arbres
+ *   mesTrees   - vecteur des arbres au format Newick
+ *   isBH       - true = indice Ball-Hall, false = Calinski-Harabasz
+ *   alpha      - paramètre de pénalisation du chevauchement des espèces (∈ [0,1])
+ *   kmin       - nombre minimal de clusters
+ *   kmax       - nombre maximal de clusters
+ *
+ * Retourne 0 en cas de succès.
+ */
 int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees, bool isBH, double alpha, int kmin, int kmax){
-     // Variables
     time_t tbegin,tend;
     double texec=0.0;
 
-    // Start timer
-    tbegin=time(NULL);                // get the current calendar time
+    tbegin=time(NULL);
 
-    //Varriables
     double **Matrice_RF;
-    
+    double **Ww;
+    double **n_identique;
+
     double *distances = new double[6];
     int *n_leaves = new int[mesTrees.size()+1]; //possiblement inutile
     string tree;
     string tree1;
     string tree2;
-    
+
     for (int j=0; j<4; j++){
         distances[j]=0.0;
     }
-    
-    // Distances[5] correspond à la valeur de alpha
+
+    /* distances[5] correspond à la valeur de alpha */
     distances[5] = alpha;
-    
-    //Création de la matrice carrée et symétrique (mesTrees.size()*mesTrees.size()) : Matrice_RF
+
+    /* Création de la matrice carrée symétrique (N×N) */
     Matrice_RF= new double*[mesTrees.size()];
-    
+    Ww= new double*[mesTrees.size()];
+    n_identique= new double*[mesTrees.size()];
+
     for(int lineDist=0;lineDist<mesTrees.size();lineDist++){
         Matrice_RF[lineDist]= new double[mesTrees.size()];
     }
-    
-    
-    // Remplissage de la matrice des distances RF en faisant appel à main_hgt
-    // qui calcule la distance RF entre chaque paire d'arbre
-    
+
+    /* Remplissage de la matrice RF : distance RF entre chaque paire d'arbres */
     for(int line=0;line<mesTrees.size();line++){
         tree=mesTrees[line];
         main_hgt(tree,tree,distances);
         n_leaves[line] = distances[4];
     }
-    
+
     for(int line=0;line<(mesTrees.size()-1);line++){
-        //mettre des valeurs 0.0 pour la diagonale de la matrice RF
+        /* Diagonale à zéro */
         Matrice_RF[line][line]=0.0;
-        
+
         for(int column=(line+1);column<mesTrees.size();column++){
-            // Affectation de deux arbres : tree1 et tree2
             tree1=mesTrees[line];
             tree2=mesTrees[column];
-            
-            // Appel des algorithmes des calcules des distances : RF
+
+            /* Calcul de la distance RF entre tree1 et tree2 */
             main_hgt(tree1,tree2,distances);
             Matrice_RF[line][column]=distances[0];
-            
-            // pour remplir la symétrique de la matrice RF sans réaliser de calcul (car matrice carrée symétrique)
+
+            /* Nombre d'espèces communes entre tree1 et tree2 */
+            n_identique[line][column]=distances[3];
+
+            /* Symétrie de la matrice */
+            n_identique[column][line]=distances[3];
+
+            /* Remplissage symétrique sans recalcul */
             Matrice_RF[column][line]=Matrice_RF[line][column];
         }
     }
-    
+
+    /* Calcul de la distance RF moyenne sur les paires valides (RF >= 0) */
     double avg_RF = 0.0;
     int nb_avg_RF = 0;
-    // RF = Mean(RF) + Alpha*Terme2, where Mean(RF) is the average of all RF between trees (where number of same leave is more than 3)
     for(int line=0;line<mesTrees.size()-1;line++){
         for(int colonne=(line+1);colonne<mesTrees.size();colonne++){
             if(Matrice_RF[line][colonne]>=0){
@@ -79,9 +105,10 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
             }
         }
     }
-    
+
     avg_RF = avg_RF/(nb_avg_RF*1.0);
-    // RF = Mean(RF) + Alpha*Terme2, where Mean(RF) is the average of all RF between trees (where number of same leave is more than 3)
+
+    /* RF = Moy(RF) + Alpha*|RF| pour les paires avec trop peu d'espèces communes */
     for(int line=0;line<mesTrees.size()-1;line++){
         for(int colonne=(line+1);colonne<mesTrees.size();colonne++){
             if(Matrice_RF[line][colonne]<0){
@@ -90,24 +117,30 @@ int main_consense(char **argv, vector<int> tabIndices, vector <string> mesTrees,
             }
         }
     }
- 
-    //appel de l'algorithme de K-means:
+
+    /* Initialisation de la matrice de poids Ww à 1.0 */
+    for (int i=0; i<mesTrees.size(); i++){
+        for (int j=0; j<mesTrees.size(); j++){
+            Ww[i][j]=1.0;
+        }
+    }
+
+    /* Appel de l'algorithme K-means si le nombre d'arbres est suffisant */
     if(mesTrees.size()>3){
         main_kmeans(argv,mesTrees,Matrice_RF,tabIndices,isBH,kmin,kmax);
     }
-        
-    //Liberation of memory
+
+    /* Libération de la mémoire */
     for (int i=0;i<mesTrees.size();i++){
         delete [] Matrice_RF[i];
     }
     delete [] n_leaves;
     delete [] Matrice_RF;
     delete [] distances;
-    // End timer
-    tend=time(NULL);                // get the current calendar time
 
-    // Compute execution time
-    texec=difftime(tend,tbegin);    // tend-tbegin (result in second)
-    //cout<<"\nTEMPS D'EXECUTION "<<texec<<endl;
+    tend=time(NULL);
+    texec=difftime(tend,tbegin);
+    (void)texec;
+
     return 0;
 }

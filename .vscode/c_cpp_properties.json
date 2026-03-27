@@ -1,0 +1,37 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "includePath": [
+                "${workspaceFolder}/src",
+                "${workspaceFolder}",
+                "${workspaceFolder}/**",
+                "/usr/include",
+                "/usr/local/include",
+                "/usr/include/pybind11",
+                "/usr/local/include/pybind11",
+                "/usr/include/python3.8",
+                "/usr/include/python3.10",
+                "/usr/include/python3.11",
+                "/usr/include/python3.12",
+                "/usr/lib/python3/dist-packages/pybind11/include"
+            ],
+            "defines": [],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/src",
+                    "/usr/include",
+                    "/usr/local/include",
+                    "/usr/lib/python3/dist-packages/pybind11/include",
+                    "/usr/include/python3.12"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ],
+    "version": 4
+}

@@ -1,13 +1,24 @@
 #include "consense.hpp"
 
+/**
+ * Initialise les options du programme de consensus et les fixe à leurs
+ * valeurs par défaut.
+ *
+ * Dans la version actuelle, toutes les options interactives sont désactivées :
+ * le mode MRe (Majority Rule Extended) est sélectionné par défaut, sans
+ * enracinement, et l'arbre est écrit dans le fichier de sortie.
+ *
+ * Variables globales modifiées : ibmpc, ansi, didreroot, firsttree, spp,
+ * col, tree_pairing, strict, mr, mre, ml, mlfrac, noroot, numopts, outgrno,
+ * outgropt, trout, prntsets, progress, treeprint.
+ */
 void getoptions()
 {
-  /* interactively set options */
   long loopcount, loopcount2;
   char ch;
   boolean done, done1;
 
-  /* Initial settings */
+  /* Réglages initiaux */
   ibmpc          = IBMCRT;
   ansi           = ANSICRT;
   didreroot      = false;
@@ -15,12 +26,9 @@ void getoptions()
   spp            = 0 ;
   col            = 0 ;
 
-  /* This is needed so functions in cons.c work */
+  /* Requis pour que les fonctions de cons.c fonctionnent correctement */
   tree_pairing   = NO_PAIRING ;
 
-  //fprintf(outfile, "\nConsensus tree");
-  //fprintf(outfile, " program, version %s\n\n", VERSION);
-  //putchar('\n');
   strict = false;
   mr = false;
   mre = true;
@@ -36,66 +44,9 @@ void getoptions()
   treeprint = true;
   loopcount = 0;
   do {
-    //cleerhome();
-    /*printf("\nConsensus tree");
-    printf(" program, version %s\n\n", VERSION);
-    printf("Settings for this run:\n");
-    printf(" C         Consensus type (MRe, strict, MR, Ml):");
-    if (strict)
-      printf("  strict\n");
-    else if (mr)
-        printf("  Majority rule\n");
-      else if (mre)
-          printf("  Majority rule (extended)\n");
-        else if (ml)
-            printf("  Ml\n");
-          else printf("  Adams\n");
-    if (noroot) {
-      printf(" O                                Outgroup root:");
-      if (outgropt)
-        printf("  Yes, at species number%3ld\n", outgrno);
-      else
-        printf("  No, use as outgroup species%3ld\n", outgrno);
-      }
-    printf(" R                Trees to be treated as Rooted:");
-    if (noroot)
-      printf("  No\n");
-    else
-      printf("  Yes\n");
-    printf(" T           Terminal type (IBM PC, ANSI, none):");
-    if (ibmpc)
-      printf("  IBM PC\n");
-    if (ansi)
-      printf("  ANSI\n");
-    if (!(ibmpc || ansi))
-      printf("  (none)\n");
-    printf(" 1                Print out the sets of species:");
-    if (prntsets)
-      printf("  Yes\n");
-    else
-      printf("  No\n");
-    printf(" 2         Print indications of progress of run:  %s\n",
-           (progress ? "Yes" : "No"));
-    printf(" 3                               Print out tree:");
-    if (treeprint)
-      printf("  Yes\n");
-    else
-      printf("  No\n");
-    printf(" 4               Write out trees onto tree file:");
-    if (trout)
-      printf("  Yes\n");
-    else
-      printf("  No\n");
-
-    printf("\nAre these settings correct? (type Y or the letter for one to change)\n");*/
 #ifdef WIN32
     phyFillScreenColor();
 #endif
-    /*fflush(stdout);
-    scanf("%c%*[^\n]", &ch);
-    getchar();
-    uppercase(&ch);
-    done = (ch == 'Y');*/
     ch = 'Y';
     done = true;
     if (!done) {
@@ -130,7 +81,6 @@ void getoptions()
             numopts++;
             loopcount2 = 0;
             do {
-              //printf("Type number of the outgroup:\n");
 #ifdef WIN32
               phyFillScreenColor();
 #endif
@@ -138,10 +88,6 @@ void getoptions()
               scanf("%ld%*[^\n]", &outgrno);
               getchar();
               done1 = (outgrno >= 1);
-              if (!done1) {
-                /*printf("ERROR: Bad outgroup number: %ld\n", outgrno);
-                printf("  Must be greater than zero\n");*/
-              }
             countup(&loopcount2, 10);
             } while (done1 != true);
           }
@@ -162,7 +108,7 @@ void getoptions()
         case '2':
           progress = !progress;
           break;
-        
+
         case '3':
           treeprint = !treeprint;
           break;
@@ -172,14 +118,12 @@ void getoptions()
           break;
 
         }
-      } /*else
-        printf("Not a possible option!\n");*/
+      }
     }
     countup(&loopcount, 100);
   } while (!done);
   if (ml) {
     do {
-      //printf("\nFraction (l) of times a branch must appear\n");
       fflush(stdout);
       scanf("%lf%*[^\n]", &mlfrac);
       getchar();
@@ -188,13 +132,24 @@ void getoptions()
 }  /* getoptions */
 
 
+/**
+ * Parcourt la liste circulaire des frères d'un nœud pour vérifier sa
+ * cohérence.
+ *
+ * Pour les feuilles (nœud NULL), retourne immédiatement. Sinon, parcourt
+ * la chaîne next dans la limite de 1000 itérations jusqu'à revenir au
+ * nœud de départ.
+ *
+ * Paramètre :
+ *   p - pointeur vers le nœud à inspecter
+ */
 void count_siblings(node **p)
 {
   node *tmp_node;
   int i;
 
   if (!(*p)) {
-    /* This is a leaf, */
+    /* Feuille : pas de frères */
     return;
   } else {
     tmp_node = (*p)->next;
@@ -202,21 +157,31 @@ void count_siblings(node **p)
 
   for (i = 0 ; i < 1000; i++) {
     if (tmp_node == (*p)) {
-      /* When we've gone through all the siblings, */
+      /* Tous les frères ont été parcourus */
       break;
     } else if (tmp_node) {
       tmp_node = tmp_node->next;
-    } else  {
-      /* Should this be executed? */
+    } else {
       return ;
     }
   }
 } /* count_siblings */
 
 
+/**
+ * Écrit récursivement l'arbre enraciné en p dans le fichier outtree au
+ * format Newick.
+ *
+ * Pour les feuilles, le nom est écrit en remplaçant les espaces par '_'.
+ * Pour les nœuds internes, les sous-arbres sont séparés par des virgules
+ * entre parenthèses. Les longueurs de branches correspondent à la fréquence
+ * d'apparition de chaque nœud (deltav), sauf en mode strict.
+ *
+ * Paramètre :
+ *   p - nœud courant (racine du sous-arbre à écrire)
+ */
 void treeout(node *p)
 {
-  /* write out file with representation of final tree */
   long i, n = 0;
   char c;
   node *q;
@@ -225,8 +190,7 @@ void treeout(node *p)
   count_siblings (&p);
 
   if (p->tip) {
-    /* If we're at a node which is a leaf, figure out how long the
-       name is and print it out. */
+    /* Feuille : écrire le nom en remplaçant les espaces par '_' */
     for (i = 1; i <= MAXNCH; i++) {
       if (p->nayme[i - 1] != '\0')
         n = i;
@@ -239,14 +203,11 @@ void treeout(node *p)
     }
     col += n;
   } else {
-    /* If we're at a furcation, print out the proper formatting, loop
-       through all the children, calling the procedure recursively. */
+    /* Nœud interne : écrire les sous-arbres entre parenthèses */
     putc('(', outtree);
     col++;
     q = p->next;
     while (q != p) {
-      /* This should terminate when we've gone through all the
-         siblings, */
       treeout(q->back);
       q = q->next;
       if (q == p)
@@ -268,12 +229,12 @@ void treeout(node *p)
     x = (double)p->deltav;
 
   if (p == root) {
-    /* When we're all done with this tree, */
+    /* Fin de l'arbre */
     fprintf(outtree, ";\n");
     return;
   }
 
-  /* Figure out how many characters the branch length requires: */
+  /* Écrire la longueur de branche selon la magnitude de x */
   else {
     if (!strict) {
       if (x >= 100.0) {
@@ -291,49 +252,59 @@ void treeout(node *p)
 }  /* treeout */
 
 
+/**
+ * Fonction principale du module de consensus phylogénétique.
+ *
+ * Lit un fichier d'arbres au format Newick (argv[1]), calcule l'arbre
+ * consensus selon les options choisies (MRe par défaut) et écrit le
+ * résultat dans le fichier "outtree".
+ *
+ * Étapes :
+ *   1. Ouverture du fichier d'arbres en entrée
+ *   2. Initialisation des options via getoptions()
+ *   3. Comptage des arbres et des feuilles
+ *   4. Lecture des groupes de bipartitions (read_groups)
+ *   5. Calcul du consensus (consensus)
+ *   6. Écriture de l'arbre résultat (treeout)
+ *   7. Libération de la mémoire et fermeture des fichiers
+ *
+ * Paramètre :
+ *   argv - tableau d'arguments (argv[1] = chemin du fichier d'arbres)
+ *
+ * Retourne "0" en cas de succès.
+ */
 string main_consensus(char *argv[])
 {
-  /* Local variables added by Dan F. */
   pattern_elm  ***pattern_array;
   long trees_in = 0;
   long i, j;
   long tip_count = 0;
   node *p, *q;
 #ifdef MAC
-  argc = 1;                /* macsetup("Consense", "");        */
+  argc = 1;
   argv[0] = "Consense";
 #endif
   init(0, argv);
   const char *in_tree = static_cast<const char*> (argv[1]);
   cout<<argv[1]<<endl;
-  /* Open in binary: ftell() is broken for UNIX line-endings under WIN32 */
+  /* Ouverture en mode binaire : ftell() est cassé sous WIN32 avec les fins de ligne UNIX */
   openfile(&intree, in_tree, "input tree file", "rb", argv[0], intreename);
-  /*openfile(&outfile, OUTFILE, "output file", "w", argv[0], outfilename);*/
-
-  /* Initialize option-based variables, then ask for changes regarding
-     their values. */
 
   getoptions();
   ntrees = 0.0;
-  maxgrp = 32767;   /* initial size of set hash table */
+  maxgrp = 32767;   /* taille initiale de la table de hachage des groupes */
   lasti  = -1;
 
-  /*char *out_t;
-  strcpy(out_t, "outtree");*/
   const char *out_tree = static_cast<const char*> ("outtree");
   if (trout)
     openfile(&outtree, out_tree, "output tree file", "w", argv[0], outtreename);
-  /*if (prntsets)
-    fprintf(outfile, "Species in order: \n\n");*/
 
   trees_in = countsemic(&intree);
   countcomma(&intree,&tip_count);
-  tip_count++; /* countcomma does a raw comma count, tips is one greater */
+  tip_count++; /* countcomma donne le nombre brut de virgules, les feuilles = virgules + 1 */
 
-  /* Read the tree file and put together grouping, order, and timesseen */
+  /* Lecture des groupes de bipartitions et calcul de l'arbre consensus */
   read_groups(&pattern_array, trees_in, tip_count, intree);
-  /* Compute the consensus tree. */
-  //putc('\n', outfile);
   nodep      = (pointarray)Malloc(2*(1+spp)*sizeof(node *));
   for (i = 0; i < spp; i++) {
     nodep[i] = (node *)Malloc(sizeof(node));
@@ -347,11 +318,7 @@ string main_consensus(char *argv[])
   printf("\n");
   if (trout) {
     treeout(root);
-    /*if (progress)
-      printf("Consensus tree written to file \"%s\"\n\n", outtreename);*/
   }
-  /*if (progress)
-    printf("Output written to file \"%s\"\n\n", outfilename);*/
   for (i = 0; i < spp; i++)
     free(nodep[i]);
   for (i = spp; i < 2*(1 + spp); i++) {
@@ -368,17 +335,16 @@ string main_consensus(char *argv[])
   free(nodep);
   FClose(outtree);
   FClose(intree);
-  //FClose(outfile);
 
 #ifdef MAC
   fixmacfile(outfilename);
   fixmacfile(outtreename);
 #endif
-printf("Consensus Program Done.\n\n");
+  printf("Consensus Program Done.\n\n");
 
 #ifdef WIN32
   phyRestoreConsoleAttributes();
 #endif
 
-return "0";
-}  /* main */
+  return "0";
+}  /* main_consensus */
