@@ -625,10 +625,10 @@ void Permute(int n,int *iordre){
 // =============================================================================================================
 
 //compute rand index
-double f_RI(int Strouve[],int Sref[],int N){
+double f_RI(int Strouve[],int Sref[],int treeAmount){
     double comb = 1.0;
 
-    for (int i=N; i>=(N-2+1); i--) {
+    for (int i=treeAmount; i>=(treeAmount-2+1); i--) {
         comb*=i;
     }
 
@@ -637,8 +637,8 @@ double f_RI(int Strouve[],int Sref[],int N){
     double a=0.0;
     double b=0.0;
 
-    for (int i=0; i<N-1; i++){
-        for (int j=i+1; j<N; j++){
+    for (int i=0; i<treeAmount-1; i++){
+        for (int j=i+1; j<treeAmount; j++){
             if(Sref[i]!=Sref[j]){
                 if(Strouve[i]!=Strouve[j]){
                     b++;
@@ -660,7 +660,7 @@ double f_RI(int Strouve[],int Sref[],int N){
 // =============================================================================================================
 
 //compute adjusted rand index
-double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N){
+double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int treeAmount){
     int kReal = atoi(K_real);
     if(kReal <= 0){
         // If K_real is not a valid positive integer (e.g. "?"),
@@ -690,7 +690,7 @@ double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N){
     }
 
 
-    for(int i=0;i<N;i++){
+    for(int i=0;i<treeAmount;i++){
         tabCongruence[Sref[i]][Strouve[i]]++;
     }
 
@@ -707,14 +707,14 @@ double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N){
 
     double comb = 1.0;
 
-    for (int i=N; i>=(N-2+1); i--) {
+    for (int i=treeAmount; i>=(treeAmount-2+1); i--) {
         comb*=i;
     }
 
     comb/=2.0;
 
-    for (int i=0; i<N-1; i++){
-        for (int j=i+1; j<N; j++){
+    for (int i=0; i<treeAmount-1; i++){
+        for (int j=i+1; j<treeAmount; j++){
             if(Sref[i]!=Sref[j]){
                 if(Strouve[i]==Strouve[j]){
                     c++;
@@ -748,15 +748,15 @@ double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N){
 // Modification Centroids: this whole subroutine
 
 //stat output
-void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group,double score, vector <string> monTableau){
+void outStat(int Strouve[],int Sref[],char *criteria,int treeAmount,char *N_especes,char *percent,const char *K_real,int group,double score, vector <string> monTableau){
     //Compute Rand index between Strouve and Sref
-    double RI = f_RI(Strouve,Sref,N);
+    double RI = f_RI(Strouve,Sref,treeAmount);
 
     //Compute Rand index Adjusted between Strouve and Sref
-    double ARI = f_ARI(Strouve,Sref,K_real,group,N);
+    double ARI = f_ARI(Strouve,Sref,K_real,group,treeAmount);
 
     fprintf (Output4,"%s;",criteria);
-    fprintf (Output4,"%i;",N);
+    fprintf (Output4,"%i;",treeAmount);
     fprintf (Output4,"%s;",N_especes);
     fprintf (Output4,"%s;",percent);
     fprintf (Output4,"%s;",K_real);
@@ -780,8 +780,8 @@ void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char 
     fprintf (Output4,"%.3f;",score);
 
     fprintf (Output4,"part(");
-    for (int p=1; p<=N; p++){
-        if(p==N){
+    for (int p=1; p<=treeAmount; p++){
+        if(p==treeAmount){
             fprintf (Output4,"%i%s",Strouve[p-1]," ");
         }else{
             fprintf (Output4,"%i%s",Strouve[p-1]," <> ");
@@ -802,7 +802,7 @@ void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char 
         myfile << "\n";
         myfile << "Cluster content:";
         myfile << "\n";
-        for (int p=1; p<=N; p++){
+        for (int p=1; p<=treeAmount; p++){
             if(Strouve[p-1]==n_cl){
                 myfile << "\tTree #\t: T";
                 myfile << p;

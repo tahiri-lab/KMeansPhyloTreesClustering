@@ -38,9 +38,9 @@ void Assign(int iran,int treeAmount,int k1,int* list,int* howmany,int* no,int ia
 
 //--Squared distances to group centroids. Assign objects to nearest one
 void Permute(int treeAmount,int *iordre);
-double f_RI(int Strouve[],int Sref[],int N);
-double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int N);
-void outStat(int Strouve[],int Sref[],char *criteria,int N,char *N_especes,char *percent,const char *K_real,int group,double score, vector <string> monTableau);
+double f_RI(int Strouve[],int Sref[],int treeAmount);
+double f_ARI(int Strouve[],int Sref[],const char *K_real,int group,int treeAmount);
+void outStat(int Strouve[],int Sref[],char *criteria,int treeAmount,char *N_especes,char *percent,const char *K_real,int group,double score, vector <string> monTableau);
 
 //SUPERTREES
 double FO_super_tree(int treeAmount,int k_capacity,double** mat,int* list,int* howmany,double &SSE,int currentK);
