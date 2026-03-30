@@ -36,12 +36,12 @@
  */
 double BipartitionDistance (int **B, int ** B1,int n)
 {
-    int i,j,k,k1,cpt1,cpt2,cpt3,cpt4;
+    int k,k1,cpt1,cpt2,cpt3,cpt4;
     double c1,c2,min1 = 0.0,min2 = 0.0,cptB=0.0,cptB1=0.0;
     int *flag,*flag1,**Bi,**Bi1;
     Bi = safe_malloc<int*>(2*n-2);
     Bi1 = safe_malloc<int*>(2*n-2);
-    for (i=0;i<2*n-2;i++)
+    for (int i=0;i<2*n-2;i++)
     {
         Bi[i] = safe_malloc<int>(2*n);
         Bi1[i] = safe_malloc<int>(2*n);
@@ -57,7 +57,7 @@ double BipartitionDistance (int **B, int ** B1,int n)
     /* Marquer les bipartitions triviales (singleton ou complémentaire) */
     for(i=1;i<=2*n-3;i++){
         flag[i] = flag1[i] = 0;
-        for(j=1;j<=n;j++){
+        for(int j=1;j<=n;j++){
             flag[i] = flag[i] + B[i][j];
             flag1[i] = flag1[i] + B1[i][j];
         }
@@ -73,14 +73,14 @@ double BipartitionDistance (int **B, int ** B1,int n)
 
     /* Copier uniquement les bipartitions non triviales dans Bi et Bi1 */
     k=k1=1;
-    for(i=1;i<=2*n-3;i++){
+    for(int i=1;i<=2*n-3;i++){
         if(flag[i] == 0){
-            for(j=1;j<=n;j++)
+            for(int j=1;j<=n;j++)
                 Bi[k][j] = B[i][j];
             k++;
         }
         if(flag1[i] == 0){
-            for(j=1;j<=n;j++)
+            for(int j=1;j<=n;j++)
                 Bi1[k1][j] = B1[i][j];
             k1++;
         }
@@ -111,7 +111,7 @@ double BipartitionDistance (int **B, int ** B1,int n)
         cptB1 += min2;
     }
 
-    for (i=0;i<2*n-2;i++)
+    for(int i=0;i<2*n-2;i++)
     {
         free(Bi[i]); free(Bi1[i]);
     }
@@ -139,10 +139,8 @@ double BipartitionDistance (int **B, int ** B1,int n)
  */
 void Floyd(double ** Adjacence , double ** DIST,int n,int kt)
 {
-    int i,j,k;
-
-    for(i=1;i<=2*n-2-kt;i++) {
-        for(j=1;j<=2*n-2-kt;j++) {
+    for(int i=1;i<=2*n-2-kt;i++) {
+        for(int j=1;j<=2*n-2-kt;j++) {
             if(i==j) {
                 DIST[i][j] = 0;
             } else {
@@ -151,9 +149,9 @@ void Floyd(double ** Adjacence , double ** DIST,int n,int kt)
         }
     }
 
-    for(i=1;i<=2*n-2-kt;i++) {
-        for(j=1;j<=2*n-2-kt;j++) {
-            for(k=1;k<=2*n-2-kt;k++) {
+    for(int i=1;i<=2*n-2-kt;i++) {
+        for(int j=1;j<=2*n-2-kt;j++) {
+            for(int k=1;k<=2*n-2-kt;k++) {
                 if((DIST[j][i] + DIST[i][k]) < DIST[j][k]) {
                     DIST[j][k] = DIST[j][i] + DIST[i][k];
                 }
@@ -172,10 +170,8 @@ void Floyd(double ** Adjacence , double ** DIST,int n,int kt)
  */
 void Floyd(double ** Adjacence , double ** DIST,double **DIST2,int n,int kt)
 {
-    int i,j,k1;
-
-    for(i=1;i<=2*n-2-kt;i++)
-        for(j=1;j<=2*n-2-kt;j++)
+    for(int i=1;i<=2*n-2-kt;i++)
+        for(int j=1;j<=2*n-2-kt;j++)
         {
             if(i==j)
                 DIST[i][j] = DIST2[i][j] = 0;
@@ -183,9 +179,9 @@ void Floyd(double ** Adjacence , double ** DIST,double **DIST2,int n,int kt)
                 DIST[i][j] = DIST2[i][j] = Adjacence[i][j];
         }
 
-    for(i=1;i<=2*n-2-kt;i++) {
-        for(j=1;j<=2*n-2-kt;j++) {
-            for(k1=1;k1<=2*n-2-kt;k1++) {
+    for(int i=1;i<=2*n-2-kt;i++) {
+        for(int j=1;j<=2*n-2-kt;j++) {
+            for(int k1=1;k1<=2*n-2-kt;k1++) {
                 if((DIST[j][i] + DIST[i][k1]) < DIST[j][k1]) {
                     DIST[j][k1] = DIST2[j][k1] = DIST[j][i] + DIST[i][k1];
                 }
@@ -245,11 +241,11 @@ void loadAdjacenceMatrix( double **Adjacence, long int *ARETE, double *LONGUEUR,
 void odp1(double **D, int *X, int *i1, int *j1, int n)
 {
     double S1,S;
-    int i,j,k = 0,a,*Y1;
+    int k = 0,a,*Y1;
 
     Y1 = safe_malloc<int>(n+1);
 
-    for(i=1;i<=n;i++)
+    for(int i=1;i<=n;i++)
         Y1[i]=1;
 
     X[1]=*i1;
@@ -260,11 +256,11 @@ void odp1(double **D, int *X, int *i1, int *j1, int n)
     }
     Y1[*i1]=0;
     Y1[*j1]=0;
-    for(i=0;i<=n-3;i++)
+    for(int i=0;i<=n-3;i++)
     {
         a=2;
         S=0;
-        for(j=1;j<=n;j++)
+        for(int j=1;j<=n;j++)
         {
             if (Y1[j]>0)
             {
@@ -321,7 +317,7 @@ int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binair
 
     D=(double **) malloc((n+1)*sizeof(double*));
 
-    for (i=0;i<=n;i++)
+    for(int i=0;i<=n;i++)
     {
         D[i]=(double*)malloc((n+1)*sizeof(double));
 
@@ -334,9 +330,9 @@ int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binair
     i=1; j=n;
     odp1(DI,X,&i,&j,n);
 
-    for (i=1;i<=n;i++)
+    for(int i=1;i<=n;i++)
     {
-        for (j=1;j<=n;j++)
+        for(int j=1;j<=n;j++)
             D[i][j]=DI[i][j];
     }
 
@@ -348,7 +344,7 @@ int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binair
     p=0;
     P=1;
 
-    for(k=2;k<=n-1;k++)
+    for(int k=2;k<=n-1;k++)
     {
 
         DIS=(D[X[1]][X[k]]+D[X[1]][X[k+1]]-D[X[k]][X[k+1]])/2;
@@ -372,7 +368,7 @@ int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binair
         Tree[p+1].LN=S-DIS;
         if (Tree[p+1].LN<epsilon_ba) Tree[p+1].LN=2*epsilon_ba;
 
-        for (j=i+1;j<=P;j++)
+        for(int j=i+1;j<=P;j++)
         {
             Tree[p+j-i+1].U=Path[j].U;
             Tree[p+j-i+1].V=Path[j].V;
@@ -389,14 +385,14 @@ int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binair
         P=i+1;
     }
 
-    for (i=1;i<=P;i++)
+    for(int i=1;i<=P;i++)
     {
         Tree[p+i].U=Path[i].U;
         Tree[p+i].V=Path[i].V;
         Tree[p+i].LN=L[i];
     }
 
-    for (i=1;i<=2*n-3;i++)
+    for(int i=1;i<=2*n-3;i++)
     {
         if (fabs(Tree[i].LN-epsilon_ba)<=2*epsilon_ba)
             Tree[i].LN=0.0;
@@ -422,7 +418,7 @@ int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binair
                 }
                 pasfini=1;
 
-                for (j=1;j<=2*n-3-kt;j++){
+                for(int j=1;j<=2*n-3-kt;j++){
 
                     if(j!=i){
                         if(ARETE[2*j-2] == SomToDel){
@@ -433,12 +429,12 @@ int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binair
                         }
                     }
                 }
-                for(j=i;j<=2*n-3-kt;j++){
+                for(int j=i;j<=2*n-3-kt;j++){
                     LONGUEUR[j-1] = LONGUEUR[j];
                     ARETE[2*j-1] = ARETE[2*(j+1)-1];
                     ARETE[2*j-2] = ARETE[2*(j+1)-2];
                 }
-                for(j=1;j<=2*n-3-kt-1;j++){
+                for(int j=1;j<=2*n-3-kt-1;j++){
                     if(ARETE[2*j-2] > SomToDel)
                         ARETE[2*j-2]--;
                     if(ARETE[2*j-1] > SomToDel)
@@ -483,7 +479,7 @@ int Tree_edges (double **DI, long int *ARETE, double *LONGUEUR, int n,int binair
  */
 int Bipartition_Table (double **D, int **B, int *PLACE, int n)
 {
-    int i,j,k,l,l1,*MaxCol,*X,EdgeNumberPath,m,uv = 0,PlaceNumber,edge,*Path,M,F;
+    int i,j,l1,*MaxCol,*X,EdgeNumberPath,m,uv = 0,PlaceNumber,edge,*Path,M,F;
     double S,DIS,DIS1,*LengthPath;
     double EPS=1.e-5;
     double EPS1=1.e-2;
@@ -501,7 +497,7 @@ int Bipartition_Table (double **D, int **B, int *PLACE, int n)
     {
         MaxCol[i]=0;
         PLACE[i]=0;
-        for (j=1;j<=n;j++)
+        for(int j=1;j<=n;j++)
             B[i][j]=0;
     }
     B[1][X[2]]=1; MaxCol[1]=X[2]; Path[1]=1; PlaceNumber=1;
@@ -550,7 +546,7 @@ int Bipartition_Table (double **D, int **B, int *PLACE, int n)
             else if (F==2) { uv=Path[EdgeNumberPath]; EdgeNumberPath=EdgeNumberPath+1;LengthPath[EdgeNumberPath]=DIS1;
             Path[EdgeNumberPath-1]=m+2; Path[EdgeNumberPath]=m+1; }
 
-            for (j=1;j<=n;j++)
+            for(int j=1;j<=n;j++)
                 B[m+2][j]=B[uv][j];
             MaxCol[m+2]=MaxCol[uv];
         }
@@ -577,7 +573,7 @@ int Bipartition_Table (double **D, int **B, int *PLACE, int n)
             i=2;
             while (PLACE[i]!=uv)
                 i++;
-            for (j=PlaceNumber;j>=i+1;j--)
+            for(int j=PlaceNumber;j>=i+1;j--)
                 PLACE[j+1]=PLACE[j];
             PLACE[i+1]=m+2; PlaceNumber++;
         }
@@ -593,7 +589,7 @@ int Bipartition_Table (double **D, int **B, int *PLACE, int n)
                 if (j>i+1)
                 {
                     l1=PLACE[i];
-                    for (l=i+1;l<=j-1;l++)
+                    for (int l=i+1;l<=j-1;l++)
                         PLACE[l-1]=PLACE[l];
                     PLACE[j-1]=l1;
 
@@ -702,7 +698,6 @@ int findFils(double ** Adjacence,int sommet,int n){
  */
 struct TNoeud * CreerSousArbre(long int *ARETE,int *indice, double ** Adjacence,int sommet,int n){
 
-    int i=0;
     int *tableau;
     int nbElt=0;
     int nouveauFils;
@@ -717,7 +712,7 @@ struct TNoeud * CreerSousArbre(long int *ARETE,int *indice, double ** Adjacence,
     node->NoNoeud = sommet;
     node->nbfils = 0;
     node->fils = safe_malloc<struct TNoeud*>(100);
-    for(i=0;i<100;i++)
+    for(int i=0;i<100;i++)
         node->fils[i] = NULL;
 
     nouveauFils = -1;
@@ -730,7 +725,7 @@ struct TNoeud * CreerSousArbre(long int *ARETE,int *indice, double ** Adjacence,
         }
     }while(nouveauFils != -1);
 
-    for(i=0;i<nbElt;i++){
+    for(int i=0;i<nbElt;i++){
         node->fils[node->nbfils] = CreerSousArbre(ARETE,indice,Adjacence,tableau[i],n);
         node->nbfils = node->nbfils + 1;
     }
@@ -752,8 +747,8 @@ void sortIntTab(int * tab, int debut, int fin){
 
     int i,j,tmp;
 
-    for(i=debut;i<=fin;i++){
-        for(j=i+1;j<=fin;j++){
+    for(int i=debut;i<=fin;i++){
+        for(int j=i+1;j<=fin;j++){
             if(tab[i] > tab[j]){
                 tmp = tab[i];
                 tab[i] = tab[j];
@@ -778,7 +773,6 @@ void sortIntTab(int * tab, int debut, int fin){
  */
 void ParcoursArbre(struct TNoeud * unNoeud, struct DescTree * SousMatriceTree){
 
-    int j,k;
     int somme=0;
     int nbSommet=0;
     int nbfils;
@@ -788,7 +782,7 @@ void ParcoursArbre(struct TNoeud * unNoeud, struct DescTree * SousMatriceTree){
 
         if(nbfils != 0){
 
-            for(j=0; j<nbfils;j++){
+            for(int j=0; j<nbfils;j++){
                 ParcoursArbre(unNoeud->fils[j],SousMatriceTree);
             }
 
@@ -830,7 +824,7 @@ void viderArbre(struct TNoeud * A){
     int i;
 
     if(A->nbfils != 0){
-        for(i=0; i<A->nbfils;i++){
+        for(int i=0; i<A->nbfils;i++){
             viderArbre(A->fils[i]);
         }
         free(A->fils);
@@ -861,18 +855,18 @@ void AfficherArbre(struct TNoeud * A,int prof){
 
     if(A != NULL){
         if(A->nbfils== 0){
-            for(i=0;i<prof;i++) printf("  ");
+            for(int i=0;i<prof;i++) printf("  ");
             printf("-- %d\n",A->NoNoeud);
         }
         else{
             taille = A->nbfils;
-            for(i=0; i<taille/2;i++){
+            for(int i=0; i<taille/2;i++){
                 AfficherArbre(A->fils[i],prof+2);
                 printf("\n");
             }
-            for(i=0;i<prof;i++) printf("  ");
+            for(int i=0;i<prof;i++) printf("  ");
             printf("-- %d\n",A->NoNoeud);
-            for(i=taille/2; i<taille;i++){
+            for(int i=taille/2; i<taille;i++){
                 AfficherArbre(A->fils[i],prof+2);
             }
         }
@@ -971,12 +965,12 @@ void filtrerMatrice(double **dissSpecies, double **dissGene, char **nomsSpecies,
         /* Supprimer de l'arbre espèce les espèces absentes de l'arbre gène */
         for(i = 1 ; i <= nbSpecies; i++){
             temoin = 0;
-            for(j=1;j<=nbGene;j++){
+            for(int j=1;j<=nbGene;j++){
                 if(strcmp(nomsSpecies[i],nomsGene[j])==0)
                     temoin=1;
             }
             if(temoin == 0){
-                for(j=1;j<=nbSpecies;j++){
+                for(int j=1;j<=nbSpecies;j++){
                     dissSpecies[i][j] = dissSpecies[j][i] = -1;
                 }
                 strcpy(nomsSpecies[i],"");
@@ -986,12 +980,12 @@ void filtrerMatrice(double **dissSpecies, double **dissGene, char **nomsSpecies,
         /* Supprimer de l'arbre gène les espèces absentes de l'arbre espèce */
         for(i = 1; i <= nbGene; i++){
             temoin = 0;
-            for(j=1;j<=nbSpecies;j++){
+            for(int j=1;j<=nbSpecies;j++){
                 if(strcmp(nomsSpecies[j],nomsGene[i])==0)
                     temoin=1;
             }
             if(temoin == 0){
-                for(j=1; j <= nbGene; j++){
+                for(int j=1; j <= nbGene; j++){
                     dissGene[i][j] = dissGene[j][i] = -1;
                 }
                 strcpy(nomsGene[i],"");
@@ -1017,7 +1011,7 @@ void filtrerMatrice(double **dissSpecies, double **dissGene, char **nomsSpecies,
  * Retourne le nombre d'espèces écrites, ou -1 si moins de 3 espèces communes.
  */
 int ecrireMatrice(double **mat,const char *outfile,int taille,char **noms){
-    int i,j,finalTaille;
+    int finalTaille=0;
     FILE *out;
 
     finalTaille=0;
@@ -1032,7 +1026,7 @@ int ecrireMatrice(double **mat,const char *outfile,int taille,char **noms){
     for (i = 1; i <= taille; i++) {
         if (strcmp(noms[i], "") != 0) {
             fprintf(out, "\n%s", noms[i]);
-            for (j = 1; j <= taille; j++)
+            for(int j = 1; j <= taille; j++)
                 if (mat[i][j] != -1) {
                     fprintf(out, " %lf", mat[i][j]);
                 }
@@ -1056,13 +1050,12 @@ int ecrireMatrice(double **mat,const char *outfile,int taille,char **noms){
  *   noms    - tableau des noms d'espèces
  */
 void ajouterMatriceGene(double **mat, const char *outfile, int taille, char **noms) {
-    int i, j;
     FILE *out = safe_fopen(outfile, "a");
     fprintf(out, "\n");
     for (i = 1; i <= taille; i++) {
         if (strcmp(noms[i], "") != 0) {
             fprintf(out, "\n%s", noms[i]);
-            for (j = 1; j <= taille; j++)
+            for(int j = 1; j <= taille; j++)
                 if (mat[i][j] != -1)
                     fprintf(out, " %lf", mat[i][j]);
         }
@@ -1087,7 +1080,7 @@ void ajouterMatriceGene(double **mat, const char *outfile, int taille, char **no
  */
 void TrierMatrices(double **DISS,char **NomsDISS,char **NomsADD,int n)
 {
-    int trouve, ligne,colonne,i,j;
+    int trouve;
     double ** DISS_;
     char   ** NomsDISS_;
     char noms[50];
@@ -1097,7 +1090,7 @@ void TrierMatrices(double **DISS,char **NomsDISS,char **NomsADD,int n)
     DISS_ = (double **) malloc((n+1)*sizeof(double*));
     NomsDISS_ = (char **) malloc((n+1)*sizeof(char*));
 
-    for (i=0;i<=n;i++)
+    for(int i=0;i<=n;i++)
     {
         DISS_[i] = (double*)malloc((n+1)*sizeof(double));
         NomsDISS_[i] = (char*) malloc(SPECIES_NAME_LENGTH);
@@ -1107,11 +1100,11 @@ void TrierMatrices(double **DISS,char **NomsDISS,char **NomsADD,int n)
         }
     }
 
-    for(ligne = 1;ligne<=n;ligne++)
+    for(int ligne = 1;ligne<=n;ligne++)
     {
         strcpy(noms,NomsADD[ligne]);
         trouve = 0;
-        for(colonne = 1;colonne<=n;colonne++)
+        for(int colonne = 1;colonne<=n;colonne++)
         {
             if(strcmp(noms,NomsDISS[colonne])==0)
             {
@@ -1127,15 +1120,15 @@ void TrierMatrices(double **DISS,char **NomsDISS,char **NomsADD,int n)
         }
     }
 
-    for(i=1;i<=n;i++)
-        for(j=1;j<=i;j++) DISS_[i][j] = DISS_[j][i] = DISS[table[i]][table[j]];
+    for(int i=1;i<=n;i++)
+        for(int j=1;j<=i;j++) DISS_[i][j] = DISS_[j][i] = DISS[table[i]][table[j]];
 
-    for(i=1;i<=n;i++)
+    for(int i=1;i<=n;i++)
     {
         strcpy(NomsDISS[i],NomsDISS_[i]);
-        for(j=1;j<=n;j++) DISS[i][j] = DISS_[i][j];
+        for(int j=1;j<=n;j++) DISS[i][j] = DISS_[i][j];
     }
-    for (i=0;i<=n;i++)
+    for(int i=0;i<=n;i++)
     {
         free(DISS_[i]);
         free(NomsDISS_[i]);
@@ -1175,7 +1168,7 @@ int lectureNewick(string newick, long int * ARETE, double * LONGUEUR, char ** le
     int taxaPos;
     int aretePos;
     char symbolOld =' ';
-    int zz, xx,jj,ii;
+    int zz, xx,jj;
     double longueur;
     char * tempString;
     int cpt=0;
@@ -1442,21 +1435,21 @@ int lectureNewick(string newick, long int * ARETE, double * LONGUEUR, char ** le
         ARETE[i-1] = ARETE[i];
     }while(ARETE[i] != 0);
 
-    for(i=1;i<=na;i++){
+    for(int i=1;i<=na;i++){
         LONGUEUR[i-1] = LONGUEUR[i];
     }
 
     /* Gestion de la racine explicite ("Root") */
     if( root_existance > 0){
         long noeud_interne = -1.0;
-        for(i=1;i<=na;i++){
+        for(int i=1;i<=na;i++){
             if(ARETE[2*i-1] == root_existance)
                 noeud_interne = ARETE[2*i-2];
             if(ARETE[2*i-2] == root_existance)
                 noeud_interne = ARETE[2*i-1];
         }
 
-        for(i=1;i<=na;i++){
+        for(int i=1;i<=na;i++){
             if((ARETE[2*i-1] != root_existance) && (noeud_interne == ARETE[2*i-2])){
                 LONGUEUR[i-1] = 50;
             }
@@ -1469,9 +1462,9 @@ int lectureNewick(string newick, long int * ARETE, double * LONGUEUR, char ** le
     /* Détection et suppression du nœud de degré 2 (pseudo-racine) */
     int * tableau = (int*)malloc((2*n)*sizeof(int));
     int deg2=-1,deg1=-1;
-    for(i=1;i<=2*n;i++)
+    for(int i=1;i<=2*n;i++)
         tableau[i-1] = 0;
-    for(i=1;i<=na;i++){
+    for(int i=1;i<=na;i++){
         tableau[ARETE[2*i-1]]++;
         tableau[ARETE[2*i-2]]++;
     }
@@ -1484,7 +1477,7 @@ int lectureNewick(string newick, long int * ARETE, double * LONGUEUR, char ** le
     }
     int pos_racine=-1;
 
-    for(i=1;i<=na;i++){
+    for(int i=1;i<=na;i++){
         if(ARETE[2*i-1] == deg1){ ARETE[2*i-1] = deg2; pos_racine=i;  break;}
         if(ARETE[2*i-2] == deg1){ ARETE[2*i-2] = deg2; pos_racine=i;  break;}
     }
@@ -1493,7 +1486,7 @@ int lectureNewick(string newick, long int * ARETE, double * LONGUEUR, char ** le
     }
     else if(deg2 != -1){
         int pos1=-1,pos2=-1;
-        for(i=1;i<=na;i++){
+        for(int i=1;i<=na;i++){
             if((ARETE[2*i-1] == deg2 || ARETE[2*i-2] == deg2) && pos1==-1){ pos1=i;}
             else if((ARETE[2*i-1] == deg2 || ARETE[2*i-2] == deg2) && pos1 != -1){ pos2=i;}
         }
@@ -1503,7 +1496,7 @@ int lectureNewick(string newick, long int * ARETE, double * LONGUEUR, char ** le
         else
             ARETE[2*pos1-2] = (ARETE[2*pos2-1] == deg2)?ARETE[2*pos2-2]:ARETE[2*pos2-1];
 
-        for(i=pos2;i<=na;i++){
+        for(int i=pos2;i<=na;i++){
             LONGUEUR[i-1] = LONGUEUR[i];
             ARETE[2*i-1] = ARETE[2*(i+1)-1];
             ARETE[2*i-2] = ARETE[2*(i+1)-2];
