@@ -22,7 +22,7 @@ void main_hgt(string tree1, string tree2, double *distances){
     struct InputTree GeneTree;                        //== initial gene tree
     struct InputTree SpeciesTreeReduce;                    //== initial species tree reduit
     struct InputTree GeneTreeReduce;                        //== initial gene tree reduit
-    int nb_same_espece, nb_leaves;
+    int i,j,nb_same_espece, nb_leaves;
     int min_diff = 0; // difference minimum of species between T1 and nb_same_espece or between T2 and nb_same_espece
 
     struct CRITERIA aCrit;                               //== struture of all the criteria
@@ -71,8 +71,8 @@ void main_hgt(string tree1, string tree2, double *distances){
     //== lecture des matrices ou chaines newick en entree VM
     TrierMatrices(GeneTreeReduce.Input,GeneTreeReduce.SpeciesName,SpeciesTreeReduce.SpeciesName,SpeciesTreeReduce.size);
 
-    for(int i = 1; i <= SpeciesTreeReduce.size; i++){
-        for(int j = 1; j <= SpeciesTreeReduce.size; j++){
+    for(i = 1; i <= SpeciesTreeReduce.size; i++){
+        for( j = 1; j <= SpeciesTreeReduce.size; j++){
             SpeciesTreeReduce.ADD[i][j] = SpeciesTreeReduce.Input[i][j];
             GeneTreeReduce.ADD[i][j] = GeneTreeReduce.Input[i][j];
         }

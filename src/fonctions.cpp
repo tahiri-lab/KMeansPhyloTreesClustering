@@ -58,6 +58,8 @@ void initInputTree(struct InputTree *aTree){
  *   n - nombre d'espèces (feuilles) de l'arbre
  */
 void allocMemmory(struct InputTree *aTree, int n){
+    int i;
+
     if(aTree->ARETE == NULL){
         aTree->degre = (int*)malloc(2*n*sizeof(int));
         aTree->ADD = (double**)malloc(2*n*sizeof(double*));
@@ -65,20 +67,20 @@ void allocMemmory(struct InputTree *aTree, int n){
         aTree->Input = (double**)malloc(2*n*sizeof(double*));
         aTree->W = (double**)malloc((n+1)*sizeof(double*));
         
-        for(int i=0;i<2*n;i++){
+        for(i=0;i<2*n;i++){
             aTree->ADD[i] = (double*)malloc(2*n*sizeof(double));
             aTree->Adjacence[i] = (double*)malloc(2*n*sizeof(double));
             aTree->Input[i] = (double*)malloc(2*n*sizeof(double));
         }
 
-        for(int i=0;i<=n;i++)
+        for(i=0;i<=n;i++)
             aTree->W[i] = (double*)malloc(2*n*sizeof(double));
         
         aTree->ARETE    =(long int*)malloc(4*(2*(n))*sizeof(long int));
         aTree->LONGUEUR    =(double*)malloc((4*(n))*sizeof(double));
         aTree->SpeciesName = (char**)malloc(2*n*sizeof(char*));
         
-        for(int i=0;i<=n;i++)
+        for(i=0;i<=n;i++)
             aTree->SpeciesName[i] = (char*)malloc(50);
     }
 }
@@ -106,7 +108,7 @@ void freeInputTree(struct InputTree *aTree,int n){
         }
     }
     
-    for(int i=0;i<=n;i++){
+    for(i=0;i<=n;i++){
         free(aTree->SpeciesName[i]);
     }
     
@@ -135,18 +137,18 @@ void freeReducedTree(struct InputTree *aTree,int n){
     int i;
     int inc = 10;   /* marge d'allocation utilisée dans CreateSubStructures */
     
-    for(int i=0;i<2*n;i++){
+    for(i=0;i<2*n;i++){
         free(aTree->ADD[i]);
         free(aTree->Input[i]);
         if(i<=n)
             free(aTree->W[i]);
     }
     
-    for(int i=0;i<2*(n+inc);i++){
+    for(i=0;i<2*(n+inc);i++){
         free(aTree->Adjacence[i]);
     }
     
-    for(int i=0;i<=n;i++){
+    for(i=0;i<=n;i++){
         free(aTree->SpeciesName[i]);
     }
     
@@ -194,9 +196,9 @@ void computeCriteria(double ** Matrix1, double ** Matrix2, int size,struct CRITE
 
     /* Moindres carrés : somme des carrés des différences entre matrices */
     LS = 0.0;
-    for (int i=1;i<=size-1;i++)
+    for (i=1;i<=size-1;i++)
     {
-        for (int j=i+1;j<=size;j++){
+        for (j=i+1;j<=size;j++){
             LS=LS + (Matrix1[i][j]-Matrix2[i][j])*(Matrix1[i][j]-Matrix2[i][j]);
             }
         }
@@ -325,12 +327,15 @@ int readInputFile(string tree1, string tree2, const char *tmpFile, struct InputT
  *   size    - nombre d'espèces
  */
 void InitCriteria(struct CRITERIA * oldCrit, int size){
+
+    int i;
+
     oldCrit->PLACE=(int *) malloc((2*size-3+1)*sizeof(int));
     oldCrit->PLACEI=(int *) malloc((2*size-3+1)*sizeof(int));
     oldCrit->B=(int **) malloc((2*size-3+1)*sizeof(int*));
     oldCrit->BI=(int **) malloc((2*size-3+1)*sizeof(int*));
 
-    for (int i=0;i<=2*size-3;i++)
+    for (i=0;i<=2*size-3;i++)
     {
         oldCrit->B[i]=(int *) malloc((size+1)*sizeof(int));
         oldCrit->BI[i]=(int *) malloc((size+1)*sizeof(int));
@@ -353,10 +358,13 @@ void InitCriteria(struct CRITERIA * oldCrit, int size){
  *   size - nombre d'espèces utilisé lors de l'allocation
  */
 void FreeCriteria(struct CRITERIA * Crit,int size){
+
+    int i;
+
     free(Crit->PLACE);
     free(Crit->PLACEI);
     
-    for(int i=0;i<=2*size-3;i++){
+    for(i=0;i<=2*size-3;i++){
         free(Crit->B[i]);
         free(Crit->BI[i]);
     }
@@ -384,6 +392,7 @@ void FreeCriteria(struct CRITERIA * Crit,int size){
 void CreateSubStructures(struct InputTree * aTree,int inc,int binaire){
 
     int n = aTree->size;
+    int i,j;
     int kt=0;
     inc = 10;   /* marge fixe pour éviter les débordements lors du réenracinement */
 
@@ -391,7 +400,7 @@ void CreateSubStructures(struct InputTree * aTree,int inc,int binaire){
         aTree->ARETE    =(long int*)malloc(4*(2*(n+inc))*sizeof(long int));
         aTree->LONGUEUR    =(double*)malloc((4*(n+inc))*sizeof(double));
         aTree->Adjacence=(double**)malloc((2*(n+inc)+1)*sizeof(double*));
-        for(int i=0;i<2*(n+inc);i++)
+        for(i=0;i<2*(n+inc);i++)
             aTree->Adjacence[i]=(double*)malloc((2*(n+inc)+1)*sizeof(double));
     }
 
@@ -402,9 +411,9 @@ void CreateSubStructures(struct InputTree * aTree,int inc,int binaire){
 
     /* Calcul du degré de chaque nœud interne */
     aTree->degre = (int*)malloc(2*(n+inc)*sizeof(int));
-    for(int i=1;i<=2*n-2-kt;i++){
+    for(i=1;i<=2*n-2-kt;i++){
         aTree->degre[i]=0;
-        for(int j=1;j<=2*n-2-kt;j++)
+        for(j=1;j<=2*n-2-kt;j++)
             if(aTree->Adjacence[i][j] < INFINI) aTree->degre[i]++;
     }
 }
@@ -501,7 +510,7 @@ bool file_exists(const char * filename)
  */
 int readInput(int Type, const char *file,struct InputTree * aTree){
 
-    int size;
+    int size,i,j;
     char name[50];
     double val;
     FILE * in;
@@ -521,7 +530,7 @@ int readInput(int Type, const char *file,struct InputTree * aTree){
     aTree->Input = (double**)malloc((2*size)*sizeof(double*));
     aTree->ADD = (double**)malloc((2*size)*sizeof(double*));
     aTree->W = (double**)malloc((size+1)*sizeof(double*));
-    for(int i=0;i<2*size;i++){
+    for(i=0;i<2*size;i++){
         aTree->ADD[i] = (double*)malloc((2*size)*sizeof(double));
         aTree->Input[i] = (double*)malloc((2*size)*sizeof(double));
         if(i<=size){
@@ -542,7 +551,7 @@ int readInput(int Type, const char *file,struct InputTree * aTree){
     {
         fscanf(in,"%s",name);
         if(Type == SPECIE) strcpy(aTree->SpeciesName[i],name);
-        for(int j = 1; j <= size; j++)
+        for( j = 1; j <= size; j++)
         {
             fscanf(in,"%lf",&val);
             if(Type == SPECIE) aTree->Input[i][j] = val;
@@ -554,7 +563,7 @@ int readInput(int Type, const char *file,struct InputTree * aTree){
     {
         fscanf(in,"%s",name);
         if(Type == GENE) strcpy(aTree->SpeciesName[i],name);
-        for(int j = 1; j <= size; j++)
+        for( j = 1; j <= size; j++)
         {
             fscanf(in,"%lf",&val);
             if(Type == GENE) aTree->Input[i][j] = val;
