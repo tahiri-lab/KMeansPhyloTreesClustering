@@ -104,8 +104,7 @@ FILE *Output4;
 int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<int> tabIndices, bool isBH, int k_min, int k_max){
     //*****************Define variables******************************************//
     // Variables
-    time_t tbegin2,tend2;
-    double texec2 = 0.;
+    time_t tbegin2 = time(NULL);
 
     double WVariable = 0.0;
     double CH = MIN_CH_VALUE;
@@ -118,10 +117,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     int W_group = 0;
     double FO_new = MAX_FO_VALUE;
 
-    // Start timer
-    tbegin2 = time(NULL);                // get the current calendar time
-
-    int treeAmount = int (monTableau.size()); //quantity of initial tree
+    const int treeAmount = int (monTableau.size()); //quantity of initial tree
     int currentK=0; //nombre courant de clusters (groupes) en cours d’évaluation
     bool debug=false;
     int k1=0, k2=0;
@@ -400,10 +396,10 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     // End timer
-    tend2=time(NULL);                // get the current calendar time
+    const tend2 = time(NULL);                // get the current calendar time
 
     // Compute execution time
-    texec2=difftime(tend2,tbegin2);    // tend-tbegin (result in second)
+    const double texec2 = difftime(tend2,tbegin2);    // tend-tbegin (result in second)
     fprintf (Output4,"%.3f;\n",texec2);
 
     // cleanup resources
