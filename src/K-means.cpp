@@ -251,11 +251,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                 // Compute distances to group centroids and assign objects to nearest one
                 if(!isBH){
                     FO_new = FO_super_tree(treeAmount,k_capacity,mat,list,howmany,SSE,currentK);
-                }else if(isBH){
-                    FO_new = FO_W(treeAmount,k_capacity,mat,list,howmany,SSE,currentK);
-                }
-
-                if(!isBH){
                     CH_new = DistanceCH(treeAmount,k_capacity,mat,list,FO_new);
                     if(CH_new>CHr[currentK]){
                         CH=CH_new;
@@ -265,6 +260,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                         }    //65    listr(currentK,i)=list(i)
                     }
                 }else if(isBH){
+                    FO_new = FO_W(treeAmount,k_capacity,mat,list,howmany,SSE,currentK);
                     W_new = DistanceW(treeAmount,k_capacity,list,FO_new);
 
                     if(W_new<Wr[currentK]){
@@ -396,7 +392,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     // End timer
-    const tend2 = time(NULL);                // get the current calendar time
+    const time_t tend2 = time(NULL);                // get the current calendar time
 
     // Compute execution time
     const double texec2 = difftime(tend2,tbegin2);    // tend-tbegin (result in second)
