@@ -109,6 +109,7 @@ struct context {
     int pmax;
     int k_capacity;
     vector<int> Strouve;
+    vector<vector<int>> listr;
 };
 
 /*
@@ -129,6 +130,10 @@ context initialisation(vector <string> monTableau) {
     for (int i=0;i<ctx.treeAmount;i++) {
         ctx.Strouve[i] = 0;
     }
+
+    vector<int> temp1_listr((ctx.nmax+1),1);
+    vector<vector<int>> temp2_listr((ctx.k_capacity+1),(temp1_listr));
+    ctx.listr = temp2_listr;
 
     return ctx;
 }
