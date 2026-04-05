@@ -195,9 +195,8 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     vector<vector<int>> listr = ctx.listr;
 
-    int *list,*no;        //list(nmax),no(nmax)
-    list = new int [nmax+1];
-    no = new int [nmax+1];
+    int list[nmax+1];
+    int no[nmax+1];
 
     for (int i=0; i<=nmax; i++){
         list[i] = 0;
@@ -424,7 +423,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     // cleanup resources
     kmeans_cleanup(Output4, k_capacity, treeAmount, CHr, Wr,
-        list, no, howmany);
+        howmany);
 
     return 0;
 }
@@ -475,14 +474,12 @@ int setup_k_bounds(int k_max, int k_capacity, int k_min, int &k1, int &k2, int t
 
 void kmeans_cleanup(FILE *Output4, int k_capacity, int treeAmount,
                     double *CHr, double *Wr,
-                    int *list, int *no, int *howmany) {
+                    int *howmany) {
     //Close output files
     if (Output4) fclose(Output4);
 
     delete [] CHr;
     delete [] Wr;
-    delete [] list;
-    delete [] no;
     delete [] howmany;
 }
 
