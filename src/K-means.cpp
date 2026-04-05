@@ -110,6 +110,9 @@ struct context {
     int k_capacity;
     vector<int> Strouve;
     vector<vector<int>> listr;
+    vector<int> list;
+    vector<int> no;
+    vector<int> howmany;
 };
 
 /*
@@ -134,6 +137,20 @@ context initialisation(vector <string> monTableau) {
     vector<int> temp1_listr((ctx.nmax+1),1);
     vector<vector<int>> temp2_listr((ctx.k_capacity+1),(temp1_listr));
     ctx.listr = temp2_listr;
+
+    ctx.list.reserve(ctx.nmax+1);
+    ctx.no.reserve(ctx.nmax+1);
+
+    for (int i=0; i<=ctx.nmax; i++){
+        ctx.list[i] = 0;
+        ctx.no[i] = 0;
+    }
+
+    ctx.howmany.reserve(ctx.k_capacity+1);
+
+    for (int i=0; i<=ctx.k_capacity; i++){
+        ctx.howmany[i] = 0;
+    }
 
     return ctx;
 }
@@ -192,17 +209,10 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     int list[nmax+1];
     int no[nmax+1];
-
-    for (int i=0; i<=nmax; i++){
-        list[i] = 0;
-        no[i] = 0;
-    }
-
+    copy(ctx.list.begin(), ctx.list.end(), list);
+    copy(ctx.no.begin(), ctx.no.end(), no);
     int howmany[k_capacity+1];
-
-    for (int i=0; i<=k_capacity; i++){
-        howmany[i] = 0;
-    }
+    copy(ctx.howmany.begin(), ctx.howmany.end(), howmany);
 
 //***********************  Read data file  **********************************
 
