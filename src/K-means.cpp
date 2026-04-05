@@ -186,9 +186,8 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     copy(ctx.Strouve.begin(), ctx.Strouve.end(), Strouve);
 
-    double *CHr, *Wr;
-    CHr = new double [k_capacity+1];
-    Wr = new double [k_capacity+1];
+    double CHr[k_capacity+1];
+    double Wr[k_capacity+1];
 
     //Ces variables sont utilisées pour déterminer combien de fois une boucle sera parcouru.
     double SSE=0,SSEref=0;
@@ -203,8 +202,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         no[i] = 0;
     }
 
-    int *howmany;        //howmany(k_capacity),
-    howmany = new int [k_capacity+1];
+    int howmany[k_capacity+1];
 
     for (int i=0; i<=k_capacity; i++){
         howmany[i] = 0;
@@ -421,14 +419,13 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     const double texec2 = difftime(tend2,tbegin2);    // tend-tbegin (result in second)
     fprintf (Output4,"%.3f;\n",texec2);
 
-    // cleanup resources
-    kmeans_cleanup(Output4, k_capacity, treeAmount, CHr, Wr,
-        howmany);
+    //Close output files
+    if (Output4) fclose(Output4);
 
     return 0;
 }
 
-int setup_k_bounds(int k_max, int k_capacity, int k_min, int &k1, int &k2, int treeAmount, bool isBH, double *&CHr, double *&Wr) {
+int setup_k_bounds(int k_max, int k_capacity, int k_min, int &k1, int &k2, int treeAmount, bool isBH, double *CHr, double *Wr) {
     int warningCount = 0;
     int max_k1 = k_max;
 
@@ -470,17 +467,6 @@ int setup_k_bounds(int k_max, int k_capacity, int k_min, int &k1, int &k2, int t
     }
 
     return warningCount;
-}
-
-void kmeans_cleanup(FILE *Output4, int k_capacity, int treeAmount,
-                    double *CHr, double *Wr,
-                    int *howmany) {
-    //Close output files
-    if (Output4) fclose(Output4);
-
-    delete [] CHr;
-    delete [] Wr;
-    delete [] howmany;
 }
 
 //      end
