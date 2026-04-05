@@ -477,8 +477,7 @@ int setup_k_bounds(int k_max, int k_capacity, int k_min, int &k1, int &k2, int t
 //******************************************************************************
 
 void ReadData1(int treeAmount,int nmax,int pmax){
-    char *nameb;
-    nameb = new char [MAX_FILENAME_LENGTH];
+    char nameb[MAX_FILENAME_LENGTH];
 
     if(treeAmount>nmax) {
         printf ("Too many objects. Use a sample of objects or recompile program to increase nmax.");                //     +'Too many objects. Use a sample of objects or recompile program.'
@@ -496,9 +495,7 @@ void ReadData1(int treeAmount,int nmax,int pmax){
     if((Output4 = fopen(nameb,"a"))==NULL){
         printf("\n%s: result file open failed...",nameb);
         exit(1);
-    }
-    
-    delete [] nameb;
+    }    
 }
 
 // =============================================================================================================
@@ -820,10 +817,10 @@ void outStat(int Strouve[],int Sref[],char *criteria,int treeAmount,char *N_espe
 double FO_super_tree(int treeAmount, int k_capacity, double** mat, int* list, int* howmany, double &SSE, int currentK){
     // clusterK_same[k] stocke la somme des distances RF internes (ou vers un représentant)
     // utilisée pour calculer la contribution du cluster k à la fonction objectif.
-    double *clusterK_same = new double[k_capacity + 1];
+    double clusterK_same[k_capacity+1];
 
     // nk_CH[k] stocke le nombre d'arbres actuellement assignés au cluster k.
-    int *nk_CH = new int[k_capacity + 1];
+    int nk_CH[k_capacity+1];
 
     SSE = 0.0;
 
@@ -915,9 +912,6 @@ double FO_super_tree(int treeAmount, int k_capacity, double** mat, int* list, in
     // (Ton code original tente ensuite d'améliorer l'affectation en déplaçant des arbres.)
     double Dref = FO_old;
 
-    delete [] clusterK_same;
-    delete [] nk_CH;
-
     return Dref;
 }
 
@@ -931,7 +925,7 @@ double DistanceCH(int treeAmount,int k_capacity,double** mat,int* list,double FO
     double dist_all = 0.0;
     double RF;
     double distance_total = 0.0;
-    int *nk_CH = new int [k_capacity+1];
+    int nk_CH[k_capacity+1];
     int k_cluster = 0;
 
     for(int k=1;k<=k_capacity; k++){
@@ -975,8 +969,6 @@ double DistanceCH(int treeAmount,int k_capacity,double** mat,int* list,double FO
         distance_total=10000000.0*SSB*((treeAmount-k_cluster)/((1.0*k_cluster)-1.0));
     }
 
-    delete [] nk_CH;
-
     return distance_total;
 }
 
@@ -985,8 +977,8 @@ double DistanceCH(int treeAmount,int k_capacity,double** mat,int* list,double FO
 // =============================================================================================================
 
 double FO_W(int treeAmount,int k_capacity,double** mat,int* list,int* howmany,double &SSE,int currentK){
-    double *clusterK_same = new double [k_capacity+1];
-    int *nk_W = new int [k_capacity+1];
+    double clusterK_same[k_capacity+1];
+    int nk_W[k_capacity+1];
     int cluster_k = 0;
     double RF = 0.0;
     double Dref = 0;       //Real*8 Dref,D1,SSE,weight(pmax)
@@ -1129,9 +1121,6 @@ double FO_W(int treeAmount,int k_capacity,double** mat,int* list,int* howmany,do
         }
     }
 
-    delete [] clusterK_same;
-    delete [] nk_W;
-
     return Dref;
 }
 
@@ -1141,8 +1130,8 @@ double FO_W(int treeAmount,int k_capacity,double** mat,int* list,int* howmany,do
 
 double DistanceW(int treeAmount, int k_capacity, int* list, double FO_new){
     double distance_total = 100000000.0;
-    double *clusterK_same = new double [k_capacity+1];
-    int *nk_W = new int [k_capacity+1];
+    double clusterK_same[k_capacity+1];
+    int nk_W[k_capacity+1];
     int k_cluster = 0;
 
     for(int k=1;k<=k_capacity; k++){
@@ -1170,9 +1159,6 @@ double DistanceW(int treeAmount, int k_capacity, int* list, double FO_new){
             distance_total=(FO_new/k_cluster);
         }
     }
-
-    delete [] clusterK_same;
-    delete [] nk_W;
 
     return distance_total;
 
@@ -1212,8 +1198,8 @@ void conv2sameRef(int *Strouve,int *Sref, int treeAmount){
     std::cout << "Number of clusters (K) found: " << k << std::endl;
 
     // On utilise k+1 cases car les clusters sont numérotés de 1 à k (l'indice 0 n'est pas utilisé).
-    int *nk_trouve = new int[k + 1];
-    int *nk_ref    = new int[k + 1];
+    int nk_trouve[k + 1];
+    int nk_ref[k + 1];
 
     // On met à 0 le nombre d'arbres dans chaque cluster (1..k).
     for (int c = 0; c <= k; c++) {
@@ -1229,7 +1215,4 @@ void conv2sameRef(int *Strouve,int *Sref, int treeAmount){
 
     // Ici, nk_trouve[c] = nombre d'arbres assignés au cluster c dans la partition trouvée.
     // nk_ref[c]    = nombre d'arbres assignés au cluster c dans la partition de référence.
-
-    delete [] nk_trouve;
-    delete [] nk_ref;
 }
