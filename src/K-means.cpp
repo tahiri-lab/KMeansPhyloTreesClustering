@@ -180,10 +180,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     int Strouve[treeAmount];
 
-    /*for(int linej=0;linej<treeAmount;linej++){
-        Strouve[linej]= 0;
-    }*/
-
     copy(ctx.Strouve.begin(), ctx.Strouve.end(), Strouve);
 
     double CHr[k_capacity+1];
