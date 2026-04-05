@@ -193,11 +193,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     //Ces variables sont utilisées pour déterminer combien de fois une boucle sera parcouru.
     double SSE=0,SSEref=0;
 
-    int **listr;                    //listr(k_capacity,nmax),
-    listr = new int*[k_capacity+1];
-    for (int i=0;i<=k_capacity;i++){
-        listr[i] = new int [nmax+1];
-    }
+    int listr[k_capacity+1][nmax+1];
 
     for (int i=0; i<=k_capacity; i++){
         for (int j=0; j<=nmax; j++){
@@ -433,7 +429,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     fprintf (Output4,"%.3f;\n",texec2);
 
     // cleanup resources
-    kmeans_cleanup(Output4, k_capacity, treeAmount, listr, CHr, Wr,
+    kmeans_cleanup(Output4, k_capacity, treeAmount, CHr, Wr,
         list, no, howmany);
 
     return 0;
@@ -483,17 +479,11 @@ int setup_k_bounds(int k_max, int k_capacity, int k_min, int &k1, int &k2, int t
     return warningCount;
 }
 
-void kmeans_cleanup(FILE *Output4, int k_capacity, int treeAmount, int **listr,
+void kmeans_cleanup(FILE *Output4, int k_capacity, int treeAmount,
                     double *CHr, double *Wr,
                     int *list, int *no, int *howmany) {
     //Close output files
     if (Output4) fclose(Output4);
-
-    //Remove matrix
-    for (int i = 0; i <= k_capacity; ++i) {
-        delete [] listr[i];
-    }
-    delete [] listr;
 
     delete [] CHr;
     delete [] Wr;
