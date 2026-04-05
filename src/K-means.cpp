@@ -193,13 +193,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     //Ces variables sont utilisées pour déterminer combien de fois une boucle sera parcouru.
     double SSE=0,SSEref=0;
 
-    int listr[k_capacity+1][nmax+1];
-
-    for (int i=0; i<=k_capacity; i++){
-        for (int j=0; j<=nmax; j++){
-            listr[i][j] = 1;
-        }
-    }
+    vector<vector<int>> listr = ctx.listr;
 
     int *list,*no;        //list(nmax),no(nmax)
     list = new int [nmax+1];
