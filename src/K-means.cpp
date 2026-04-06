@@ -102,23 +102,32 @@ FILE *Output4;
 // =============================================================================================================
 
 struct context {
+    double CHr_max = INITIAL_MAX_CH;
+    int CHr_group = 0;
+    
+    double W_min = MAX_W_VALUE;
+    double W_max = MIN_CH_VALUE;
+    int W_group = 0;
+    double FO_new = MAX_FO_VALUE;
+
     int treeAmount;
+    int currentK=0; //nombre courant de clusters (groupes) en cours d’évaluation
     int k1 = 0;
     int k2 = 0;
+
+    int random_number=100; //--Fixed random number
+    int iassign=2;  // 1 equal, 2 random
+    int nran=100;  //--Number of Random start VM
+
     int nmax;
     int pmax;
     int k_capacity;
+    
     vector<int> Strouve;
     vector<vector<int>> listr;
     vector<int> list;
     vector<int> no;
     vector<int> howmany;
-    double CHr_max = INITIAL_MAX_CH;
-    int CHr_group = 0;
-    double W_min = MAX_W_VALUE;
-    double W_max = MIN_CH_VALUE;
-    int W_group = 0;
-    double FO_new = MAX_FO_VALUE;
 };
 
 /*
@@ -177,12 +186,12 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     double FO_new = ctx.FO_new;
 
     const int treeAmount = ctx.treeAmount;
-    int currentK=0; //nombre courant de clusters (groupes) en cours d’évaluation
+    int currentK=ctx.currentK; //nombre courant de clusters (groupes) en cours d’évaluation
     int k1=ctx.k1, k2=ctx.k2;
 
-    int random_number=100; //--Fixed random number
-    int iassign=2;  // 1 equal, 2 random
-    int nran=100;  //--Number of Random start VM
+    int random_number=ctx.random_number; //--Fixed random number
+    int iassign=ctx.iassign;  // 1 equal, 2 random
+    int nran=ctx.nran;  //--Number of Random start VM
 
     int nmax=ctx.nmax;    //--Maximum number of object -Parameter (nmax=10000,pmax=250,k_capacity=100)
     int pmax=ctx.pmax;      //--Maximum data point (variable))
