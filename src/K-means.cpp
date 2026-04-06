@@ -113,6 +113,12 @@ struct context {
     vector<int> list;
     vector<int> no;
     vector<int> howmany;
+    double CHr_max = INITIAL_MAX_CH;
+    int CHr_group = 0;
+    double W_min = MAX_W_VALUE;
+    double W_max = MIN_CH_VALUE;
+    int W_group = 0;
+    double FO_new = MAX_FO_VALUE;
 };
 
 /*
@@ -162,13 +168,13 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     context ctx = initialisation(monTableau);
 
-    double CHr_max = INITIAL_MAX_CH;
-    int CHr_group = 0;
+    double CHr_max = ctx.CHr_max;
+    int CHr_group = ctx.CHr_group;
 
-    double W_min = MAX_W_VALUE;
-    double W_max = MIN_CH_VALUE;
-    int W_group = 0;
-    double FO_new = MAX_FO_VALUE;
+    double W_min = ctx.W_min;
+    double W_max = ctx.W_max;
+    int W_group = ctx.W_group;
+    double FO_new = ctx.FO_new;
 
     const int treeAmount = ctx.treeAmount;
     int currentK=0; //nombre courant de clusters (groupes) en cours d’évaluation
