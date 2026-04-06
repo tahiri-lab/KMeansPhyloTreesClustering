@@ -178,7 +178,6 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     const int treeAmount = ctx.treeAmount;
     int currentK=0; //nombre courant de clusters (groupes) en cours d’évaluation
-    bool debug=false;
     int k1=ctx.k1, k2=ctx.k2;
 
     int random_number=100; //--Fixed random number
@@ -274,6 +273,7 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
             //Je ne comprends pas pourquoi on fait une boucle ici, il n'est peut-être pas nécéssaire de faire ceci 100 fois.
             for (int nit=1;nit<=MAX_ITERATIONS;nit++){
+                bool debug=false;
                 if(debug){
                     printf ("Iteration = %d",nit);
                     printf ("SSEref = %lf",SSEref);
