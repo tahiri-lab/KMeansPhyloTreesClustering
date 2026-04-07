@@ -3,7 +3,7 @@
         [![Contributions](https://img.shields.io/badge/contributions-welcome-blue.svg)](https://pysd.readthedocs.io/en/latest/development/development_index.html)
         <!--[![Py version](https://img.shields.io/pypi/pyversions/pysd.svg)](https://pypi.python.org/pypi/pysd/)-->
         [![GitHub release](https://img.shields.io/github/v/release/tahiri-lab/KMeansPhylogeneticTreesClustering.svg?maxAge=3600)](https://github.com/tahiri-lab/KMeansPhylogeneticTreesClustering/releases/)
-      </p>
+      </p>  
 
 <h2  align="center">Multi-platform application for clustering phylogenetic trees using K-means and inferring multiple supertrees</h2>
 
