@@ -17,20 +17,10 @@
 
 using namespace std;
 
-//===================================================================================
-//===================================================================================
-//===================================================================================
-
-                          
 int rand_bootstrap;
 bool withConsensus = false;
 
-
-//===================================================================================
-//===================================================================================
-//===================================================================================
-
-//Prototypes of functions
+/* Prototypes des fonctions locales */
 int ExtraireDonneesLC(const char * chaine, char *champs, char * contenu);
 void validation(int &intParam);
 void validationAlpha(double &alpha);
@@ -38,53 +28,63 @@ void validationKmin(int intParam, int &kmin);
 void presenterProgramme(void);
 void Initialisation(int, char **);
 
-//===================================================================================
-//===================================================================================
-//===================================================================================
 
+/**
+ * Point d'entrée du programme KMeansSuperTreeClustering.
+ *
+ * Analyse les arguments de la ligne de commande pour déterminer le mode
+ * d'exécution (-tree ou -matrice), charge les données, puis lance
+ * l'algorithme K-means sur les arbres phylogénétiques.
+ *
+ * Usage :
+ *   programme -tree  <fichier> [indice] [alpha] [kmin] [kmax]
+ *   programme -matrice <fichier> <indice> <alpha> <kmin> <kmax>
+ *
+ * Paramètres :
+ *   nargs - nombre d'arguments
+ *   argv  - tableau des arguments
+ */
 int main(int nargs, char ** argv) {
-    
-    // Déclaration et initialisation de variables
+
     char champs[100];
     char contenu[100];
 
     Initialisation(nargs, argv);
-    //nargs = 7;
 
     presenterProgramme();
-    
+
     if(ExtraireDonneesLC(argv[1],champs,contenu)==1){
 
-        //if program is launched with -tree argument
+        /* Mode -tree : lecture des arbres depuis un fichier Newick */
         if(strcmp("tree",champs) == 0){
             fstream fichier(argv[2]);
-            int intParam = 0; //Cluster validity index parameter (0: exit, 1: CH, 2: BH)
+            int intParam = 0; /* Indice de validité de cluster (0: quitter, 1: CH, 2: BH) */
             double alpha = 0.0;
             int kmin=0;
             int kmax=0;
-            if(nargs==3){ //default parameters
+            if(nargs==3){
                 intParam = 1;
                 alpha = 1;
                 kmin = 2;
-            }else if (nargs==4){ //if the user choose to only specify the cluster validity index.
+            }else if (nargs==4){
                 intParam = atoi(argv[3]);
                 validation(intParam);
                 alpha = 1;
                 validationKmin(intParam,kmin);
-            }else if (nargs==5){ //if the user choose to only specify the cluster validity index and the alpha parameter.
+            }else if (nargs==5){
                 intParam = atoi(argv[3]);
                 validation(intParam);
                 alpha = atof(argv[4]);
                 validationAlpha(alpha);
                 validationKmin(intParam,kmin);
-            }else if (nargs==6){ //if the user choose to specify all the parameters except kmax.
+            }else if (nargs==6){
                 intParam = atoi(argv[3]);
                 validation(intParam);
                 alpha = atof(argv[4]);
                 validationAlpha(alpha);
                 kmin = atoi(argv[5]);
                 validationKmin(intParam,kmin);
-            }else if (nargs==7){ //if the user choose to specify all the parameters.
+            }else if (nargs==7){
                 intParam = atoi(argv[3]);
                 validation(intParam);
                 alpha = atof(argv[4]);
@@ -113,28 +113,26 @@ int main(int nargs, char ** argv) {
                 std::cout << "File "<<argv[2]<<" no exist."<<std::endl;
             }else{
                 while( !fichier.eof()){
-                    mesTrees.push_back("");//creation d'une ligne vide
-                    getline(fichier, mesTrees.back());//lecture d'une ligne du fichier
-                    ligne = int (mesTrees.size() - 1);//je recupere la taille du tableau (-1 pour la ligne 0)
+                    mesTrees.push_back("");
+                    getline(fichier, mesTrees.back());
+                    ligne = int (mesTrees.size() - 1);
 
-                    if(mesTrees[ligne].empty())//si la ligne est vide
-                        mesTrees.pop_back();//on la retire du tableau
+                    if(mesTrees[ligne].empty())
+                        mesTrees.pop_back();
                 }
                 tabIndices.push_back(int (mesTrees.size()));
                 if (kmax>mesTrees.size()-1||kmax<1){
                     kmax = int (mesTrees.size()-1);
                 }
 
-                //call to main_consense, a consensus algorithm to classify super trees
                 bool isBH = (intParam == 2);
                 main_consense(cl2,tabIndices,mesTrees,isBH,alpha,kmin,kmax);
 
-                //vider les vecteurs
                 mesTrees.clear();
                 tabIndices.clear();
             }
 
-        //if program is launched with -matrice argument
+        /* Mode -matrice : lecture d'une matrice de distances pré-calculée */
         } else if (strcmp("matrice",champs) == 0) {
             if(nargs > 7){
                 printf("\nbad input..\nusage:%s {-matrice} nameFile [cluster_validity_index] [alpha] [kmin] [kmax]\n",argv[0]);
@@ -151,14 +149,11 @@ int main(int nargs, char ** argv) {
                 cl2[i] = new char[10];
             }
 
-            //Varriables
             double **Matrice_RF;
             double **Ww;
             double **n_identique;
-            double *distances = new double[4];
-            int n = 0; //taille de la matrice RF
+            int n = 0; /* taille de la matrice RF */
             string contenu = "";
-
 
             strcpy(cl2[0], "*");
             strcpy(cl2[1], "?");
@@ -176,8 +171,8 @@ int main(int nargs, char ** argv) {
                 cout << "File "<<argv[2]<<" no exist."<<endl;
             }else{
 
-                //lecture de la premiere ligne (taille de la matrice)
-                getline(fichier, contenu);//lecture d'une ligne du fichier
+                /* Lecture de la première ligne : taille de la matrice */
+                getline(fichier, contenu);
 
                 val = contenu.substr(0, contenu.find(delimiter));
                 istringstream(val) >> n;
@@ -190,11 +185,10 @@ int main(int nargs, char ** argv) {
                     Matrice_RF[lineDist]= new double[n];
                     Ww[lineDist]= new double[n];
                     n_identique[lineDist]= new double[n];
-                    mesTrees.push_back("");//creation d'une ligne vide
+                    mesTrees.push_back("");
                 }
 
-
-                //Initialisation des matrices : Matrice_RF, Ww et n_identique
+                /* Initialisation des matrices Matrice_RF, Ww et n_identique */
                 for (int i=0; i<n; i++)
                 {
                     for (int j=0; j<n; j++)
@@ -206,7 +200,7 @@ int main(int nargs, char ** argv) {
                 }
 
                 while( !fichier.eof()){
-                    getline(fichier, contenu);//lecture d'une ligne du fichier
+                    getline(fichier, contenu);
                     colonne = 0;
                     while ((pos = contenu.find(space))!= std::string::npos) {
                         val = contenu.substr(0, pos);
@@ -220,19 +214,16 @@ int main(int nargs, char ** argv) {
                 }
                 tabIndices.push_back(n);
 
-                int *n_leaves = new int[mesTrees.size()+1];
-                double alpha = atof(argv[4]);
-                //appel de l'algorithme de K-means:
+                /* Appel de l'algorithme K-means */
                 if(mesTrees.size()>3){
                     bool isBH = (intParam == 2);
                     main_kmeans(cl2,mesTrees,Matrice_RF,tabIndices,isBH,kmin,kmax);
                 }
 
-                //vider les vectors
                 mesTrees.clear();
                 tabIndices.clear();
 
-                //Liberation of memory
+                /* Libération de la mémoire */
                 for (int i=0;i<n;i++){
                     delete [] Matrice_RF[i];
                     delete [] Ww[i];
@@ -241,7 +232,6 @@ int main(int nargs, char ** argv) {
                 delete [] Matrice_RF;
                 delete [] Ww;
                 delete [] n_identique;
-                delete [] distances;
                 for (int i=0;i<4;i++){
                     delete [] cl2[i];
                 }
@@ -254,12 +244,25 @@ int main(int nargs, char ** argv) {
     return 0;
 }
 
-//===================================================================================
-//===================================================================================
-//===================================================================================
 
+/**
+ * Extrait le champ (nom de l'option) depuis un argument de ligne de commande
+ * de la forme "-nomOption".
+ *
+ * Si la chaîne ne commence pas par '-', retourne 0 (argument invalide).
+ * Sinon, copie les caractères suivant le '-' dans champs.
+ *
+ * Paramètres :
+ *   chaine  - argument de la ligne de commande
+ *   champs  - buffer de sortie pour le nom de l'option (sans le '-')
+ *   contenu - non utilisé (réservé pour une extension future)
+ *
+ * Retourne 1 si l'argument commence par '-', 0 sinon.
+ */
 int ExtraireDonneesLC(const char * chaine, char *champs, char * contenu){
     int tailleChaine;
+
+    (void)contenu;
 
     if(chaine[0] != '-'){
         return 0;
@@ -273,6 +276,17 @@ int ExtraireDonneesLC(const char * chaine, char *champs, char * contenu){
     return 1;
 }
 
+
+/**
+ * Valide le paramètre d'indice de validité de cluster intParam.
+ *
+ * Valeurs acceptées : 1 (Calinski-Harabasz) ou 2 (Ball-Hall).
+ * Si la valeur est hors plage, elle est remplacée par 1 (CH par défaut).
+ * Si la valeur est 0, le programme affiche l'aide et se termine.
+ *
+ * Paramètre :
+ *   intParam - indice de validité (modifié si invalide)
+ */
 void validation(int &intParam){
 
     while(intParam<0 || intParam>2){
@@ -293,8 +307,16 @@ void validation(int &intParam){
     }
 }
 
+
+/**
+ * Valide et borne le paramètre alpha dans l'intervalle [0, 1].
+ *
+ * Si alpha < 0, il est mis à 0. Si alpha > 1, il est mis à 1.
+ *
+ * Paramètre :
+ *   alpha - pénalité de chevauchement des espèces (modifiée si hors plage)
+ */
 void validationAlpha(double &alpha){
-    //Validation of the alpha argument
     if(alpha<0){
         alpha=0;
     }else if(alpha>1){
@@ -302,8 +324,20 @@ void validationAlpha(double &alpha){
     }
 }
 
+
+/**
+ * Valide la valeur minimale de k selon l'indice de validité choisi.
+ *
+ * Pour CH (intParam==1), kmin doit être >= 2.
+ * Pour BH (intParam==2), kmin doit être >= 1.
+ * Si kmin est inférieur au minimum requis, il est réinitialisé à la valeur
+ * minimale acceptable.
+ *
+ * Paramètres :
+ *   intParam - indice de validité (1: CH, 2: BH)
+ *   kmin     - nombre minimal de clusters (modifié si invalide)
+ */
 void validationKmin(int intParam, int &kmin){
-    //Validation of the K-min argument
     if(intParam==1 && kmin<1){
         kmin = 2;
     }
@@ -312,14 +346,33 @@ void validationKmin(int intParam, int &kmin){
     }
 }
 
+
+/**
+ * Affiche la présentation du programme sur la sortie standard.
+ *
+ * Décrit les auteurs, l'objectif, le format d'entrée attendu (Newick),
+ * la distance utilisée (Robinson-Foulds) et les indices de validité
+ * disponibles (CH et BH).
+ */
 void presenterProgramme(){
-    //Presentation of the Programm
-   printf ("\nGenerate Tree similar\n");
+    printf ("\nGenerate Tree similar\n");
     printf("Program   : KMeansSuperTreeClustering - 2021\nAuthors : Benjamin Albertelli and Nadia Tahiri - Departement d'informatique - Universite de Sherbrooke\nPresentation : This program clusters phylogenetic trees using the k-means partitioning algorithm.\nThese trees may have the same or different, but mutually overlapping, sets of leaves (the multiple supertree problem).\nPhylogenetic trees must be given in the Newick format (program input).\nA partitioning of the input trees in K clusters of trees is returned as output.\nThe optimal number of clusters can be determined either by the Calinski-Harabasz (CH) or by the Ball-Hall (BH) cluster validity index adapted for tree clustering.\nA supertree can then be inferred for each cluster of trees.\nThe Robinson and Foulds topological distance is used in the objective function of K-means.\nThe list of the program parameters is specified below.\n\n\n");
 }
 
+
+/**
+ * Guide interactif de saisie des arguments si la ligne de commande est
+ * incomplète (moins de 7 arguments).
+ *
+ * Demande à l'utilisateur de choisir le type de données (tree / matrix),
+ * le fichier d'entrée, l'indice de validité, alpha, kmin et kmax. Les
+ * valeurs sont stockées directement dans argv.
+ *
+ * Paramètres :
+ *   nargs - nombre d'arguments reçus
+ *   argv  - tableau des arguments (modifié si incomplet)
+ */
 void Initialisation(int nargs, char ** argv){
-    //Allow the user to use the program without executing the example line but choosing arguments step by step
     int choice = 0;
 
     std::cout<<"nargs vaut : "<<nargs<<std::endl;
