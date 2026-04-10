@@ -22,7 +22,7 @@
     <li>
       <a href="#contact">Contact</a>
     </li><li>
-      <a href="#📖Project Documentation">Contact</a>
+      <a href="#📖Project Documentation">📖Project Documentation</a>
     </li>
           
   </ol>
