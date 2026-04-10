@@ -120,6 +120,19 @@ To clean the project, please execute:
     $ make clean
 
 
+    ## 📖 Project Documentation
+
+The full documentation of this project is available on the GitHub Wiki:
+
+👉 [Access the Wiki](https://github.com/tahiri-lab/KMeansPhylogeneticTreesClustering/wiki)
+
+This includes:
+- Workflow
+- Technical aspects
+- Study cases
+- Limitations and improvements
+
+
 # Contact
 Please email us at : <Nadia.Tahiri@USherbrooke.ca> for any question or feedback.
 
