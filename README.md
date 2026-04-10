@@ -120,7 +120,8 @@ To clean the project, please execute:
     $ make clean
 
 
-# 📖 Project Documentation
+
+## 📖 Project Documentation
 
 The full documentation of this project is available on the GitHub Wiki:
 
