@@ -21,10 +21,7 @@
     </li>
     <li>
       <a href="#contact">Contact</a>
-    </li><li>
-      <a href="#Project Documentation">📖Project Documentation</a>
     </li>
-          
   </ol>
 </details>
 
@@ -124,7 +121,7 @@ To clean the project, please execute:
 
 
 
-## 📖 Project Documentation
+### 📖 Project Documentation
 
 The full documentation of this project is available on the GitHub Wiki:
 
