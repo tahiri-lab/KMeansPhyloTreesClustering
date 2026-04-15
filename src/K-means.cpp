@@ -101,38 +101,101 @@ FILE *Output4;
 // =============================================================================================================
 // =============================================================================================================
 
-int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<int> tabIndices, bool isBH, int k_min, int k_max){
-    //*****************Define variables******************************************//
-    // Variables
-    time_t tbegin2,tend2;
-    double texec2 = 0.;
-
-    double WVariable = 0.0;
-    double CH = MIN_CH_VALUE;
-
+struct context {
     double CHr_max = INITIAL_MAX_CH;
     int CHr_group = 0;
-
+    
     double W_min = MAX_W_VALUE;
     double W_max = MIN_CH_VALUE;
     int W_group = 0;
     double FO_new = MAX_FO_VALUE;
 
-    // Start timer
-    tbegin2 = time(NULL);                // get the current calendar time
-
-    int treeAmount = int (monTableau.size()); //quantity of initial tree
+    int treeAmount;
     int currentK=0; //nombre courant de clusters (groupes) en cours d’évaluation
-    bool debug=false;
-    int k1=0, k2=0;
+    int k1 = 0;
+    int k2 = 0;
 
     int random_number=100; //--Fixed random number
     int iassign=2;  // 1 equal, 2 random
     int nran=100;  //--Number of Random start VM
 
-    int nmax=treeAmount;    //--Maximum number of object -Parameter (nmax=10000,pmax=250,k_capacity=100)
-    int pmax=treeAmount;      //--Maximum data point (variable))
-    int k_capacity=treeAmount;      // Maximum number of groups
+    int nmax;
+    int pmax;
+    int k_capacity;
+    
+    vector<int> Strouve;
+    vector<vector<int>> listr;
+    vector<int> list;
+    vector<int> no;
+    vector<int> howmany;
+};
+
+/*
+Cette structure fais l'itilialisation de nombreuses variables qui seront utilisées dans main_kmeans.
+Quand la transformation de main_kmeans en plein d'appel de fonctions sera terminée,
+on aura pas besoin de précéder la plupart des variables avec un le nom de la structure car ceci cera fait dans la signature de la fonction.
+Pour l'instant, je dois faire des truc stupide comme "treeAmount = ctx.treeAmount" dans main_kmeans pour vérifier que mon refactoring ne change
+pas le comportement du code sans avoir à replacer tout les "treeAmount" par "ctx.treeAmount".
+*/
+context initialisation(vector <string> monTableau) {
+    context ctx;
+    ctx.treeAmount = int(monTableau.size()); //quantity of initial tree
+    ctx.nmax = ctx.treeAmount;
+    ctx.pmax = ctx.treeAmount;
+    ctx.k_capacity = ctx.treeAmount;
+
+    ctx.Strouve.reserve(ctx.treeAmount);
+    for (int i=0;i<ctx.treeAmount;i++) {
+        ctx.Strouve[i] = 0;
+    }
+
+    vector<int> temp1_listr((ctx.nmax+1),1);
+    vector<vector<int>> temp2_listr((ctx.k_capacity+1),(temp1_listr));
+    ctx.listr = temp2_listr;
+
+    ctx.list.reserve(ctx.nmax+1);
+    ctx.no.reserve(ctx.nmax+1);
+
+    for (int i=0; i<=ctx.nmax; i++){
+        ctx.list[i] = 0;
+        ctx.no[i] = 0;
+    }
+
+    ctx.howmany.reserve(ctx.k_capacity+1);
+
+    for (int i=0; i<=ctx.k_capacity; i++){
+        ctx.howmany[i] = 0;
+    }
+
+    return ctx;
+}
+
+int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<int> tabIndices, bool isBH, int k_min, int k_max){
+    //*****************Define variables******************************************//
+    // Variables
+    time_t tbegin2 = time(NULL);
+
+    context ctx = initialisation(monTableau);
+
+    double CHr_max = ctx.CHr_max;
+    int CHr_group = ctx.CHr_group;
+
+    double W_min = ctx.W_min;
+    double W_max = ctx.W_max;
+    int W_group = ctx.W_group;
+    double FO_new = ctx.FO_new;
+
+    const int treeAmount = ctx.treeAmount;
+    int currentK=ctx.currentK; //nombre courant de clusters (groupes) en cours d’évaluation
+    int k1=ctx.k1, k2=ctx.k2;
+
+    int random_number=ctx.random_number; //--Fixed random number
+    int iassign=ctx.iassign;  // 1 equal, 2 random
+    int nran=ctx.nran;  //--Number of Random start VM
+
+    int nmax=ctx.nmax;    //--Maximum number of object -Parameter (nmax=10000,pmax=250,k_capacity=100)
+    int pmax=ctx.pmax;      //--Maximum data point (variable))
+    int k_capacity=ctx.k_capacity;      // Maximum number of groups
 
     //char *criteria = argv[0];
     // ------------------------------------------------------------
@@ -148,44 +211,22 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
 
     int Strouve[treeAmount];
 
-    for(int linej=0;linej<treeAmount;linej++){
-        Strouve[linej]= 0;
-    }
+    copy(ctx.Strouve.begin(), ctx.Strouve.end(), Strouve);
 
-    double *CHr, *Wr;
-    CHr = new double [k_capacity+1];
-    Wr = new double [k_capacity+1];
+    double CHr[k_capacity+1];
+    double Wr[k_capacity+1];
 
     //Ces variables sont utilisées pour déterminer combien de fois une boucle sera parcouru.
     double SSE=0,SSEref=0;
 
-    int **listr;                    //listr(k_capacity,nmax),
-    listr = new int*[k_capacity+1];
-    for (int i=0;i<=k_capacity;i++){
-        listr[i] = new int [nmax+1];
-    }
+    vector<vector<int>> listr = ctx.listr;
 
-    for (int i=0; i<=k_capacity; i++){
-        for (int j=0; j<=nmax; j++){
-            listr[i][j] = 1;
-        }
-    }
-
-    int *list,*no;        //list(nmax),no(nmax)
-    list = new int [nmax+1];
-    no = new int [nmax+1];
-
-    for (int i=0; i<=nmax; i++){
-        list[i] = 0;
-        no[i] = 0;
-    }
-
-    int *howmany;        //howmany(k_capacity),
-    howmany = new int [k_capacity+1];
-
-    for (int i=0; i<=k_capacity; i++){
-        howmany[i] = 0;
-    }
+    int list[nmax+1];
+    int no[nmax+1];
+    copy(ctx.list.begin(), ctx.list.end(), list);
+    copy(ctx.no.begin(), ctx.no.end(), no);
+    int howmany[k_capacity+1];
+    copy(ctx.howmany.begin(), ctx.howmany.end(), howmany);
 
 //***********************  Read data file  **********************************
 
@@ -236,13 +277,12 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
         //initialisation de Strouve de la liste realiser aleatoirement
         for (currentK=k1;currentK>=k2;currentK--){
             SSEref=INITIAL_SSE_REF;
-            WVariable = MAX_W_VALUE;
-            CH = MIN_CH_VALUE;
             FO_new = MAX_FO_VALUE;
             W_new = MAX_FO_VALUE;
 
             //Je ne comprends pas pourquoi on fait une boucle ici, il n'est peut-être pas nécéssaire de faire ceci 100 fois.
             for (int nit=1;nit<=MAX_ITERATIONS;nit++){
+                bool debug=false;
                 if(debug){
                     printf ("Iteration = %d",nit);
                     printf ("SSEref = %lf",SSEref);
@@ -255,25 +295,19 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
                 // Compute distances to group centroids and assign objects to nearest one
                 if(!isBH){
                     FO_new = FO_super_tree(treeAmount,k_capacity,mat,list,howmany,SSE,currentK);
-                }else if(isBH){
-                    FO_new = FO_W(treeAmount,k_capacity,mat,list,howmany,SSE,currentK);
-                }
-
-                if(!isBH){
                     CH_new = DistanceCH(treeAmount,k_capacity,mat,list,FO_new);
                     if(CH_new>CHr[currentK]){
-                        CH=CH_new;
-                        CHr[currentK]=CH;
+                        CHr[currentK]=CH_new;
                         for (int i=1;i<=treeAmount;i++) {            //do 65 i=1,n
                             listr[currentK][i]=list[i];
                         }    //65    listr(currentK,i)=list(i)
                     }
                 }else if(isBH){
+                    FO_new = FO_W(treeAmount,k_capacity,mat,list,howmany,SSE,currentK);
                     W_new = DistanceW(treeAmount,k_capacity,list,FO_new);
 
                     if(W_new<Wr[currentK]){
-                        WVariable=W_new;
-                        Wr[currentK]=WVariable;
+                        Wr[currentK]=W_new;
 
                         for (int i=1;i<=treeAmount;i++){
                             listr[currentK][i]=list[i];
@@ -400,20 +434,19 @@ int main_kmeans(char **argv, vector <string> monTableau, double ** mat, vector<i
     }
 
     // End timer
-    tend2=time(NULL);                // get the current calendar time
+    const time_t tend2 = time(NULL);                // get the current calendar time
 
     // Compute execution time
-    texec2=difftime(tend2,tbegin2);    // tend-tbegin (result in second)
+    const double texec2 = difftime(tend2,tbegin2);    // tend-tbegin (result in second)
     fprintf (Output4,"%.3f;\n",texec2);
 
-    // cleanup resources
-    kmeans_cleanup(Output4, k_capacity, treeAmount, listr, CHr, Wr,
-        list, no, howmany);
+    //Close output files
+    if (Output4) fclose(Output4);
 
     return 0;
 }
 
-int setup_k_bounds(int k_max, int k_capacity, int k_min, int &k1, int &k2, int treeAmount, bool isBH, double *&CHr, double *&Wr) {
+int setup_k_bounds(int k_max, int k_capacity, int k_min, int &k1, int &k2, int treeAmount, bool isBH, double *CHr, double *Wr) {
     int warningCount = 0;
     int max_k1 = k_max;
 
@@ -457,25 +490,6 @@ int setup_k_bounds(int k_max, int k_capacity, int k_min, int &k1, int &k2, int t
     return warningCount;
 }
 
-void kmeans_cleanup(FILE *Output4, int k_capacity, int treeAmount, int **listr,
-                    double *CHr, double *Wr,
-                    int *list, int *no, int *howmany) {
-    //Close output files
-    if (Output4) fclose(Output4);
-
-    //Remove matrix
-    for (int i = 0; i <= k_capacity; ++i) {
-        delete [] listr[i];
-    }
-    delete [] listr;
-
-    delete [] CHr;
-    delete [] Wr;
-    delete [] list;
-    delete [] no;
-    delete [] howmany;
-}
-
 //      end
 //************************End of Main
 
@@ -484,8 +498,7 @@ void kmeans_cleanup(FILE *Output4, int k_capacity, int treeAmount, int **listr,
 //******************************************************************************
 
 void ReadData1(int treeAmount,int nmax,int pmax){
-    char *nameb;
-    nameb = new char [MAX_FILENAME_LENGTH];
+    char nameb[MAX_FILENAME_LENGTH];
 
     if(treeAmount>nmax) {
         printf ("Too many objects. Use a sample of objects or recompile program to increase nmax.");                //     +'Too many objects. Use a sample of objects or recompile program.'
@@ -503,9 +516,7 @@ void ReadData1(int treeAmount,int nmax,int pmax){
     if((Output4 = fopen(nameb,"a"))==NULL){
         printf("\n%s: result file open failed...",nameb);
         exit(1);
-    }
-    
-    delete [] nameb;
+    }    
 }
 
 // =============================================================================================================
@@ -827,10 +838,10 @@ void outStat(int Strouve[],int Sref[],char *criteria,int treeAmount,char *N_espe
 double FO_super_tree(int treeAmount, int k_capacity, double** mat, int* list, int* howmany, double &SSE, int currentK){
     // clusterK_same[k] stocke la somme des distances RF internes (ou vers un représentant)
     // utilisée pour calculer la contribution du cluster k à la fonction objectif.
-    double *clusterK_same = new double[k_capacity + 1];
+    double clusterK_same[k_capacity+1];
 
     // nk_CH[k] stocke le nombre d'arbres actuellement assignés au cluster k.
-    int *nk_CH = new int[k_capacity + 1];
+    int nk_CH[k_capacity+1];
 
     SSE = 0.0;
 
@@ -922,9 +933,6 @@ double FO_super_tree(int treeAmount, int k_capacity, double** mat, int* list, in
     // (Ton code original tente ensuite d'améliorer l'affectation en déplaçant des arbres.)
     double Dref = FO_old;
 
-    delete [] clusterK_same;
-    delete [] nk_CH;
-
     return Dref;
 }
 
@@ -938,7 +946,7 @@ double DistanceCH(int treeAmount,int k_capacity,double** mat,int* list,double FO
     double dist_all = 0.0;
     double RF;
     double distance_total = 0.0;
-    int *nk_CH = new int [k_capacity+1];
+    int nk_CH[k_capacity+1];
     int k_cluster = 0;
 
     for(int k=1;k<=k_capacity; k++){
@@ -982,8 +990,6 @@ double DistanceCH(int treeAmount,int k_capacity,double** mat,int* list,double FO
         distance_total=10000000.0*SSB*((treeAmount-k_cluster)/((1.0*k_cluster)-1.0));
     }
 
-    delete [] nk_CH;
-
     return distance_total;
 }
 
@@ -992,8 +998,8 @@ double DistanceCH(int treeAmount,int k_capacity,double** mat,int* list,double FO
 // =============================================================================================================
 
 double FO_W(int treeAmount,int k_capacity,double** mat,int* list,int* howmany,double &SSE,int currentK){
-    double *clusterK_same = new double [k_capacity+1];
-    int *nk_W = new int [k_capacity+1];
+    double clusterK_same[k_capacity+1];
+    int nk_W[k_capacity+1];
     int cluster_k = 0;
     double RF = 0.0;
     double Dref = 0;       //Real*8 Dref,D1,SSE,weight(pmax)
@@ -1136,9 +1142,6 @@ double FO_W(int treeAmount,int k_capacity,double** mat,int* list,int* howmany,do
         }
     }
 
-    delete [] clusterK_same;
-    delete [] nk_W;
-
     return Dref;
 }
 
@@ -1148,8 +1151,8 @@ double FO_W(int treeAmount,int k_capacity,double** mat,int* list,int* howmany,do
 
 double DistanceW(int treeAmount, int k_capacity, int* list, double FO_new){
     double distance_total = 100000000.0;
-    double *clusterK_same = new double [k_capacity+1];
-    int *nk_W = new int [k_capacity+1];
+    double clusterK_same[k_capacity+1];
+    int nk_W[k_capacity+1];
     int k_cluster = 0;
 
     for(int k=1;k<=k_capacity; k++){
@@ -1177,9 +1180,6 @@ double DistanceW(int treeAmount, int k_capacity, int* list, double FO_new){
             distance_total=(FO_new/k_cluster);
         }
     }
-
-    delete [] clusterK_same;
-    delete [] nk_W;
 
     return distance_total;
 
@@ -1219,8 +1219,8 @@ void conv2sameRef(int *Strouve,int *Sref, int treeAmount){
     std::cout << "Number of clusters (K) found: " << k << std::endl;
 
     // On utilise k+1 cases car les clusters sont numérotés de 1 à k (l'indice 0 n'est pas utilisé).
-    int *nk_trouve = new int[k + 1];
-    int *nk_ref    = new int[k + 1];
+    int nk_trouve[k + 1];
+    int nk_ref[k + 1];
 
     // On met à 0 le nombre d'arbres dans chaque cluster (1..k).
     for (int c = 0; c <= k; c++) {
@@ -1236,7 +1236,4 @@ void conv2sameRef(int *Strouve,int *Sref, int treeAmount){
 
     // Ici, nk_trouve[c] = nombre d'arbres assignés au cluster c dans la partition trouvée.
     // nk_ref[c]    = nombre d'arbres assignés au cluster c dans la partition de référence.
-
-    delete [] nk_trouve;
-    delete [] nk_ref;
 }
